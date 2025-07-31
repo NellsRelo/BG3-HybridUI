@@ -1,6 +1,6 @@
 HybridUI Is a mod designed to improve the Controller UI, implementing aspects of the KB+M UI, reducing the use of carousels, and making the UI more usable, especially for users with multiple modded races, classes, and spells.
 
-[img width=712,height=399]https://i.imgur.com/HPitegm.png[/img]
+![modathon logo](https://i.imgur.com/HPitegm.png)
 
 # Progress
 The release version is 0.5.0.1, and covers the following screens:
