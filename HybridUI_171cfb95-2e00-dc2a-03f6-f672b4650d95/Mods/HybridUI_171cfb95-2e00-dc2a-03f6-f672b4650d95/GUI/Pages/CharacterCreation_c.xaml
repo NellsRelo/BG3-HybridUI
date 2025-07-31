@@ -1786,7 +1786,7 @@
                     </Control.Template>
                 </Control>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="{StaticResource ButtonHint.Margin.Left}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0">
                     <Control x:Name="PlayerSlots" Template="{StaticResource PlayerSlotsTemplate}" VerticalAlignment="Center"/>
                     <TextBlock x:Name="PressToJoinText" Foreground="{StaticResource LS_accent75TxtColor}" FontSize="{StaticResource ScaledSmallishFontSize}"
                                VerticalAlignment="Center" Visibility="Collapsed" Opacity="0" Margin="12,-18,0,18">
