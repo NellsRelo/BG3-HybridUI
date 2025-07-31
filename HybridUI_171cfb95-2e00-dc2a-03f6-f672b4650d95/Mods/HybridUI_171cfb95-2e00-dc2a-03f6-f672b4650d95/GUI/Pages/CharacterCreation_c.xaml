@@ -1020,7 +1020,7 @@
                                                     <RowDefinition Height="*" />
                                                   </Grid.RowDefinitions>
                                                   <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="{StaticResource gameplayPanelWidth}" />
+                                                    <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="*" />
                                                   </Grid.ColumnDefinitions>
                                                     <b:Interaction.Triggers>
@@ -1087,7 +1087,7 @@
                                                       <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="{StaticResource gameplayPanelWidth}" />
+                                                      <ColumnDefinition Width="Auto" />
                                                       <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <b:Interaction.Triggers>
@@ -1123,7 +1123,7 @@
                                                       <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="{StaticResource gameplayPanelWidth}" />
+                                                      <ColumnDefinition Width="Auto" />
                                                       <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <b:Interaction.Triggers>
@@ -1158,7 +1158,7 @@
                                                       <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="{StaticResource gameplayPanelWidth}" />
+                                                      <ColumnDefinition Width="Auto" />
                                                       <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <b:Interaction.Triggers>
@@ -1226,7 +1226,7 @@
                                                       <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="{StaticResource gameplayPanelWidth}" />
+                                                      <ColumnDefinition Width="Auto" />
                                                       <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <b:Interaction.Triggers>
