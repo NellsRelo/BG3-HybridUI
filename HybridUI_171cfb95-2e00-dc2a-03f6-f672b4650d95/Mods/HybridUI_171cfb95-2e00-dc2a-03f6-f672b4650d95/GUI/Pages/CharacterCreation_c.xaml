@@ -1420,21 +1420,17 @@
 
                                     <TextBlock x:Name="CharacterNameHeader" ls:TextBlockFormatter.SourceText="{Binding Source=hfc928d2ega3a9g420egbeb5g0b20ab704959, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
 
-                                    <Grid MinWidth="1100">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
+                                    <Grid x:Name="textInputBox" HorizontalAlignment="Center" Margin="0,-30,0,-40">
+                                        <ls:LSNineSliceImage x:Name="textInputBg" Padding="20,0,20,0" Slices="150,86,150,86" ImageSource="pack://application:,,,/Core;component/Assets/CC/btn_namegroupBG_01.png" MinWidth="740" MinHeight="256">
 
-                                        <Rectangle Grid.Column="0" Fill="{StaticResource CCTextSpecial}" Opacity="0.8" Height="100"/>
+                                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <Image x:Name="textInputDashes" Source="pack://application:,,,/Core;component/Assets/CC/btn_namegroup_input_d.png" Stretch="Fill" Height="126" MinWidth="584" Width="{Binding ElementName=characterName, Path=ActualWidth}"/>
 
-                                        <ls:LSTextBox Grid.Column="0" x:Name="characterName" Text="{Binding CharacterName}" IsEnabled="{Binding CanEditName}" MaxLength="20" TextImmediateSourceUpdate="True"
-                                                      Foreground="{StaticResource CCTextPrimary}" FontSize="{StaticResource ScaledMassiveFontSize}" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" ProfanityFilter="True"
-                                                      Margin="16,0"/>
+                                                <ls:LSTextBox x:Name="characterName" Text="{Binding CharacterName}" IsEnabled="{Binding CanEditName}" MaxLength="20" TextImmediateSourceUpdate="True" Foreground="{StaticResource CCTextPrimary}" FontSize="{StaticResource MassiveFontSize}" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="60,0,60,0"/>
+                                            </Grid>
 
-                                        <Control Grid.Column="0" x:Name="frame" Visibility="{Binding ElementName=characterName, Path=IsFocused, Converter={StaticResource BoolToVisibleConverter}, ConverterParameter=True}"
-                                                 Template="{StaticResource FocusedListItemIndicatorTemplate}" Margin="-20,0" />
+                                        </ls:LSNineSliceImage>
                                     </Grid>
-
                                     <ls:LSButton x:Name="focusNaming" IsEnabled="{Binding CanEditName}" Visibility="{Binding ElementName=characterName, Path=IsFocused, Converter={StaticResource BoolToHiddenConverter}}" BoundEvent="UIAccept"
                                                  ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}"
                                                  Tag="{Binding Source=h5cd3cabag657ag4abfga33fg9b1b2808ee7f,Converter={StaticResource TranslatedStringConverter}}">
@@ -1475,7 +1471,7 @@
                                             <TranslateTransform X="0"/>
                                         </Grid.RenderTransform>
 
-                                        <Control x:Name="summaryPanel" IsEnabled="False" ls:MoveFocus.IsMoveFocusScope="True" Template="{StaticResource summaryPanelTemplate}"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,70,16,0"/>
+                                        <Control x:Name="summaryPanel" IsEnabled="False" ls:MoveFocus.IsMoveFocusScope="True" Template="{StaticResource summaryPanelTemplate}"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,16,0"/>
 
                                         <ls:LSButton x:Name="focusGameplayPanelButton" 
                                                      Visibility="Hidden"
