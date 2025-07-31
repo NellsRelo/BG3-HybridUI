@@ -10,17 +10,18 @@ The release version is 0.5.0.1, and covers the following screens:
 - Subclass Selection (CC)
 - Background Selection (CC)
 - Deity Selection (CC)
-- Spell/Cantrip Selection (CC)
-- Spellbook (CC)
-- Passive Selection (CC)
-- Abilities Selection (CC)
-- Skills Selection (CC)
+- Spell/Cantrip Selection (CC, Level Up, Respec)
+- Spellbook (CC, Level Up)
+- Passive Selection (CC, Level Up, Respec)
+- Abilities Selection (CC, Level Up)
+- Skills Selection (CC, Level Up)
 
 It will be expanded to cover the Appearance section of CC, as well as Respec and Level-up UIs.
 
 # Additional Features
 HybridUI also provides a few additional benefits in Character Creation:
 - Specially-named Cantrip/Spell Selectors now actually have their name in the tab bar
+- Passive and Equipment Selectors that have unique names will now display their name in the tab bar
 - Equipment Lists are now scrollable
 - The scrollbar in Spell selectors and the Spellbook is now visible
 - The Description box is decoupled from the selection interfaces, ensuring no strange gaps appear in the UI

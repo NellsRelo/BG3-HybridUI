@@ -1138,7 +1138,7 @@
         <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <!-- Note: does not work without HorizontalAlignment="Right" -->
-            <TextBlock x:Name="label" Text="{Binding Source='hccb74959ga789g46f6g8cc2g73edf1536b6a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
+            <TextBlock x:Name="label" Text="{Binding Name}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
             <b:Interaction.Triggers>
 
                 <!-- Set the tab underline asset width -->
@@ -1228,7 +1228,7 @@
     <DataTemplate x:Key="gameplayTabEquipmentSelectorTemplate2" DataType="{x:Type ls:VMCharacterCreationEquipments}">
         <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            <TextBlock x:Name="label" Text="{Binding Source='h02a6c879g1b7fg443ag9a1fg45e9ee7bb75e', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
+            <TextBlock x:Name="label" Text="{Binding Name}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
             <b:Interaction.Triggers>
 
                 <!-- Set the tab underline asset width -->

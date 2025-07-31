@@ -21,7 +21,7 @@
                     <attribute id="Author" type="LSString" value="NellsRelo"/>
                     <attribute id="CharacterCreationLevelName" type="FixedString" value=""/>
                     <attribute id="Description" type="LSString" value="HybridUI Is a mod designed to improve the Controller UI, implementing aspects of the KB+M UI, reducing the use of carousels, and making the UI more usable, especially for users with multiple modded races, classes, and spells."/>
-                    <attribute id="FileSize" type="uint64" value="88069"/>
+                    <attribute id="FileSize" type="uint64" value="2426479"/>
                     <attribute id="Folder" type="LSString" value="HybridUI_171cfb95-2e00-dc2a-03f6-f672b4650d95"/>
                     <attribute id="LobbyLevelName" type="FixedString" value=""/>
                     <attribute id="MD5" type="LSString" value="067c17f448308ead21abc597a32e604d"/>
@@ -29,13 +29,13 @@
                     <attribute id="Name" type="LSString" value="HybridUI"/>
                     <attribute id="NumPlayers" type="uint8" value="4"/>
                     <attribute id="PhotoBooth" type="FixedString" value=""/>
-                    <attribute id="PublishHandle" type="uint64" value="0"/>
+                    <attribute id="PublishHandle" type="uint64" value="5131244"/>
                     <attribute id="StartupLevelName" type="FixedString" value=""/>
                     <attribute id="UUID" type="FixedString" value="171cfb95-2e00-dc2a-03f6-f672b4650d95"/>
-                    <attribute id="Version64" type="int64" value="36028797018963971"/>
+                    <attribute id="Version64" type="int64" value="703687441776642"/>
                     <children>
                         <node id="PublishVersion">
-                            <attribute id="Version64" type="int64" value="144255927718543409"/>
+                            <attribute id="Version64" type="int64" value="703687441776640"/>
                         </node>
                         <node id="Scripts">
                             <children>
