@@ -10,14 +10,18 @@
 
       <ControlTemplate x:Key="raceSelectionTemplate">
           <DockPanel>
+
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                   <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
                       <Image.RenderTransform>
                           <ScaleTransform ScaleY="-1"></ScaleTransform>
                       </Image.RenderTransform>
                   </Image>
-                  <ListBox Template="{StaticResource SelectableCarouselTemplate}"
-                           ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}" Margin="0,45,0,0" />
+                  <Grid>
+                    <Image Style="{DynamicResource SummarySpellsDecorationStyle}" RenderOptions.BitmapScalingMode="Fant" Height="256" Width="{Binding ElementName=RaceCarousel, Path=ActualWidth}" Stretch="Fill"/>
+                    <ListBox x:Name="RaceCarousel" Template="{StaticResource SelectableCarouselTemplate}" Height="100"
+                            ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}" Margin="0,0,0,0" />
+                  </Grid>
               </StackPanel>
 
               <StackPanel x:Name="selectedSubRaceDescription" Orientation="Horizontal" DockPanel.Dock="Top"
