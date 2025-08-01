@@ -2592,8 +2592,8 @@
     <DataTemplate x:Key="ClassIconTemplate" DataType="ls:VMSelectableClass">
         <StackPanel x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True">
             <Grid HorizontalAlignment="Center">
-                <Image Style="{StaticResource ClassIconHotbarStyle}"  Stretch="Uniform" Width="140"/>
-                <Control x:Name="frame" Width="148" Height="148"/>
+                <Image Style="{StaticResource ClassIconHotbarStyle}" Stretch="None"/>
+                <ls:LSNineSliceImage x:Name="frame" Visibility="Hidden" ImageSource="{StaticResource IconGridSelector}" Slices="32,32,32,32" Padding="16" Width="208" Height="208" Margin="-6"/>
                 <Image x:Name="tick" Visibility="Hidden" Source="{StaticResource IconTick}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
             </Grid>
             <TextBlock x:Name="label" ls:TextBlockFormatter.SourceText="{Binding ShortName}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource LS_baseTxtColor}" Width="230" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
@@ -2641,7 +2641,7 @@
                     <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="frame" Property="Template" Value="{StaticResource FocusedAndSelectedIndicatorTemplate}"/>
-                <Setter TargetName="label" Property="Foreground" Value="{StaticResource LS_specialTxtColor}"/>
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
                 <Setter TargetName="level" Property="Foreground" Value="{StaticResource LS_specialTxtColor}"/>
             </MultiDataTrigger>
 
