@@ -62,7 +62,7 @@
                   <TextBlock Text="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}"/>
               </StackPanel>
               <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto"
-                            VerticalScrollMode="Enabled" Grid.Row="1" Margin="0,-20,0,0"> <!-- MaxHeight="600"-->
+                            Grid.Row="1" Margin="0,-20,0,0">
                   <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
 
                       <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=RaceProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
