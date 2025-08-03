@@ -7,7 +7,55 @@
 					xmlns:ls="clr-namespace:ls;assembly=Code"
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
+    <ControlTemplate x:Key="abilityBonusSelectTemplate">
+                                                      
+      <ItemsControl ItemsSource="{Binding RaceProgressionDetails.AbilityBonusSelection}" Margin="0,24,0,0">
+          <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                  <ContentControl Template="{StaticResource CarouselButtonTemplate}" Tag="notEnabled" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True">
+                      <Grid VerticalAlignment="Center" Margin="50,0,50,0">
 
+                          <TextBlock x:Name="bonus" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                              <TextBlock.Text>
+                                  <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                      <Binding Source="hcb0e1e92ga5eeg4823g8e03gee3c7bdf9b58"/>
+                                      <Binding Path="AbilityBonus"/>
+                                  </MultiBinding>
+                              </TextBlock.Text>
+                          </TextBlock>
+
+                          <ListBox x:Name="abilityBonuses" ItemsSource="{Binding BonusAbilities}" SelectedIndex="{Binding SelectedIndex}">
+
+                              <ListBox.Template>
+                                  <ControlTemplate>
+                                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                          <ls:LSButton x:Name="leftBtn" BoundEvent="UILeft" Command="{Binding DataContext.SelectPrevAbilityBonus, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding}" SoundID="{DynamicResource CarouselButtonSoundEvent}" Style="{StaticResource IconCarouselButtonStyle}" VerticalAlignment="Bottom">
+                                              <ls:LSButton.RenderTransform>
+                                                  <ScaleTransform ScaleX="-1" CenterX="32"/>
+                                              </ls:LSButton.RenderTransform>
+                                          </ls:LSButton>
+
+                                          <Grid VerticalAlignment="Center" MinWidth="400">
+
+                                              <Control Template="{StaticResource AbilityDisplayName}" DataContext="{Binding SelectedItem, ElementName=abilityBonuses}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextPrimary}" HorizontalAlignment="Center"/>
+
+                                          </Grid>
+
+                                          <ls:LSButton x:Name="rightBtn" BoundEvent="UIRight" Command="{Binding DataContext.SelectNextAbilityBonus, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding}" SoundID="{DynamicResource CarouselButtonSoundEvent}" Style="{StaticResource IconCarouselButtonStyle}" VerticalAlignment="Center"/>
+
+                                      </StackPanel>
+                                  </ControlTemplate>
+                              </ListBox.Template>
+                          </ListBox>
+                      </Grid>
+
+                  </ContentControl>
+              </DataTemplate>
+          </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+    </ControlTemplate>
     <ControlTemplate x:Key="abilitySelectionTemplate">
           <DockPanel>
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
@@ -90,56 +138,6 @@
                 <Setter TargetName="AssignAbilityPointsValue" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
             </DataTrigger>
         </ControlTemplate.Triggers>
-
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="abilityBonusSelectTemplate">
-                                                            
-      <ItemsControl ItemsSource="{Binding RaceProgressionDetails.AbilityBonusSelection}" Margin="0,24,0,0">
-          <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                  <ContentControl Template="{StaticResource CarouselButtonTemplate}" Tag="notEnabled" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True">
-                      <Grid VerticalAlignment="Center" Margin="50,0,50,0">
-
-                          <TextBlock x:Name="bonus" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" HorizontalAlignment="Left" VerticalAlignment="Center">
-                              <TextBlock.Text>
-                                  <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
-                                      <Binding Source="hcb0e1e92ga5eeg4823g8e03gee3c7bdf9b58"/>
-                                      <Binding Path="AbilityBonus"/>
-                                  </MultiBinding>
-                              </TextBlock.Text>
-                          </TextBlock>
-
-                          <ListBox x:Name="abilityBonuses" ItemsSource="{Binding BonusAbilities}" SelectedIndex="{Binding SelectedIndex}">
-
-                              <ListBox.Template>
-                                  <ControlTemplate>
-                                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-
-                                          <ls:LSButton x:Name="leftBtn" BoundEvent="UILeft" Command="{Binding DataContext.SelectPrevAbilityBonus, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding}" SoundID="{DynamicResource CarouselButtonSoundEvent}" Style="{StaticResource IconCarouselButtonStyle}" VerticalAlignment="Bottom">
-                                              <ls:LSButton.RenderTransform>
-                                                  <ScaleTransform ScaleX="-1" CenterX="32"/>
-                                              </ls:LSButton.RenderTransform>
-                                          </ls:LSButton>
-
-                                          <Grid VerticalAlignment="Center" MinWidth="400">
-
-                                              <Control Template="{StaticResource AbilityDisplayName}" DataContext="{Binding SelectedItem, ElementName=abilityBonuses}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextPrimary}" HorizontalAlignment="Center"/>
-
-                                          </Grid>
-
-                                          <ls:LSButton x:Name="rightBtn" BoundEvent="UIRight" Command="{Binding DataContext.SelectNextAbilityBonus, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding}" SoundID="{DynamicResource CarouselButtonSoundEvent}" Style="{StaticResource IconCarouselButtonStyle}" VerticalAlignment="Center"/>
-
-                                      </StackPanel>
-                                  </ControlTemplate>
-                              </ListBox.Template>
-                          </ListBox>
-                      </Grid>
-
-                  </ContentControl>
-              </DataTemplate>
-          </ItemsControl.ItemTemplate>
-      </ItemsControl>
 
     </ControlTemplate>
     
