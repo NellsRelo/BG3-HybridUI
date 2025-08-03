@@ -17,7 +17,8 @@
         <ResourceDictionary Source="CC_RaceControls_c.xaml"/>
         <ResourceDictionary Source="CC_SubRaceControls_c.xaml"/>
         <ResourceDictionary Source="CC_SubClassControls_c.xaml"/>
+        <ResourceDictionary Source="CC_OriginControls_c.xaml"/>
         <ResourceDictionary Source="CC_SelectorControls_c.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
 </ResourceDictionary>
