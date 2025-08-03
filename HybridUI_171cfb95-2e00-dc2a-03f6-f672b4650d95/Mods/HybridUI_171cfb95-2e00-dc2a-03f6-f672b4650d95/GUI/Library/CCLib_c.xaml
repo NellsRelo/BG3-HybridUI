@@ -2592,7 +2592,7 @@
     <DataTemplate x:Key="ClassIconTemplate" DataType="ls:VMSelectableClass">
         <StackPanel x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True">
             <Grid HorizontalAlignment="Center">
-                <Image Style="{StaticResource ClassIconHotbarStyle}" Stretch="None"/>
+                <Image Style="{StaticResource ClassIconHotbarStyle}" Stretch="Uniform" Width="140"/>
                 <ls:LSNineSliceImage x:Name="frame" Visibility="Hidden" ImageSource="{StaticResource IconGridSelector}" Slices="32,32,32,32" Padding="16" Width="208" Height="208" Margin="-6"/>
                 <Image x:Name="tick" Visibility="Hidden" Source="{StaticResource IconTick}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
             </Grid>
