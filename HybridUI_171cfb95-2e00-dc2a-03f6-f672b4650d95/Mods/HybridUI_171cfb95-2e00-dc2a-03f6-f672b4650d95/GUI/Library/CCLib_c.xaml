@@ -69,6 +69,8 @@
     <BitmapImage x:Key="SelectorSelected1" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_cc_selector_selected1.png"/>
     <BitmapImage x:Key="SelectorSelected2" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_cc_selector_selected2.png"/>
 
+    <BitmapImage x:Key="IconGridSelector" UriSource="pack://application:,,,/Core;component/Assets/CC/selector_CC.png"/>
+
     <BitmapImage x:Key="AltButton_d" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_altButton_d.png"/>
     <BitmapImage x:Key="AltButton_selected" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_altButton_selected.png"/>
 
@@ -166,6 +168,24 @@
             </EasingDoubleKeyFrame>
         </DoubleAnimationUsingKeyFrames>
     </Storyboard>
+
+    <Style x:Key="CCIconTextListBoxItemStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}" >
+        <Setter Property="noesis:StyleInteraction.Triggers">
+            <Setter.Value>
+                <noesis:StyleTriggerCollection>
+                    <b:EventTrigger EventName="LSButtonPressed">
+                        <ls:LSPlaySound Sound="UI_Shared_Panel_Select"/>
+                    </b:EventTrigger>
+                    <b:EventTrigger EventName="LSButtonPressed">
+                        <ls:LSPlaySound Sound="UI_Shared_Secondary_Press"/>
+                    </b:EventTrigger>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <ls:LSPlaySound Sound="UI_Shared_Hover"/>
+                    </b:EventTrigger>
+                </noesis:StyleTriggerCollection>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style x:Key="gameplayPanelScrollViewerStyle" TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
         <Setter Property="Width" Value="{StaticResource gameplayPanelWidth}"/>
@@ -2656,6 +2676,8 @@
             <Grid HorizontalAlignment="Center">
                 <Rectangle x:Name="icon" Width="188" Height="188" Fill="{StaticResource CCIconDefault}" Style="{DynamicResource CustomIconStyle}"/>
                 <ls:LSNineSliceImage x:Name="frame" Visibility="Hidden" ImageSource="{StaticResource IconGridSelector}" Slices="32,32,32,32" Padding="16" Width="208" Height="208" Margin="-6"/>
+                                <Image x:Name="tick" Visibility="Hidden" Source="{StaticResource IconTick}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
+
             </Grid>
             <TextBlock x:Name="label" ls:TextBlockFormatter.SourceText="{Binding Name}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource LS_baseTxtColor}" Width="{DynamicResource IconTextWidth}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
 
@@ -3317,15 +3339,106 @@
                 <Setter TargetName="SubclassLabel" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding ProgressionData.AllProgressions.WeaponProficiencies.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                <Setter TargetName="proficiencyHeader" Property="Visibility" Value="Visible"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ProgressionData.AllProgressions.ArmourProficiencies.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                <Setter TargetName="proficiencyHeader" Property="Visibility" Value="Visible"/>
-            </DataTrigger>
-
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <DataTemplate x:Key="OriginPortraitTemplate" DataType="{x:Type ls:VMSelectableOrigin}">
+        <StackPanel x:Name="base" Background="Transparent" Width="{DynamicResource IconTextWidth}" Margin="0,0,0,10" ToolTipService.ShowOnDisabled="True"  ls:MoveFocus.Focusable="True" Focusable="True">
+            <StackPanel.ToolTip>
+                <ls:LSTooltip>
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Path=DataContext.DisableReason, ElementName=base}"/>
+                </ls:LSTooltip>
+            </StackPanel.ToolTip>
+            <Grid HorizontalAlignment="Center">
+                <Rectangle x:Name="portrait" Fill="{Binding Portrait}" Width="132" Height="196" RadiusX="20" RadiusY="20"/>
+                <Image x:Name="lock" Visibility="Collapsed" Source="{StaticResource IconLock}" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="46,0,0,20"/>
+                <Image x:Name="tick" Visibility="Hidden" Source="{StaticResource IconTick}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
+                <Ellipse Height="50" Width="50" Fill="{Binding OtherPlayerChoice.CommunityIcon}" ToolTipService.ShowOnDisabled="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,46,22">
+                    <Ellipse.ToolTip>
+                        <ls:LSTooltip Content="{Binding DataContext.OtherPlayerChoice.Name , RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                    </Ellipse.ToolTip>
+                </Ellipse>
+                <Image x:Name="cross" Visibility="Collapsed" Stretch="None">
+                    <Image.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard Storyboard="{StaticResource ExclamationAnim}"/>
+                        </EventTrigger>
+                    </Image.Triggers>
+                </Image>
+
+                <ls:LSNineSliceImage x:Name="frame" Visibility="Hidden" ImageSource="{StaticResource IconGridSelector}" Slices="32,32,32,32" Width="168" Padding="0,18,0,18">
+                    <Rectangle Fill="Transparent" Width="164" Height="196"/>
+                </ls:LSNineSliceImage>
+
+            </Grid>
+            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" HorizontalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" IsHitTestVisible="False"/>
+        
+             <ls:LSInputBinding IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" BoundEvent="UIAccept">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="LSInputBindingReleased">
+                        <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" PropertyName="SelectedItem" Value="{Binding .}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ls:LSInputBinding>
+          </StackPanel>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSelectable}" Value="True">
+                <Setter TargetName="base" Property="ToolTip" Value="{x:Null}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsSelectable}" Value="False">
+                <Setter TargetName="lock" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                <Setter TargetName="frame" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="base" Property="ToolTip" Value="{x:Null}"/>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="frame" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="frame" Property="ImageSource" Value="pack://application:,,,/Core;component/Assets/CC/selector_CC_h.png"/>
+            </DataTrigger>
+
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="frame" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="frame" Property="ImageSource" Value="pack://application:,,,/Core;component/Assets/CC/selector_CC_h.png"/>
+            </MultiDataTrigger>
+
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                    <Condition Binding="{Binding DataContext.Validity.SameOriginSelectedByMultiplePlayers,RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="cross">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </MultiDataTrigger.EnterActions>
+                <MultiDataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="cross">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </MultiDataTrigger.ExitActions>
+            </MultiDataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
     <DataTemplate x:Key="progressionSpellSelectors" DataType="ls:VMSpellSelector">
         <ItemsControl x:Name="items" ItemsSource="{Binding Additions}">
