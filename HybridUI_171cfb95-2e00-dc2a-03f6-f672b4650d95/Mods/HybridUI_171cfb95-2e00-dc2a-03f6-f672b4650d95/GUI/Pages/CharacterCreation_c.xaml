@@ -787,7 +787,6 @@
                                                         <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.OriginDescription}" Style="{StaticResource PanelDescriptionText}" Margin="0,30,0,60"/>
                                                     </Viewbox>
                                                     <ScrollViewer Grid.Row="4" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" ls:ScrollViewerHelper.VerticalScrollOffsetMargin="300">
-                                                        
 
                                                             <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" x:Name="customControls" Visibility="Collapsed">
                                                                 <Control x:Name="bodyType" Template="{StaticResource BodyTypeChoice}" HorizontalAlignment="Center" Margin="0,0,0,0"/>

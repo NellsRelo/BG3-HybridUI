@@ -30,9 +30,16 @@
     <ControlTemplate x:Key="subClassDescriptionTemplate">
           <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
               <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
-                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedSubClass.Description}" Style="{StaticResource CarouselSideDescriptionText}"/>
+                  <TextBlock x:Name="SelectionDescription" ls:TextBlockFormatter.SourceText="{Binding SelectedSubClass.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
               </ContentControl>
           </StackPanel>
+
+        <ControlTemplate.Triggers>
+            <!-- Split Screen variation -->
+            <DataTrigger Binding="{Binding Layout}" Value="Common">
+                <Setter TargetName="SelectionDescription" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="subClassProgressionsTemplate">
