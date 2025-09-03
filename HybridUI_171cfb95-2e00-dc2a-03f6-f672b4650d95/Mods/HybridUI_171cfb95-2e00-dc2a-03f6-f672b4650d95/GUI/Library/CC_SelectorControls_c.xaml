@@ -8,64 +8,129 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
-
-      <ControlTemplate x:Key="selectorClosingTemplate">
-          <Grid HorizontalAlignment="Left">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-              </Grid.RowDefinitions>
-              <StackPanel Grid.Row="0">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="0,-50,0,0" Height="108" HorizontalAlignment="Center" />
-              </StackPanel>
-          </Grid>
-      </ControlTemplate>
-
-    <DataTemplate x:Key="SpellSelectorItemTemplate">
-        <DockPanel x:Name="Base" Height="{StaticResource gameplayPanelHeightSplit}">
-            <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"></ScaleTransform>
-                    </Image.RenderTransform>
-                </Image>
-                <TextBlock x:Name="PanelHeader" ls:TextBlockFormatter.SourceText="{Binding Title}" Style="{StaticResource PanelHeaderText}"/>
-            </StackPanel>
-
-            <StackPanel DockPanel.Dock="Top">
-                <TextBlock x:Name="SpellSelectorDescription" ls:TextBlockFormatter.SourceText="{Binding Description}" Style="{StaticResource PanelDescriptionText}" Margin="0,50,0,0"/>
-
-                <TextBlock x:Name="SelectedTitle" ls:TextBlockFormatter.SourceText="{Binding Source='h46206b54gae33g4546ga5dfg13de4a4c66aa', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0"/>
-                <ItemsControl x:Name="chosenSpells" ItemsSource="{Binding Additions}" ItemTemplate="{StaticResource removeableSpell}" Style="{StaticResource spellSelectorSpellListStyle}" Margin="0,50,0,0" Width="{Binding Width, ElementName=base}"/>
-                <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h76bfc212gcdd9g4c2ag899eg6bbeaf84f1e5', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0"/>
-            </StackPanel>
-
-            <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                          VerticalScrollBarVisibility="Auto" MaxHeight="1200" Height="Auto"
-                          DockPanel.Dock="Top" Margin="0,20,0,0">
-                <!-- <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}"> -->
-                    <ItemsControl x:Name="availableSpells" ItemsSource="{Binding Available}" ItemTemplate="{StaticResource selectableSpell}" Style="{StaticResource spellSelectorSpellListStyle}" Margin="-60,50,0,0" Width="{Binding Width, ElementName=base}"/>
-                <!-- </StackPanel> -->
-            </ScrollViewer>
-
-        </DockPanel>
-
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding IsCantrips}" Value="True">
-                <Setter TargetName="SelectedTitle" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='hc1b7e817gdd47g4f48g9d05gd8d8b0353160', Converter={StaticResource TranslatedStringConverter}}"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IsActions}" Value="True">
-                <Setter TargetName="SelectedTitle" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h346b7170gf25ag4c8dgbc45gb21b421b6833', Converter={StaticResource TranslatedStringConverter}}"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IsComplete}" Value="False">
-                <Setter TargetName="SelectedTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-            </DataTrigger>
-            <!-- Split Screen variation -->
-            <DataTrigger Binding="{Binding Layout}" Value="Common">
-                <Setter TargetName="Base" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
-
+    <!-- Progression Feature Templates -->
+    <DataTemplate x:Key="progressionActionsTemplate" DataType="ls:VMProgression">
+        <ContentControl Template="{StaticResource progressionFeaturesSpellList}" DataContext="{Binding Features.Actions}" Content="{Binding Source='h420f4742g1f0dg4d44gb326g4a8f7547b7a3', Converter={StaticResource TranslatedStringConverter}}"/>
     </DataTemplate>
 
-</ResourceDictionary>
+    <DataTemplate x:Key="progressionCantripsTemplate" DataType="ls:VMProgression">
+        <ContentControl Template="{StaticResource progressionFeaturesSpellList}" DataContext="{Binding Features.Cantrips}" Content="{Binding Source='h420f4742g1f0dg4d44gb326g4a8f7547b7a3', Converter={StaticResource TranslatedStringConverter}}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="progressionSpellsTemplate" DataType="ls:VMProgression">
+        <ContentControl Template="{StaticResource progressionFeaturesSpellList}" DataContext="{Binding Features.Spells}" Content="{Binding Source='h420f4742g1f0dg4d44gb326g4a8f7547b7a3', Converter={StaticResource TranslatedStringConverter}}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="skillProgressionTemplate" DataType="ls:VMSkill">
+        <ContentControl Template="{StaticResource ListButtonTemplate}" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" ToolTip="{StaticResource ManagedTooltip}" ToolTipService.Placement="Right">
+            <Grid>
+                <Grid Style="{StaticResource FeatureListItemIconHolder}"/>
+                <Control Template="{StaticResource SkillDisplayName}" FontSize="{StaticResource ScaledDefaultFontSize}" FontWeight="SemiBold" Foreground="{StaticResource LS_accent100TxtColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="160,0,0,0"/>
+                <TextBlock x:Name="featureType" Text="{Binding Source='h6df70972gfd55g4f29g9431g0a1530858ccf', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListItemKind}"/>
+            </Grid>
+        </ContentControl>
+    </DataTemplate>
+
+    <DataTemplate x:Key="abilityProgressionTemplate" DataType="ls:VMAbility">
+        <ContentControl Template="{StaticResource ListButtonTemplate}" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" ToolTip="{StaticResource ManagedTooltip}" ToolTipService.Placement="Right">
+            <Grid>
+                <Grid Style="{StaticResource FeatureListItemIconHolder}"/>
+                <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource FeatureListItemName}">
+                    <b:Interaction.Behaviors>
+                        <ls:CtxTransStringRunGeneratorBehavior Source="{Binding NameCTS}"/>
+                    </b:Interaction.Behaviors>
+                </TextBlock>
+            </Grid>
+        </ContentControl>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="spellReplaceTemplate">
+        <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+            <!-- Header Section -->
+            <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleY="-1"></ScaleTransform>
+                </Image.RenderTransform>
+            </Image>
+            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h000011feg0be5g4f09g978eg030b3e2e62c6', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h7d40d764gac52g4ccbgb18eg136c928dd69e', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
+            
+            <!-- Content Section -->
+            <Grid MaxHeight="{StaticResource spellReplacementPanelHeight}">
+                <StackPanel x:Name="replaceSummary" ls:MoveFocus.IsMoveFocusScope="True">
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,100,0,0">
+
+                        <StackPanel Margin="0,0,50,0">
+                            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source=hd19b7627gc9c3g4ff4ga827g5d68b0ce1409, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}"/>
+
+                            <ls:LSButton x:Name="outSpell" ls:MoveFocus.Focusable="True" Focusable="True">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="LSButtonReleased" >
+                                        <b:ChangePropertyAction TargetName="replaceSummary" PropertyName="Visibility" Value="Hidden" />
+                                        <b:ChangePropertyAction TargetName="replaceChooseOutSpell" PropertyName="Visibility" Value="Visible" />
+                                        <b:ChangePropertyAction TargetName="replaceChooseOutSpell" PropertyName="IsEnabled" Value="True" />
+                                        <b:ChangePropertyAction TargetName="replaceChooseOutSpell" PropertyName= "Template" Value="{StaticResource chooseReplacedOutSpellPanelTemplate}"/>
+                                        <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c" FocusElement="{Binding ElementName=replaceChooseOutSpell}"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                                <ls:LSButton.Template>
+                                    <ControlTemplate>
+                                        <Grid>
+                                            <Image Source="{StaticResource SpellReplaceFrame}" Stretch="None"/>
+                                            <Rectangle Fill="{Binding ClassProgressionDetails.OutSpellReplacement.Spell.Icon}" Width="100" Height="100"/>
+                                            <Image Source="{StaticResource SpellReplaceOutOverlay}" Stretch="None"/>
+                                            <Control x:Name="frame" Width="150" Height="150" Template="{StaticResource FocusedOnlyIndicatorTemplate}" Visibility="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource AncestorType={x:Type ls:LSButton}}, Converter={StaticResource BoolToVisibleConverter}}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ls:LSButton.Template>
+                            </ls:LSButton>
+                        </StackPanel>
+
+                        <Image Source="{StaticResource SideArrowChunky}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,60"/>
+
+                        <StackPanel Margin="50,0,0,0">
+                            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source=h19bc3d6bg4c93g413fga949g4db364084cf4, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}"/>
+
+                            <ls:LSButton x:Name="inSpell" ls:MoveFocus.Focusable="True" Focusable="True">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="LSButtonReleased" >
+                                        <b:ChangePropertyAction TargetName="replaceSummary" PropertyName="Visibility" Value="Hidden" />
+                                        <b:ChangePropertyAction TargetName="replaceChooseInSpell" PropertyName="Visibility" Value="Visible" />
+                                        <b:ChangePropertyAction TargetName="replaceChooseInSpell" PropertyName="IsEnabled" Value="True" />
+                                        <b:ChangePropertyAction TargetName="replaceChooseInSpell" PropertyName= "Template" Value="{StaticResource chooseReplacedInSpellPanelTemplate}"/>
+                                        <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c" FocusElement="{Binding ElementName=replaceChooseInSpell}"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                                <ls:LSButton.Template>
+                                    <ControlTemplate>
+                                        <Grid>
+                                            <Image Source="{StaticResource SpellReplaceFrame}" Stretch="None"/>
+                                            <Rectangle Fill="{Binding ClassProgressionDetails.InSpellReplacement.Spell.Icon}" Width="100" Height="100"/>
+                                            <Control x:Name="frame" Width="150" Height="150" Template="{StaticResource FocusedOnlyIndicatorTemplate}" Visibility="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource AncestorType={x:Type ls:LSButton}}, Converter={StaticResource BoolToVisibleConverter}}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ls:LSButton.Template>
+                            </ls:LSButton>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <Control x:Name="replaceChooseOutSpell" Visibility="Collapsed" IsEnabled="False" ls:MoveFocus.IsMoveFocusScope="True"/>
+
+                <Control x:Name="replaceChooseInSpell" Visibility="Collapsed" IsEnabled="False" ls:MoveFocus.IsMoveFocusScope="True"/>
+
+            </Grid>
+        </StackPanel>
+        
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding ElementName=outSpell, Path=(ls:MoveFocus.IsFocused)}" Value="True">
+                <Setter TargetName="outSpell" Property="BoundEvent" Value="UIAccept"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=inSpell, Path=(ls:MoveFocus.IsFocused)}" Value="True">
+                <Setter TargetName="inSpell" Property="BoundEvent" Value="UIAccept"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    </ResourceDictionary>

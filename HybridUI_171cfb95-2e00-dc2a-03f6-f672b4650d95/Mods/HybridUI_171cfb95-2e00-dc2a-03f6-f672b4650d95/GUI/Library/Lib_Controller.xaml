@@ -10,10 +10,13 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="CCLib_c.xaml"/>
+        <ResourceDictionary Source="HUI_Lib.xaml"/>
         <ResourceDictionary Source="CC_AbilityControls_c.xaml"/>
+        <ResourceDictionary Source="CC_AppearanceControls_c.xaml"/>
         <ResourceDictionary Source="CC_BackgroundControls_c.xaml"/>
         <ResourceDictionary Source="CC_ClassControls_c.xaml"/>
         <ResourceDictionary Source="CC_DeityControls_c.xaml"/>
+        <ResourceDictionary Source="CC_FeatControls_c.xaml"/>
         <ResourceDictionary Source="CC_RaceControls_c.xaml"/>
         <ResourceDictionary Source="CC_SubRaceControls_c.xaml"/>
         <ResourceDictionary Source="CC_SubClassControls_c.xaml"/>

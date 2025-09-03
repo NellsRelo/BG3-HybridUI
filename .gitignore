@@ -4,3 +4,12 @@ story.div*
 story_*.dat
 story_*.txt
 *.zip
+
+Images
+Images/**
+TK
+TK/**
+MainUI
+MainUI/**
+GUI
+GUI/**

@@ -545,7 +545,7 @@
                                                     <ListBoxItem x:Name="spellPrepTab" Tag="spellprep" IsEnabled="{Binding SpellPrepare.Preparable.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
 
                                                     <ListBoxItem x:Name="backgroundTab" Tag="background"/>
-
+                                                    <ListBoxItem x:Name="featTab" Tag="feats" IsEnabled="{Binding SelectableFeats.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                     <ListBoxItem x:Name="abilityTab" Tag="ability"/>
                                                     <ListBoxItem x:Name="raceSkillsTab" Tag="raceskills" IsEnabled="{Binding AllSkills.RaceProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                     <ListBoxItem x:Name="skillsTab" Tag="skills" IsEnabled="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
@@ -781,7 +781,7 @@
 
                                                       <Control DockPanel.Dock="Top" x:Name="originControls" Template="{StaticResource originControlsTemplate}" Grid.Row="1"/>
 
-                                                    <Control Grid.Row="2" Template="{StaticResource selectorClosingTemplate}"/>
+                                                    <Control Grid.Row="2" Template="{StaticResource HUI_SelectorClosingTemplate}"/>
 
                                                     <Viewbox StretchDirection="DownOnly" Stretch="Uniform"  DockPanel.Dock="Top" Grid.Row="3">
                                                         <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.OriginDescription}" Style="{StaticResource PanelDescriptionText}" Margin="0,30,0,60"/>
@@ -1036,7 +1036,7 @@
                                                           <Control Template="{StaticResource spellPrepTemplate}"/>
                                                     </StackPanel>
 
-                                                    <Control Template="{StaticResource selectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                   </Grid>
                                                 </DockPanel>
@@ -1121,7 +1121,7 @@
                                                           <Control Template="{StaticResource raceSkillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
 
-                                                      <Control Template="{StaticResource selectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                     </Grid>
                                                 </DockPanel>
@@ -1147,7 +1147,7 @@
                                                           <Control Template="{StaticResource skillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
 
-                                                      <Control Template="{StaticResource selectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                     </Grid>
                                                 </DockPanel>
@@ -1172,7 +1172,7 @@
                                                       <Control Template="{StaticResource skillExpertisePanelTemplate}"/>
                                                     </StackPanel>
 
-                                                    <Control Template="{StaticResource selectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                   </Grid>
                                                 </DockPanel>

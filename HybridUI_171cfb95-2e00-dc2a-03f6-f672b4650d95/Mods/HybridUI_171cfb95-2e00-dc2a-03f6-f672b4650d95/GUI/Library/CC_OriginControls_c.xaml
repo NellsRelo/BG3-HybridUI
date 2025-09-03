@@ -11,12 +11,9 @@
       <ControlTemplate x:Key="originHeaderTemplate">
           <DockPanel>
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                      <Image.RenderTransform>
-                          <ScaleTransform ScaleY="-1"></ScaleTransform>
-                      </Image.RenderTransform>
-                  </Image>
-                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedOrigin.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center" Margin="0,-10,0,0"/>
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedOrigin.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  </ContentControl>
               </StackPanel>
         </DockPanel>
     </ControlTemplate>

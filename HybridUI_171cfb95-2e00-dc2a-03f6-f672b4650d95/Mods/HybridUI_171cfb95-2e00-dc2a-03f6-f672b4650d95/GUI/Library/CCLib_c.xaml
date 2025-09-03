@@ -68,6 +68,7 @@
     <BitmapImage x:Key="SelectedItem2" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_cc_selectedItem_2.png"/>
     <BitmapImage x:Key="SelectorSelected1" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_cc_selector_selected1.png"/>
     <BitmapImage x:Key="SelectorSelected2" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_cc_selector_selected2.png"/>
+    <BitmapImage x:Key="BGDecoration" UriSource="pack://application:,,,/Core;component/Assets/CC/levelUp_newAddition_bg.png" />
 
     <BitmapImage x:Key="IconGridSelector" UriSource="pack://application:,,,/Core;component/Assets/CC/selector_CC.png"/>
 
@@ -983,7 +984,7 @@
               <ContentControl ContentTemplate="{DynamicResource PassiveSelectorItemTemplate}" Content="{Binding .}"/>
             </StackPanel>
 
-            <Control Template="{StaticResource selectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+            <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
           </Grid>
         </DockPanel>
     </DataTemplate>
@@ -1004,7 +1005,7 @@
                     <ContentControl ContentTemplate="{DynamicResource EquipmentSelectorItemTemplate}" Content="{Binding .}"/>
                 </StackPanel>
 
-            <Control Template="{StaticResource selectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+            <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
           </Grid>
         </DockPanel>
     </DataTemplate>
@@ -1329,7 +1330,7 @@
 
             <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hba1cb211gedb1g47d3g9bc8g275f30e0dc6d', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,50,0,0"/>
 
-            <ls:LSScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" Height="{StaticResource spellReplacementPanelHeight}">
+            <ls:LSScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" MaxHeight="{StaticResource spellReplacementPanelHeight}" VerticalScrollBarVisibility="Auto">
                 <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
 
                     <ItemsControl x:Name="availableSpells" ItemsSource="{Binding ClassProgressionDetails.OutSpellsAvailable}" Style="{StaticResource spellSelectorSpellListStyle}" Width="{Binding ActualWidth, ElementName=base}">
@@ -1376,7 +1377,7 @@
 
             <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h693e8082g6817g4136gb51cg131b3310f24a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,50,0,0"/>
 
-            <ls:LSScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" Height="{StaticResource spellReplacementPanelHeight}">
+            <ls:LSScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" MaxHeight="{StaticResource spellReplacementPanelHeight}" VerticalScrollBarVisibility="Auto">
                 <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
 
                     <ItemsControl x:Name="availableSpells" ItemsSource="{Binding ClassProgressionDetails.InSpellsAvailable}" Style="{StaticResource spellSelectorSpellListStyle}" Width="{Binding ActualWidth, ElementName=base}">
@@ -3701,7 +3702,16 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="classPanelTemplate">
-        <DockPanel Margin="0,0,0,50">
+        <DockPanel LastChildFill="True">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">
                     <b:InvokeCommandAction Command="{Binding DataContext.SetupClassesLoopingCommand, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="Available"/>
@@ -3711,73 +3721,90 @@
             </b:Interaction.Triggers>
 
             <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+            <StackPanel Grid.Column="0" Grid.Row="0" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+              <DockPanel>
+                  <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                      <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
+                          <Image.RenderTransform>
+                              <ScaleTransform ScaleY="-1"></ScaleTransform>
+                          </Image.RenderTransform>
+                      </Image>
+                      <TextBlock x:Name="panelTitle" ls:TextBlockFormatter.SourceText="{Binding Source=h4d0d00cfg4edeg42c3gaa4agcc3908351b8d, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
 
-            <StackPanel DockPanel.Dock="Top">
-                <TextBlock x:Name="panelTitle" ls:TextBlockFormatter.SourceText="{Binding Source=h4d0d00cfg4edeg42c3gaa4agcc3908351b8d, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
-
-                <TextBlock x:Name="addClassDescription" Visibility="Collapsed" ls:TextBlockFormatter.SourceText="{Binding Source=h5207e327g4302g4910gaf8cgc2e27cc1b248, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,20"/>
-
-                <StackPanel x:Name="classList" Visibility="{Binding SelectableClasses.Count, Converter={StaticResource CountToVisibilityConverter}, FallbackValue=Collapsed}">
-
-                    <ListBox x:Name="classCarousel" Template="{StaticResource AnimatedIconCarouselTemplate}" ItemsSource="{Binding SelectableClasses}" SelectedItem="{Binding SelectedClass}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Image x:Name="classIcon" Style="{StaticResource ClassIconStyle}" Stretch="None" Opacity="1" />
-
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
-                                        <Setter TargetName="classIcon" Property="Width" Value="{StaticResource UnselectedCarouselIconSize}"/>
-                                        <Setter TargetName="classIcon" Property="Height" Value="{StaticResource UnselectedCarouselIconSize}"/>
-                                        <Setter TargetName="classIcon" Property="Stretch" Value="Uniform"/>
-                                        <Setter TargetName="classIcon" Property="Opacity" Value="0.9"/>
-                                        <Setter TargetName="classIcon" Property="Effect">
-                                            <Setter.Value>
-                                                <ls:SaturationEffect Saturation="0.6"/>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Description}" Style="{StaticResource PanelDescriptionText}" Margin="0,30,0,0"/>
+                      <TextBlock x:Name="addClassDescription" Visibility="Collapsed" ls:TextBlockFormatter.SourceText="{Binding Source=h5207e327g4302g4910gaf8cgc2e27cc1b248, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,20"/>
                 </StackPanel>
 
-                <StackPanel x:Name="multiclassList" Visibility="{Binding SelectableAdditionalClasses.Count, Converter={StaticResource CountToVisibilityConverter}, FallbackValue=Collapsed}">
+                <!-- Class Grid (Respec) -->
+                <StackPanel x:Name="selectedClassDescription" Orientation="Horizontal" DockPanel.Dock="Top">
 
-                    <ListBox x:Name="multiclassCarousel" Style="{StaticResource IconCarouselStyle}" ItemsSource="{Binding SelectableAdditionalClasses}" SelectedItem="{Binding SelectedMultiClass}">
-                        <ListBox.Resources>
-                            <ControlTemplate x:Key="IconsTemplate">
-                                <Control Template="{StaticResource CarouselClassIconsTemplate}"/>
-                            </ControlTemplate>
-                        </ListBox.Resources>
-                    </ListBox>
+                    <StackPanel x:Name="classList" Visibility="{Binding SelectableClasses.Count, Converter={StaticResource CountToVisibilityConverter}, FallbackValue=Collapsed}">
+                        <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"  DockPanel.Dock="Top" Margin="0,20,0,0">
+                          <ListBox x:Name="ClassesListBox"
+                                  ItemTemplate="{StaticResource ClassIconTemplate}"
+                                  ItemsSource="{Binding SelectableClasses}" SelectedItem="{Binding SelectedClass}"
+                                  ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                                  Style="{StaticResource gameplayIconGridStyle}"/>
+                        </ScrollViewer>
+                    </StackPanel>
 
-                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedMultiClass.Description}" Style="{StaticResource PanelDescriptionText}" Margin="0,10,0,50"/>
-                </StackPanel>
+                <!-- Multiclass Grid (Level-Up) -->
+                    <StackPanel x:Name="multiclassList" Visibility="{Binding SelectableAdditionalClasses.Count, Converter={StaticResource CountToVisibilityConverter}, FallbackValue=Collapsed}" Orientation="Horizontal" DockPanel.Dock="Top">
+                        <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto" MaxHeight="600" Height="Auto"  DockPanel.Dock="Top" Margin="0,20,0,0">
+                          <ListBox x:Name="AdditionalClassesListBox"
+                                  ItemTemplate="{StaticResource ClassIconTemplate}"
+                                  ItemsSource="{Binding SelectableAdditionalClasses}" SelectedItem="{Binding SelectedMultiClass}"
+                                  ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                                  Style="{StaticResource gameplayIconGridStyle}"/>
 
-                <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}"/>
-
+                        </ScrollViewer>
+                    </StackPanel>
+                    </StackPanel>
+              </DockPanel>
             </StackPanel>
 
-            <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}">
-                <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
-
-                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=ClassSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
-
-                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=ClassProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
-
-                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassPassiveFeatures}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=ClassPassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}"/>
-
-                    <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.ClassProgression}" HorizontalAlignment="Center"/>
-
+            <!-- Progressions List -->
+            <Grid Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="0,-30,0,0" Height="108" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}"/>
                 </StackPanel>
-            </ScrollViewer>
+                <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,-20,0,0">
+                    <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+                        <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.ClassProgression}" HorizontalAlignment="Center"/>
+
+                        <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=ClassProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                        <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassPassiveFeatures}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=ClassPassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                        <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=ClassSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                        <ItemsControl ItemsSource="{Binding ClassProgressionDetails.PassiveSelectors}" ItemTemplate="{StaticResource progressionPassiveSelectors}" ItemContainerStyle="{StaticResource UpdateStateItemStyle}"/>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Class Description -->
+            <StackPanel Grid.Column="1" Grid.RowSpan="2"  HorizontalAlignment="Left"  Margin="-200,200,0,0">
+                <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
+                    <TextBlock x:Name="SelectionDescription" ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
+                </ContentControl>
+            </StackPanel>
+
+          </Grid>
         </DockPanel>
 
         <ControlTemplate.Triggers>
+            <!-- Split Screen variation -->
+            <DataTrigger Binding="{Binding Layout}" Value="Common">
+                <Setter TargetName="SelectionDescription" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding SelectedMultiClass.Level}" Value="0">
+                <Setter TargetName="SelectionDescription" Property="ls:TextBlockFormatter.SourceText" Value="{Binding SelectedMultiClass.Description}"/>
                 <Setter TargetName="panelTitle" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='hcbc3c9a8g9e80g4139g952bga971015c1f41', Converter={StaticResource TranslatedStringConverter}}"/>
                 <Setter TargetName="addClassDescription" Property="Visibility" Value="Visible"/>
             </DataTrigger>

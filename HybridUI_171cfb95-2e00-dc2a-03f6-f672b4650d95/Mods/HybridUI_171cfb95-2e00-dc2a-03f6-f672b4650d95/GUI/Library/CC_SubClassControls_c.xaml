@@ -11,12 +11,9 @@
       <ControlTemplate x:Key="subClassSelectionTemplate">
           <DockPanel>
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                      <Image.RenderTransform>
-                          <ScaleTransform ScaleY="-1"></ScaleTransform>
-                      </Image.RenderTransform>
-                  </Image>
-                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedSubClass.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedSubClass.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  </ContentControl>
               </StackPanel>
               <StackPanel x:Name="selectedSubclassDescription" Orientation="Horizontal" DockPanel.Dock="Top">
                   <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"  DockPanel.Dock="Top" Margin="0,20,0,0">

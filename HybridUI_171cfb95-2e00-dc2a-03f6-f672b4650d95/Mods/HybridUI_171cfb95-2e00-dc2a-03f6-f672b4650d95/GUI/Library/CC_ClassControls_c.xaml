@@ -11,12 +11,9 @@
       <ControlTemplate x:Key="classSelectionTemplate">
           <DockPanel>
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                      <Image.RenderTransform>
-                          <ScaleTransform ScaleY="-1"></ScaleTransform>
-                      </Image.RenderTransform>
-                  </Image>
-                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  </ContentControl>
               </StackPanel>
 
               <StackPanel x:Name="selectedClassDescription" Orientation="Horizontal" DockPanel.Dock="Top">
@@ -73,4 +70,318 @@
               </ScrollViewer>
           </Grid>
     </ControlTemplate>
+
+    <ControlTemplate x:Key="MultiClassSelectionTemplate">
+          <DockPanel>
+              <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedMultiClass.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  </ContentControl>
+              </StackPanel>
+
+              <StackPanel x:Name="selectedClassDescription" Orientation="Horizontal" DockPanel.Dock="Top">
+                  <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                               VerticalScrollBarVisibility="Auto" 
+                               MaxHeight="800" 
+                               Height="Auto"  
+                               DockPanel.Dock="Top" 
+                               Margin="0,20,0,0">
+                      <ListBox x:Name="ClassesListBox" 
+                              ItemTemplate="{StaticResource ClassIconTemplate}"
+                              ItemsSource="{Binding SelectableAdditionalClasses}" 
+                              SelectedItem="{Binding SelectedMultiClass}"
+                              ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                              Style="{StaticResource gameplayIconGridStyle}">
+                      </ListBox>
+                  </ScrollViewer>
+              </StackPanel>
+          </DockPanel>
+    </ControlTemplate>
+
+    <!-- Extracted carousel icon template for better organization -->
+    <ControlTemplate x:Key="CarouselClassIconTemplate">
+        <ControlTemplate.Resources>
+            <ls:SaturationEffect x:Key="SelectedSaturation" Saturation="0.95"/>
+            <ls:SaturationEffect x:Key="UnselectedSaturation" Saturation="0.1"/>
+        </ControlTemplate.Resources>
+
+        <Grid x:Name="ClassRoot" HorizontalAlignment="Center" Height="350">
+            <Grid.ToolTip>
+                <ls:LSTooltip Placement="Center" VerticalOffset="-100">
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource TooltipBaseTextStyle}"/>
+                </ls:LSTooltip>
+            </Grid.ToolTip>
+
+            <Rectangle x:Name="LevelBackground" Width="150" Height="140" HorizontalAlignment="Center" VerticalAlignment="Bottom" Effect="{StaticResource UnselectedSaturation}">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pack://application:,,,/Core;component/Assets/CC/holder_classLevel_bg.png" Stretch="None"/>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Image x:Name="icon" Stretch="None" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Top" Effect="{StaticResource UnselectedSaturation}">
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource IconIdToSourceConverter}">
+                        <Binding Source="Assets/ClassIcons/"/>
+                        <Binding Path="IDString"/>
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+
+            <TextBlock x:Name="level" Foreground="{StaticResource CCTextPrimary}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,8" FontSize="{StaticResource ScaledDefaultFontSize}" Opacity="0.6">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                        <Binding Source="h5df00b79ga6acg4d9fgb8dag23340151fba7"/>
+                        <Binding Path="DataContext.Level" RelativeSource="{RelativeSource Mode=Self}"/>
+                        <Binding Source=""/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <!-- Single trigger: when selected, override the default unselected state -->
+            <DataTrigger Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                        <Binding Path="DataContext.SelectedMultiClass" ElementName="CharacterLevelUp_c"/>
+                    </MultiBinding>
+                </DataTrigger.Binding>
+                <!-- Override defaults to selected state -->
+                <Setter TargetName="LevelBackground" Property="Effect" Value="{StaticResource SelectedSaturation}"/>
+                <Setter TargetName="icon" Property="Effect" Value="{StaticResource SelectedSaturation}"/>
+                <Setter TargetName="level" Property="Opacity" Value="1.0"/>
+                <!-- Hide tooltip for selected class since name is already prominently displayed -->
+                <Setter TargetName="ClassRoot" Property="ToolTip" Value="{x:Null}"/>
+                <Setter TargetName="level" Property="Text">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                            <Binding Source="h5df00b79ga6acg4d9fgb8dag23340151fba7"/>
+                            <Binding Path="DataContext.Level" RelativeSource="{RelativeSource Mode=Self}" Converter="{StaticResource AddConverter}" ConverterParameter="1"/>
+                            <Binding Source=""/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="CarouselNavigationButtonTemplate" TargetType="ls:LSButton">
+        <Grid Width="80" Height="80" Background="Transparent">
+            <Image x:Name="arrow" Source="pack://application:,,,/Core;component/Assets/CC/input_arrow_d.png" Stretch="None"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Source" Value="pack://application:,,,/Core;component/Assets/CC/input_arrow_h.png" TargetName="arrow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="arrow" Property="Margin" Value="0,4,0,0"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ClassCarouselTemplate">
+        <ControlTemplate.Resources>
+            <!-- Shared OpacityMasks for carousel fade effects -->
+            <LinearGradientBrush x:Key="LeftFadeOpacityMask" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Offset="0" Color="Transparent" />
+                <GradientStop Offset="1" Color="Black" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="RightFadeOpacityMask" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Offset="0" Color="Black" />
+                <GradientStop Offset="1" Color="Transparent" />
+            </LinearGradientBrush>
+            
+            <Style x:Key="CarouselLeftButtonStyle" TargetType="ls:LSButton" BasedOn="{StaticResource IconCarouselButtonStyle}">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="40,0,0,0"/>
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <Style x:Key="CarouselRightButtonStyle" TargetType="ls:LSButton" BasedOn="{StaticResource IconCarouselButtonStyle}">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,0,40,0"/>
+            </Style>
+            
+            <BitmapImage x:Key="SeparatorImage" UriSource="pack://application:,,,/Core;component/Assets/CC/divider_levelUp.png" />
+            <BitmapImage x:Key="UpArrow1Image" UriSource="pack://application:,,,/Core;component/Assets/CC/upArrow_h1.png" />
+            
+            <Style x:Key="CarouselItemStyle" TargetType="Control">
+                <Setter Property="Template" Value="{StaticResource CarouselClassIconTemplate}"/>
+                <Setter Property="Focusable" Value="True"/>
+            </Style>
+            
+            <Style x:Key="SingleClassDisplayStyle" TargetType="Control" BasedOn="{StaticResource CarouselItemStyle}">
+                <Setter Property="Visibility" Value="Visible"/>
+                <Style.Triggers>
+                    <DataTrigger Value="True">
+                        <DataTrigger.Binding>
+                            <Binding Path="UsedClassesCount" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="1"/>
+                        </DataTrigger.Binding>
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            
+            <Style x:Key="CarouselSideItemStyle" TargetType="Control" BasedOn="{StaticResource CarouselItemStyle}">
+                <Setter Property="Visibility" Value="Visible"/>
+                <Setter Property="Focusable" Value="False"/>
+            </Style>
+
+            <Style x:Key="CarouselLeftItemStyle" TargetType="Control" BasedOn="{StaticResource CarouselSideItemStyle}">
+                <Setter Property="OpacityMask" Value="{StaticResource LeftFadeOpacityMask}"/>
+                <Style.Triggers>
+                    <DataTrigger Value="True">
+                        <DataTrigger.Binding>
+                            <MultiBinding Converter="{StaticResource EqualConverter}">
+                                <Binding Path="SelectedMultiClass.Prev"/>
+                                <Binding Path="SelectedMultiClass"/>
+                            </MultiBinding>
+                        </DataTrigger.Binding>
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            
+            <Style x:Key="CarouselRightItemStyle" TargetType="Control" BasedOn="{StaticResource CarouselSideItemStyle}">
+                <Setter Property="OpacityMask" Value="{StaticResource RightFadeOpacityMask}"/>
+                <Style.Triggers>
+                    <DataTrigger Value="True">
+                        <DataTrigger.Binding>
+                            <MultiBinding Converter="{StaticResource EqualConverter}">
+                                <Binding Path="SelectedMultiClass.Next"/>
+                                <Binding Path="SelectedMultiClass"/>
+                            </MultiBinding>
+                        </DataTrigger.Binding>
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ControlTemplate.Resources>
+        
+        <StackPanel DockPanel.Dock="Top">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="GotFocus">
+                    <b:Interaction.Behaviors>
+                        <b:ConditionBehavior>
+                            <b:ConditionalExpression>
+                                <b:ComparisonCondition LeftOperand="{Binding UsedClassesCount}" Operator="GreaterThan" RightOperand="1"/>
+                            </b:ConditionalExpression>
+                        </b:ConditionBehavior>
+                    </b:Interaction.Behaviors>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+
+            <StackPanel x:Name="upperClassPanel">
+                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
+                    <Image.RenderTransform>
+                        <ScaleTransform ScaleY="-1"></ScaleTransform>
+                    </Image.RenderTransform>
+                </Image>
+                <TextBlock x:Name="classPanelTitleText" ls:TextBlockFormatter.SourceText="{Binding Source=he3ccedd0gceaeg4b1fg8e74g9dfc6da58cd2, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+            </StackPanel>
+
+            <Grid x:Name="ClassesCarousel" HorizontalAlignment="Center" Width="900" Opacity="{Binding Opacity, ElementName=upperClassPanel}">
+                <Grid HorizontalAlignment="Center">
+                    <!-- Single class display - just the selected class -->
+                    <Control x:Name="SingleClassDisplay" Style="{StaticResource SingleClassDisplayStyle}" DataContext="{Binding SelectedMultiClass}"
+                           ls:MoveFocus.Focusable="True">
+                            </Control>
+                            
+                            <!-- Multi-class carousel display - three elements -->
+                            <StackPanel x:Name="MultiClassCarousel" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <Binding Path="UsedClassesCount" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="1"/>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                
+                                <Control x:Name="CarouselLeftItem" Style="{StaticResource CarouselLeftItemStyle}" DataContext="{Binding SelectedMultiClass.Prev}">
+                                    <Control.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding SelectPrevUsedClass}"/>
+                                    </Control.InputBindings>
+                                </Control>
+                                
+                                <!-- Center selected item gets focus and visual feedback -->
+                                <Control x:Name="SelectedClassItem" Style="{StaticResource CarouselItemStyle}" DataContext="{Binding SelectedMultiClass}" 
+                                       ls:MoveFocus.Focusable="True">
+                                </Control>
+                                
+                                <Control x:Name="CarouselRightItem" Style="{StaticResource CarouselRightItemStyle}" DataContext="{Binding SelectedMultiClass.Next}">
+                                    <Control.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick" Command="{Binding SelectNextUsedClass}"/>
+                                    </Control.InputBindings>
+                                </Control>
+                            </StackPanel>
+
+                        <Image Source="{StaticResource BGDecoration}" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0"/>
+                    </Grid>
+                    
+                    <ls:LSButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource CarouselLeftButtonStyle}" SoundID="{DynamicResource CarouselButtonSoundEvent}" Command="{Binding SelectPrevUsedClass}"/>
+                    <ls:LSButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource CarouselRightButtonStyle}" SoundID="{DynamicResource CarouselButtonSoundEvent}" Command="{Binding SelectNextUsedClass}"/>
+                </Grid>
+
+            <!-- Separator from K&M UI -->
+            <Grid Margin="0,-20,0,-20">
+                <Image x:Name="wideSeparator" Source="{StaticResource SeparatorImage}" Stretch="Uniform"/>
+                <Image x:Name="separatorArrow" Source="{StaticResource UpArrow1Image}" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <TranslateTransform Y="0"/>
+                            <ScaleTransform ScaleY="-1" CenterY="98"/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+            </Grid>
+
+        </StackPanel>
+        <ControlTemplate.Triggers>
+            <!-- During level up animation, show carousel but with reduced opacity and disabled navigation -->
+            <DataTrigger Binding="{Binding LevelUpStep}" Value="Started">
+                <Setter TargetName="ClassesCarousel" Property="Opacity" Value="0.5"/>
+                <Setter TargetName="classPanelTitleText" Property="Visibility" Value="Visible"/>
+                <!-- Disable controller navigation buttons -->
+                <Setter TargetName="leftBtn" Property="IsEnabled" Value="False"/>
+                <Setter TargetName="rightBtn" Property="IsEnabled" Value="False"/>
+                <!-- Disable mouse navigation on carousel items -->
+                <Setter TargetName="CarouselLeftItem" Property="IsEnabled" Value="False"/>
+                <Setter TargetName="CarouselRightItem" Property="IsEnabled" Value="False"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding LevelUpStep}" Value="SkipAnimation">
+                <Setter TargetName="ClassesCarousel" Property="Opacity" Value="0.5"/>
+                <Setter TargetName="classPanelTitleText" Property="Visibility" Value="Visible"/>
+                <!-- Disable controller navigation buttons -->
+                <Setter TargetName="leftBtn" Property="IsEnabled" Value="False"/>
+                <Setter TargetName="rightBtn" Property="IsEnabled" Value="False"/>
+                <!-- Disable mouse navigation on carousel items -->
+                <Setter TargetName="CarouselLeftItem" Property="IsEnabled" Value="False"/>
+                <Setter TargetName="CarouselRightItem" Property="IsEnabled" Value="False"/>
+            </DataTrigger>
+            <!-- After animation completes, restore full carousel opacity and enable navigation -->
+            <DataTrigger Binding="{Binding LevelUpStep}" Value="IntroComplete">
+                <Setter TargetName="ClassesCarousel" Property="Opacity" Value="1.0"/>
+                <!-- Re-enable controller navigation buttons -->
+                <Setter TargetName="leftBtn" Property="IsEnabled" Value="True"/>
+                <Setter TargetName="rightBtn" Property="IsEnabled" Value="True"/>
+                <!-- Re-enable mouse navigation on carousel items -->
+                <Setter TargetName="CarouselLeftItem" Property="IsEnabled" Value="True"/>
+                <Setter TargetName="CarouselRightItem" Property="IsEnabled" Value="True"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
 </ResourceDictionary>

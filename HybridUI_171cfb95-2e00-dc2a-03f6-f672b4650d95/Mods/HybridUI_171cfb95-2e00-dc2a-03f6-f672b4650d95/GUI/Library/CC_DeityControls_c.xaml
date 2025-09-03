@@ -11,12 +11,9 @@
       <ControlTemplate x:Key="deitySelectionTemplate">
           <DockPanel>
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                      <Image.RenderTransform>
-                          <ScaleTransform ScaleY="-1"></ScaleTransform>
-                      </Image.RenderTransform>
-                  </Image>
-                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedDeity.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedDeity.Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                  </ContentControl>
               </StackPanel>
               <StackPanel x:Name="selectedSubRaceDescription" Orientation="Horizontal" DockPanel.Dock="Top">
                   <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"

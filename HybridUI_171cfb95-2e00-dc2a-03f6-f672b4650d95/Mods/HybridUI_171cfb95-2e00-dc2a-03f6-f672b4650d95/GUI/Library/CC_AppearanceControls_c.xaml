@@ -1,0 +1,99 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+					xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+					xmlns:System="clr-namespace:System;assembly=mscorlib"
+					xmlns:ls="clr-namespace:ls;assembly=Code"
+					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
+					mc:Ignorable="d">
+
+          <!-- Appearance Selector for Non-Dragonborn Draconic Bloodline Sorcerers -->
+          <ControlTemplate x:Key="draconicAppearanceTemplate">
+            <DockPanel>
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                    <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                    </ContentControl>
+                    
+                    <!-- Tab Carousel for Scales/Colors -->
+                    <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                        <ListBox x:Name="draconicTabs" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0">
+                            <ListBox.Items>
+                                <ListBoxItem Tag="scales" Content="{Binding Source='h85555614g40b2g459dgbfbfg76291036aebe', Converter={StaticResource TranslatedStringConverter}}"/>
+                                <ListBoxItem Tag="colors" Content="{Binding Source='h381a6c0bg214fg4968gae5cg9e5b8a8ffc20', Converter={StaticResource TranslatedStringConverter}}"/>
+                            </ListBox.Items>
+                        </ListBox>
+                    </ContentControl>
+                </StackPanel>
+
+                <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}">
+                    <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" x:Name="draconicAppearanceOptions">
+
+                        <!-- Scales Content -->
+                        <StackPanel x:Name="scalesContent" Margin="0,50,0,50">
+                            <ListBox ItemsSource="{Binding SelectableScales}" SelectedItem="{Binding SelectedScales}" Style="{StaticResource appearanceIconGridStyle}" Margin="0,30,0,0"/>
+                        </StackPanel>
+
+                        <!-- Colors Content -->
+                        <StackPanel x:Name="colorsContent" Visibility="Collapsed" Margin="0,50,0,50">
+                            <ItemsControl Style="{StaticResource ColorOptionsStyle}" ItemsSource="{Binding AppearancePassive.ColorOptions}" Margin="0,0,0,30"/>
+                            <ListBox ItemsSource="{Binding SelectablePassiveColours}" SelectedItem="{Binding SelectedPassiveColour}" ItemTemplate="{StaticResource selectableColourTemplate}" Style="{StaticResource appearanceOverpanelListBoxStyle}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+          <ControlTemplate.Triggers>
+            
+            <!-- Tab Content Visibility -->
+            <DataTrigger Binding="{Binding ElementName=draconicTabs, Path=SelectedItem.Tag}" Value="scales">
+                <Setter TargetName="scalesContent" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="colorsContent" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            
+            <DataTrigger Binding="{Binding ElementName=draconicTabs, Path=SelectedItem.Tag}" Value="colors">
+                <Setter TargetName="scalesContent" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="colorsContent" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+          </ControlTemplate.Triggers>
+            
+          </ControlTemplate>
+
+
+          <!-- Appearance Selector for Dragonborn Draconic Bloodline Sorcerers -->
+          <ControlTemplate x:Key="draconicAppearanceTemplateDragonBorn">
+            <DockPanel>
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                    <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" />
+                    </ContentControl>
+                </StackPanel>
+                <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" Margin="0,50,0,50">
+
+                    <!-- Decorator for Header - using this for consistency, but normally it would just be used in Carousels -->
+                    <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                      <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h861a433dgcc20g452bg9b1agde89d14c85c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,0,0,0" />
+                    </ContentControl>
+
+                    <ls:LSToggleButton x:Name="draconicDragonbornToggle" Template="{StaticResource DraconicDragonbornTickBoxTemplate}" HorizontalAlignment="Center" ls:MoveFocus.Focusable="True" IsChecked="{Binding AppearancePassive.EmptyMaterialSelected, Mode=TwoWay, Converter={StaticResource InvertBoolConverter}}" Command="{Binding DragonbornDraconicLinesToggleCommand}"/>
+                    <ItemsControl x:Name="draconicDragonbornColourOptionList" Style="{StaticResource ColorOptionsStyle}" ItemsSource="{Binding AppearancePassive.ColorOptions}"/>
+
+                    <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}">
+                        <ListBox x:Name="draconicDragonbornColourOptionGrid" ItemsSource="{Binding SelectablePassiveColours}" SelectedItem="{Binding SelectedPassiveColour}" ItemTemplate="{StaticResource selectableColourTemplate}" Style="{StaticResource appearanceOverpanelListBoxStyle}" Margin="0,50,0,0"/>
+                    </ScrollViewer>
+
+                </StackPanel>
+            </DockPanel>
+          <ControlTemplate.Triggers>
+              <DataTrigger Binding="{Binding ElementName=draconicDragonbornToggle, Path=(ls:MoveFocus.IsFocused)}" Value="True">
+                  <Setter TargetName="draconicDragonbornToggle" Property="BoundEvent" Value="UIAccept"/>
+              </DataTrigger>
+              <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
+                  <Setter TargetName="draconicDragonbornColourOptionList" Property="Visibility" Value="Collapsed"/>
+                  <Setter TargetName="draconicDragonbornColourOptionGrid" Property="Visibility" Value="Collapsed"/>
+              </DataTrigger>
+          </ControlTemplate.Triggers>
+          </ControlTemplate>
+
+</ResourceDictionary>
