@@ -13,22 +13,23 @@
             <DockPanel>
                 <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                     <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h7572d825gd782g43a5g90aag7f5d814a5f1a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
                     </ContentControl>
                     
                     <!-- Tab Carousel for Scales/Colors -->
                     <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
                         <ListBox x:Name="draconicTabs" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0">
                             <ListBox.Items>
-                                <ListBoxItem Tag="scales" Content="{Binding Source='h381a6c0bg214fg4968gae5cg9e5b8a8ffc20', Converter={StaticResource TranslatedStringConverter}}"/>
-                                <ListBoxItem Tag="colors" Content="{Binding Source='h85555614g40b2g459dgbfbfg76291036aebe', Converter={StaticResource TranslatedStringConverter}}"/>
+                                <ListBoxItem Tag="scales" Content="{Binding Source='h24787db3gf28dg4d79g8c0age428d4067710', Converter={StaticResource TranslatedStringConverter}}"/>
+                                <ListBoxItem Tag="colors" Content="{Binding Source='h9a8b7a34g0b55g47dbg9bd3ga7cd487fe423', Converter={StaticResource TranslatedStringConverter}}"/>
                             </ListBox.Items>
                         </ListBox>
                     </ContentControl>
                 </StackPanel>
 
-                <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}">
-                    <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" x:Name="draconicAppearanceOptions">
+                <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"  VerticalScrollBarVisibility="Auto"
+                          Grid.Row="1" Margin="0,50,0,0" Height="1200">
+                    <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" x:Name="draconicAppearanceOptions"  VerticalAlignment="Stretch" >
 
                         <!-- Scales Content -->
                         <StackPanel x:Name="scalesContent" Margin="0,50,0,50">
@@ -77,7 +78,8 @@
                     <ls:LSToggleButton x:Name="draconicDragonbornToggle" Template="{StaticResource DraconicDragonbornTickBoxTemplate}" HorizontalAlignment="Center" ls:MoveFocus.Focusable="True" IsChecked="{Binding AppearancePassive.EmptyMaterialSelected, Mode=TwoWay, Converter={StaticResource InvertBoolConverter}}" Command="{Binding DragonbornDraconicLinesToggleCommand}"/>
                     <ItemsControl x:Name="draconicDragonbornColourOptionList" Style="{StaticResource ColorOptionsStyle}" ItemsSource="{Binding AppearancePassive.ColorOptions}"/>
 
-                    <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}">
+                    <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"  VerticalScrollBarVisibility="Auto"
+                          Grid.Row="1" Margin="0,50,0,0" Height="1200">
                         <ListBox x:Name="draconicDragonbornColourOptionGrid" ItemsSource="{Binding SelectablePassiveColours}" SelectedItem="{Binding SelectedPassiveColour}" ItemTemplate="{StaticResource selectableColourTemplate}" Style="{StaticResource appearanceOverpanelListBoxStyle}" Margin="0,50,0,0"/>
                     </ScrollViewer>
 

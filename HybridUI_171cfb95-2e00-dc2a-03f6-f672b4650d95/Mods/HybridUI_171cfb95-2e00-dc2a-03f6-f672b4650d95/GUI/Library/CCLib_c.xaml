@@ -1890,7 +1890,7 @@
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h15329947gc691g4323gac0fge3fbcecb92d9', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
             <Trigger Property="Tag" Value="draconic">
-                <Setter TargetName="label" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}"/>
+                <Setter TargetName="label" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h7572d825gd782g43a5g90aag7f5d814a5f1a', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
 
             <Trigger Property="Tag" Value="background">
