@@ -14,7 +14,7 @@
                   <Grid>
                       <Grid x:Name="iconHolder" Style="{StaticResource FeatureListItemIconHolder}">
                           <Rectangle x:Name="icon" Width="96" Height="96" Fill="{Binding Icon}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                          <Image x:Name="fallbackIcon" Source="{StaticResource IconFeatDefaultBrush}" Width="96" Height="96" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+                          <Image x:Name="fallbackIcon" Source="pack://application:,,,/Core;component/Assets/Tooltips/Icons/PassiveFeature_Generic.png" Width="96" Height="96" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
                       </Grid>
                       <TextBlock x:Name="featureName" Text="{Binding Name}" Style="{StaticResource FeatureListItemName}"/>
                       <TextBlock x:Name="featureKind" Text="{Binding FeatureType}" Style="{StaticResource FeatureListItemKind}"/>
