@@ -26,6 +26,11 @@
                     <ls:PushState Name="Paused"/>
                 </ls:StateEvent.Actions>
             </ls:StateEvent>
+            <ls:StateEvent Name = "IE.UICancel">
+                <ls:StateEvent.Actions>
+                    <ls:RemoveState/>
+                </ls:StateEvent.Actions>
+            </ls:StateEvent>
             <ls:StateEvent Name = "OpenMessageBox">
                 <ls:StateEvent.Actions>
                     <ls:AddSubstate Name="MessageBox"/>
@@ -56,12 +61,15 @@
         <!--STATE: CharacterLevelUp -->
         <ls:State Name = "CharacterLevelUp" HideStatesBelow = "True" IsModal="True" IsModalCameraControlAllowed="True" ForceSplitscreen="True" Layout = "Player" Owner = "Player" ModType="Override">
             <ls:State.Widgets>
-                <ls:StateWidget Filename="Notification_c.xaml" Layer="Notifications"/>
                 <ls:StateWidget Filename="CharacterLevelUp_c.xaml" Layer="HUD"/>
-                <ls:StateWidget Filename="ScreenFade.xaml" Layer="ScreenFade" BlockedLoading="True"/>
             </ls:State.Widgets>
 
             <ls:State.Events>
+              <ls:StateEvent Name = "ToggleGameMenu">
+                  <ls:StateEvent.Actions>
+                      <ls:PushState Name="Paused"/>
+                  </ls:StateEvent.Actions>
+              </ls:StateEvent>
                 <ls:StateEvent Name = "IE.ToggleInGameMenu">
                     <ls:StateEvent.Actions>
                         <ls:PushState Name="Paused"/>

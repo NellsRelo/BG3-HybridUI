@@ -1,0 +1,157 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+					xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+					xmlns:System="clr-namespace:System;assembly=mscorlib"
+					xmlns:ls="clr-namespace:ls;assembly=Code"
+					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
+					mc:Ignorable="d">
+
+          <!-- Needed because it's used by CCLib_c -->
+          <ResourceDictionary.MergedDictionaries>
+              <ResourceDictionary Source="/HybridUI;component/Library/HUI_Lib.xaml"/>
+          </ResourceDictionary.MergedDictionaries>
+
+          <BitmapImage x:Key="SpellBook" UriSource="pack://application:,,,/Core;component/Assets/PanelSelect_c/c_ico_spellBook_h.png"/>
+
+          <ControlTemplate x:Key="HUI_Spell_Separator">
+              <ContentControl Template="{StaticResource HUI_WideSeparator}">
+                  <!-- Spellbook icon -->
+                  <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <Grid.RenderTransform>
+                          <TransformGroup>
+                              <TranslateTransform Y="-1"/>
+                              <ScaleTransform ScaleY="1" CenterY="98"/>
+                          </TransformGroup>
+                      </Grid.RenderTransform>
+                      <!-- Base Icon -->
+                      <Image Source="{StaticResource SpellBook}" 
+                            Width="160" Height="160" Stretch="Uniform" Opacity="1"/>
+                      
+                      <!-- Radial gradient overlay with image shape -->
+                      <Rectangle Width="160" Height="160" Opacity="0.6">
+                          <Rectangle.Fill>
+                              <RadialGradientBrush Center="0.5,0.5" RadiusX="0.8" RadiusY="0.8">
+                                  <GradientStop Color="#CD853F" Offset="0.2"/>
+                                  <GradientStop Color="#8B4513" Offset="0.5"/>
+                              </RadialGradientBrush>
+                          </Rectangle.Fill>
+                          <Rectangle.OpacityMask>
+                              <ImageBrush ImageSource="{StaticResource SpellBook}" Stretch="Uniform"/>
+                          </Rectangle.OpacityMask>
+                      </Rectangle>
+                  </Grid>
+              </ContentControl>
+          </ControlTemplate>
+
+          <ControlTemplate x:Key="HUI_SpellSelectorTemplate">
+              <DockPanel x:Name="base">
+                  <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                          <TextBlock ls:TextBlockFormatter.SourceText="{Binding Title}" Style="{StaticResource PanelHeaderText}"/>
+                      </ContentControl>
+                      <TextBlock x:Name="SpellSelectorDescription" ls:TextBlockFormatter.SourceText="{Binding Description}" Style="{StaticResource PanelDescriptionText}" Margin="0,50,0,0"/>
+
+                      <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,-30">
+                          <TextBlock x:Name="SelectedTitle" ls:TextBlockFormatter.SourceText="{Binding Source='h46206b54gae33g4546ga5dfg13de4a4c66aa', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}"/>
+                      </ContentControl>
+                      <ItemsControl x:Name="chosenSpells" ItemsSource="{Binding Additions}" ItemTemplate="{StaticResource removeableSpell}" Style="{StaticResource spellSelectorSpellListStyle}" Margin="0,50,0,0" Width="{Binding ActualWidth, ElementName=base}"/>
+                      
+                      <ContentControl Template="{StaticResource HUI_Spell_Separator}"/>
+
+                  </StackPanel>
+
+                  <StackPanel>
+                      <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,-30">
+                          <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h76bfc212gcdd9g4c2ag899eg6bbeaf84f1e5', Converter={StaticResource TranslatedStringConverter}}" 
+                                    Style="{StaticResource PanelSubHeaderText}"/>
+                      </ContentControl>
+                      <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
+                                    VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"
+                                    DockPanel.Dock="Top" Margin="0,0,0,0">
+                          <ItemsControl x:Name="availableSpells" ItemsSource="{Binding Available}" ItemTemplate="{StaticResource selectableSpell}" Style="{StaticResource spellSelectorSpellListStyle}"
+                                        Margin="-60,50,0,0" Width="{Binding Width, ElementName=base}"/>
+
+                      </ScrollViewer>
+                  </StackPanel>
+
+              </DockPanel>
+
+              <ControlTemplate.Triggers>
+                  <!-- Split Screen variation -->
+                  <DataTrigger Binding="{Binding Layout}" Value="Common">
+                      <Setter TargetName="base" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding IsComplete}" Value="False">
+                      <Setter TargetName="SelectedTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
+          </ControlTemplate>
+
+          <ControlTemplate x:Key="HUI_SpellPrepTemplate">
+            <DockPanel x:Name="base" DataContext="{Binding SpellPrepare}">
+              <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h15329947gc691g4323gac0fge3fbcecb92d9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                  </ContentControl>
+
+                  <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,10">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hcfab5df8g7913g4193gae43g805a927077a5', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}"/>
+                  </ContentControl>
+                  <ItemsControl x:Name="chosenSpells" ItemsSource="{Binding Prepared}" ItemTemplate="{StaticResource removeableSpell}" Style="{StaticResource spellSelectorSpellListStyle}" Width="{Binding ActualWidth, ElementName=base}"/>
+                  
+                  <ContentControl Template="{StaticResource HUI_Spell_Separator}"/>
+              </StackPanel>
+
+                <ls:LSScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" ls:ScrollViewerHelper.VerticalScrollOffsetMargin="300" VerticalScrollBarVisibility="Auto" MaxHeight="900" Height="Auto"  DockPanel.Dock="Top" Margin="0,20,0,50">
+                    <StackPanel>
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h60d9fcd7g33e4g4606g8fe9g8f5f25e03847', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0"/>
+                        <ItemsControl x:Name="availableSpellsByLevel" ItemsSource="{Binding SortedItems, ElementName=SortedPreparableSpellGroupsByLevel}" Style="{StaticResource spellSelectorSpellListStyle}" Width="{Binding ActualWidth, ElementName=base}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel IsItemsHost="True" HorizontalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ls:VMSpellReferenceByLevel}">
+                                    <StackPanel>
+                                        <b:Interaction.Behaviors>
+                                            <ls:CollectionSortBehavior x:Name="SortedSpellsBySchool" ItemsSource="{Binding Spells}"
+                                                                        Comparer="{Binding DataContext.SpellBySchoolSortComparer, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" />
+                                        </b:Interaction.Behaviors>
+
+                                        <ContentControl Template="{StaticResource HUI_Decorated_Subheader}"  Margin="0,50,0,10">
+                                            <TextBlock Style="{StaticResource PanelSubHeaderText}">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                                                        <Binding Source="hd678d4eeg181fg499dg9e81g2146ab24e03a"/>
+                                                        <Binding Path="Level" Converter="{StaticResource DecimalToRomanConverter}"/>
+                                                        <Binding Source=""/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </ContentControl>
+                                        <ItemsControl x:Name="availableSpells" ItemsSource="{Binding SortedItems, ElementName=SortedSpellsBySchool}"
+                                                                              ItemTemplate="{StaticResource selectableSpell}"
+                                                                              Style="{StaticResource spellSelectorSpellListStyle}"
+                                                                              Width="{Binding ActualWidth, ElementName=base}"
+                                                                              Margin="-60,0,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ls:LSScrollViewer>
+
+            </DockPanel>
+
+          <ControlTemplate.Triggers>
+              <DataTrigger Binding="{Binding SpellPrepare.IsComplete}" Value="False">
+                  <Setter TargetName="PreparedSpellsTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+              </DataTrigger>
+          </ControlTemplate.Triggers>
+
+          </ControlTemplate>
+
+</ResourceDictionary>

@@ -216,6 +216,10 @@
         <ls:CollectionFilterBehavior x:Name="ClassSpellSelectors" ItemsSource="{Binding ClassProgressionDetails.SpellSelectors}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
         <ls:CollectionFilterBehavior x:Name="SubClassSpellSelectors" ItemsSource="{Binding ClassProgressionDetails.SpellSelectors}" Predicate="{Binding IsSubProgressionPredicate}"/>
 
+        <ls:CollectionFilterBehavior x:Name="RacePassiveFeatures" ItemsSource="{Binding RacePassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubRacePassiveFeatures" ItemsSource="{Binding RacePassiveFeatures}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="RacePassiveSelectors" ItemsSource="{Binding RaceProgressionDetails.NotSubPassiveSelectors}"/>
+        <ls:CollectionFilterBehavior x:Name="SubRacePassiveSelectors" ItemsSource="{Binding RaceProgressionDetails.SubPassiveSelectors}"/>
         <ls:CollectionFilterBehavior x:Name="ClassPassiveFeatures" ItemsSource="{Binding PassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
         <ls:CollectionFilterBehavior x:Name="SubClassPassiveFeatures" ItemsSource="{Binding PassiveFeatures}" Predicate="{Binding IsSubProgressionPredicate}"/>
 
@@ -287,14 +291,14 @@
 
                                 <Rectangle x:Name="leftSideShading" HorizontalAlignment="Left" Opacity="0" Width="{StaticResource leftSidePanelBackgroundWidth}" Fill="{StaticResource LeftSideShadingBrush}" OpacityMask="{StaticResource OpacityMaskShadingBrush}"/>
 
-                                <Grid x:Name="leftSidePanels" ls:MoveFocus.IsMoveFocusScope="True" Width="1218" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,50,0,0" Tag="0">
+                                <Grid x:Name="leftSidePanels" ls:MoveFocus.IsMoveFocusScope="True" MinWidth="1218" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,50,0,0" Tag="0">
 
                                     <Grid.RenderTransform>
                                         <!-- Start panel at left position during level up animation -->
                                         <TranslateTransform>
                                             <TranslateTransform.X>
                                                 <MultiBinding Converter="{StaticResource AddMultipleConverter}">
-                                                    <!-- During level up animation, keep panel at left (Tag = 0) -->
+                                                    <!-- During level up animation, keep panel at left (TMin= 0) -->
                                                     <!-- After animation, allow normal centering behavior -->
                                                     <Binding ElementName="CharacterLevelUp_c" Path="ActualWidth" Converter="{StaticResource MultiplierConverter}" ConverterParameter="0"/>
                                                     <Binding ElementName="leftSidePanels" Path="ActualWidth" Converter="{StaticResource MultiplierConverter}" ConverterParameter="0"/>
@@ -376,7 +380,6 @@
                                             <ListBoxItem x:Name="deityTab" Tag="deity" Visibility="{Binding SelectableDeities.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
 
                                             <ListBoxItem x:Name="draconicTab" Tag="draconic" Visibility="Collapsed"/>
-                                            <ListBoxItem x:Name="draconicDragonbornTab" Tag="draconicDragonborn" Visibility="Collapsed"/>
 
                                             <ListBoxItem x:Name="skillsTab" Tag="skills" Visibility="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource CountToVisibilityConverter}}"/>
                                             <ListBoxItem x:Name="expertiseTab" Tag="expertise" Visibility="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource CountToVisibilityConverter}}"/>
@@ -629,6 +632,9 @@
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=RaceSpellSelectors, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
                                 <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=SubRaceSpellSelectors, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
+                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=RaceProgressions, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
                                 <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
@@ -844,7 +850,7 @@ ConverterParameter=0}" Value="True"/>
                                                     
                                                     <TextBlock x:Name="LevelUpAcquiredText" ls:TextBlockFormatter.SourceText="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}" Margin="0,0,0,25" DockPanel.Dock="Top"/>
                                                     
-                                                    <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" DockPanel.Dock="Top">
+                                                    <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" DockPanel.Dock="Top" >
                                                         <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
 
                                                             <ListBox x:Name="animatedLevelUpItems">
@@ -894,7 +900,6 @@ ConverterParameter=0}" Value="True"/>
                                                                 </b:Interaction.Triggers>
 
                                                                 <!-- These ListBoxItems animate in at the start -->
-
                                                                 <ListBoxItem Template="{StaticResource levelUpListBoxItemTemplate}" Visibility="{Binding SelectableSubClasses.Count, Converter={StaticResource CountToVisibilityConverter}}" Style="{StaticResource levelUpListBoxItemStyle}">
                                                                     <!-- Subclass available -->
                                                                     <ContentControl x:Name="Subclasses" ContentTemplate="{StaticResource SubclassesTemplate}" Content="{Binding .}"/>
@@ -938,6 +943,56 @@ ConverterParameter=0}" Value="True"/>
                                                                     </ContentControl>
                                                                 </ListBoxItem>
 
+                                                                <!-- Race progression elements -->
+                                                                <ListBoxItem x:Name="racePassiveActions" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RacePassiveFeatures}" ItemTemplate="{StaticResource progressionActionsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="subracePassiveActions" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRacePassiveFeatures}" ItemTemplate="{StaticResource progressionActionsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="racePassiveCantrips" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RacePassiveFeatures}" ItemTemplate="{StaticResource progressionCantripsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="subracePassiveCantrips" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRacePassiveFeatures}" ItemTemplate="{StaticResource progressionCantripsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="racePassiveSpells" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RacePassiveFeatures}" ItemTemplate="{StaticResource progressionSpellsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="subracePassiveSpells" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRacePassiveFeatures}" ItemTemplate="{StaticResource progressionSpellsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="raceProgressionActions" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionActionsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="subraceProgressionActions" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceProgressions}" ItemTemplate="{StaticResource progressionActionsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="raceProgressionCantrips" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionCantripsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="subraceProgressionCantrips" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceProgressions}" ItemTemplate="{StaticResource progressionCantripsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="raceProgressionSpells" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                <ListBoxItem x:Name="subraceProgressionSpells" Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}">
+                                                                    <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}"/>
+                                                                </ListBoxItem>
+
+                                                                
                                                                 <ListBoxItem Template="{StaticResource levelUpListBoxItemTemplate}" Style="{StaticResource levelUpListBoxItemStyle}" Visibility="{Binding ProgressionData.ClassProgression.Other.Count, Converter={StaticResource CountToVisibilityConverter}}">
                                                                     <ItemsControl ItemsSource="{Binding ProgressionData.ClassProgression.Other}" ItemTemplate="{StaticResource progressionFeatureBoost}"/>
                                                                 </ListBoxItem>
@@ -1086,6 +1141,34 @@ ConverterParameter=0}" Value="True"/>
                                                     <Setter TargetName="classProgressionSpells" Property="Visibility" Value="Hidden"/>
                                                 </DataTrigger>
 
+                                                <!-- Race progression triggers -->
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=raceFeatureSpells}" Value="0">
+                                                    <Setter TargetName="raceFeatureSpells" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=subRaceFeatureSpells}" Value="0">
+                                                    <Setter TargetName="subRaceFeatureSpells" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+
+                                                <!-- Race progression triggers -->
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=racePassiveActions}" Value="0">
+                                                    <Setter TargetName="racePassiveActions" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=racePassiveCantrips}" Value="0">
+                                                    <Setter TargetName="racePassiveCantrips" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=racePassiveSpells}" Value="0">
+                                                    <Setter TargetName="racePassiveSpells" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=raceProgressionActions}" Value="0">
+                                                    <Setter TargetName="raceProgressionActions" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=raceProgressionCantrips}" Value="0">
+                                                    <Setter TargetName="raceProgressionCantrips" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActualHeight, ElementName=raceProgressionSpells}" Value="0">
+                                                    <Setter TargetName="raceProgressionSpells" Property="Visibility" Value="Hidden"/>
+                                                </DataTrigger>
+
                                                 <DataTrigger Binding="{Binding ActualHeight, ElementName=subclassPassiveActions}" Value="0">
                                                     <Setter TargetName="subclassPassiveActions" Property="Visibility" Value="Hidden"/>
                                                 </DataTrigger>
@@ -1115,26 +1198,28 @@ ConverterParameter=0}" Value="True"/>
                                 <Setter TargetName="gameplayPanel" Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
-                                            <StackPanel>
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="Loaded">
-                                                        <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c"/>
-                                                    </b:EventTrigger>
-                                                </b:Interaction.Triggers>
+                                            <DockPanel LastChildFill="True">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <b:Interaction.Triggers>
+                                                        <b:EventTrigger EventName="Loaded">
+                                                            <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c"/>
+                                                        </b:EventTrigger>
+                                                    </b:Interaction.Triggers>
 
-                                                <TextBlock Text="{Binding DummyCharacter.Stats.Race.DisplayName}" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,50"/>
-
-                                                <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=RaceSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
-
-                                                <ItemsControl x:Name="featureSpells" ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}"/>
-
-                                                <ItemsControl x:Name="subRaceFeatureSpells" ItemsSource="{Binding FilteredItems, ElementName=SubRaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubRaceProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
-
-                                                <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.RaceProgression}" HorizontalAlignment="Center"/>
-
-                                                <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.SubRaceProgression}" HorizontalAlignment="Center"/>
-
-                                            </StackPanel>
+                                                    <StackPanel x:Name="RaceProgressions" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                        <Control Template="{StaticResource HUI_LevelUpRaceHeader}"/>
+                                                    </StackPanel>
+                                                    <Control Template="{StaticResource HUI_LevelUpRaceProgressions}" Grid.Row="1" />
+                                                </Grid>
+                                            </DockPanel>
 
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -1177,13 +1262,14 @@ ConverterParameter=0}" Value="True"/>
                                                         </b:EventTrigger>
                                                     </b:Interaction.Triggers>
 
-                                                    <StackPanel x:Name="classCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                    <StackPanel x:Name="multiclassSelectionAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                         <Control Template="{StaticResource MultiClassSelectionTemplate}"/>
                                                     </StackPanel>
 
                                                     <Control Template="{StaticResource classProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                    <Control Template="{StaticResource classDescriptionTemplate}" Grid.Column="1" Grid.RowSpan="2" DockPanel.Dock="Top" Margin="-200,200,0,0"/>
+                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                      Tag="{Binding SelectedMultiClass.Description}" />
                                                 </Grid>
                                             </DockPanel>
                                         </ControlTemplate>
@@ -1219,13 +1305,14 @@ ConverterParameter=0}" Value="True"/>
                                                         </b:EventTrigger>
                                                     </b:Interaction.Triggers>
 
-                                                    <StackPanel x:Name="subclassCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                    <StackPanel x:Name="subclassSelectionAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                         <Control Template="{StaticResource subClassSelectionTemplate}"/>
                                                     </StackPanel>
 
                                                     <Control Template="{StaticResource subClassProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                    <Control Template="{StaticResource subClassDescriptionTemplate}" Grid.Column="1" Grid.RowSpan="2" DockPanel.Dock="Top" Margin="-200,200,0,0"/>
+                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                      Tag="{Binding SelectedSubClass.Description}" />
                                                 </Grid>
                                             </DockPanel>
                                         </ControlTemplate>
@@ -1266,9 +1353,9 @@ ConverterParameter=0}" Value="True"/>
                                                     </StackPanel>
 
                                                     <Control Template="{StaticResource subClassProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                    <Control Template="{StaticResource subClassDescriptionTemplate}" Grid.Column="1" Grid.RowSpan="2" DockPanel.Dock="Top" Margin="-200,200,0,0"/>
-                                                </Grid>
+                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                      Tag="{Binding SelectedSubClass.Description}" />                                                </Grid>
                                             </DockPanel>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -1310,40 +1397,6 @@ ConverterParameter=0}" Value="True"/>
 
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="draconicDragonborn">
-                                <Setter TargetName="gameplayPanel" Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <DockPanel LastChildFill="True">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
-
-                                                    <StackPanel x:Name="draconicAppearanceSelectors" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                        <Control Template="{StaticResource draconicAppearanceTemplateDragonBorn}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                </Grid>
-                                            </DockPanel>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-
-                            </DataTrigger>
-
                             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
                                 <Setter TargetName="gameplayPanel" Property="Template">
                                     <Setter.Value>
@@ -1372,8 +1425,9 @@ ConverterParameter=0}" Value="True"/>
                                                     </StackPanel>
 
                                                     <Control Template="{StaticResource deityProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                    <Control Template="{StaticResource deityDescriptionTemplate}" Grid.Column="1" Grid.RowSpan="2" DockPanel.Dock="Top" Margin="-200,200,0,0"/>
+                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                      Tag="{Binding SelectedDeity.Description}" />
                                                 </Grid>
                                             </DockPanel>
                                         </ControlTemplate>
@@ -1471,6 +1525,10 @@ ConverterParameter=0}" Value="True"/>
                                                       <RowDefinition Height="Auto" />
                                                       <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
                                                     <b:Interaction.Triggers>
                                                         <b:EventTrigger EventName="Loaded">
                                                             <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c"/>
@@ -1478,10 +1536,13 @@ ConverterParameter=0}" Value="True"/>
                                                     </b:Interaction.Triggers>
 
                                                     <StackPanel x:Name="spellPreperationScreen" Orientation="Horizontal" VerticalAlignment="Stretch"  DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                          <Control Template="{StaticResource spellPrepTemplate}"/>
+                                                          <Control Template="{StaticResource HUI_SpellPrepTemplate}"/>
                                                     </StackPanel>
 
                                                     <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                      Tag="{Binding Source='he47d6cc7g50c3g4ab6g9027g2c54a173db29', Converter={StaticResource TranslatedStringConverter}}" /> 
 
                                                   </Grid>
                                                 </DockPanel>
@@ -1548,6 +1609,9 @@ ConverterParameter=0}" Value="True"/>
                                                   </StackPanel>
 
                                                   <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                      Tag="{Binding SelectedFeat.Description}" />
                                               </Grid>
                                             </DockPanel>
 
@@ -1559,20 +1623,9 @@ ConverterParameter=0}" Value="True"/>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding SelectedSubClass.IsDraconicSorcerer}" Value="True"/>
-                                    <Condition Binding="{Binding IsDragonborn}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
                                     <Setter TargetName="draconicTab" Property="Visibility" Value="Visible"/>
-                                </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>
-
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding SelectedSubClass.IsDraconicSorcerer}" Value="True"/>
-                                    <Condition Binding="{Binding IsDragonborn}" Value="True"/>
-                                </MultiDataTrigger.Conditions>
-                                <MultiDataTrigger.Setters>
-                                    <Setter TargetName="draconicDragonbornTab" Property="Visibility" Value="Visible"/>
                                 </MultiDataTrigger.Setters>
                             </MultiDataTrigger>
 

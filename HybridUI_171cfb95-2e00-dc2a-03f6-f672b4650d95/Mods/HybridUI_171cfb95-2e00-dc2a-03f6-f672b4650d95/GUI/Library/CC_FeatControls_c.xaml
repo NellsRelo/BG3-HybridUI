@@ -8,6 +8,32 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
+          <!-- Feat Action Template, primarilly for Charger -->
+          <DataTemplate x:Key="HUI_ProgressionFeatureAction" DataType="ls:VMFeatureBoost">
+              <ContentControl Template="{StaticResource ListButtonTemplate}" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" ToolTip="{StaticResource ManagedTooltip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="40" ToolTipService.VerticalOffset="-10">
+                  <Grid>
+                      <Grid x:Name="iconHolder" Style="{StaticResource FeatureListItemIconHolder}">
+                          <Rectangle x:Name="icon" Width="96" Height="96" Fill="{Binding Icon}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                          <Image x:Name="fallbackIcon" Source="{StaticResource IconFeatDefaultBrush}" Width="96" Height="96" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+                      </Grid>
+                      <TextBlock x:Name="featureName" Text="{Binding Name}" Style="{StaticResource FeatureListItemName}"/>
+                      <TextBlock x:Name="featureKind" Text="{Binding FeatureType}" Style="{StaticResource FeatureListItemKind}"/>
+                  </Grid>
+              </ContentControl>
+              <DataTemplate.Triggers>
+                  <!-- Show fallback icon if custom icon is not available -->
+                  <DataTrigger Binding="{Binding Icon}" Value="{x:Null}">
+                      <Setter TargetName="icon" Property="Visibility" Value="Hidden"/>
+                      <Setter TargetName="fallbackIcon" Property="Visibility" Value="Visible"/>
+                  </DataTrigger>
+                  <!-- Focus state triggers -->
+                  <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                      <Setter TargetName="featureName" Property="Foreground" Value="{StaticResource LS_accent100TxtColor}"/>
+                      <Setter TargetName="featureKind" Property="Foreground" Value="{StaticResource LS_accent100TxtColor}"/>
+                  </DataTrigger>
+              </DataTemplate.Triggers>
+          </DataTemplate>
+
           <ControlTemplate x:Key="featSelectionTemplate">
               <DockPanel>
                   <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
@@ -148,23 +174,23 @@
                           <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}"/>
                       </ContentControl>
 
-                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding Description.Text}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
                   </StackPanel>
                   
-                  <StackPanel x:Name="featDetailScroller" Orientation="Horizontal" DockPanel.Dock="Top">
+                  <StackPanel x:Name="featDetailScroller" Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,-15">
                       <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                                VerticalScrollBarVisibility="Auto" MaxHeight="1400" Height="Auto"
-                                DockPanel.Dock="Top" Margin="0,20,0,-20">
+                                VerticalScrollBarVisibility="Auto" MaxHeight="1250" Height="Auto"
+                                DockPanel.Dock="Top" Margin="0,20,0,0">
                           <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
 
                               <!-- Boosts and Abilities -->
-                              <ItemsControl ItemsSource="{Binding FeatDetails.Progressions}" Margin="0,50,0,0">
+                              <ItemsControl ItemsSource="{Binding FeatDetails.Progressions}" Margin="0,20,0,0">
                                   <ItemsControl.ItemTemplate>
                                       <DataTemplate DataType="ls:VMProgression">
                                           <StackPanel>
                                               <ItemsControl ItemsSource="{Binding Features.Boosts}" ItemTemplate="{StaticResource progressionFeatureBoost}"/>
 
                                               <ItemsControl ItemsSource="{Binding Features.Abilities}" ItemTemplate="{StaticResource progressionFeatureAbility}"/>
+                                              <ItemsControl ItemsSource="{Binding Features.Actions}" ItemTemplate="{StaticResource HUI_ProgressionFeatureAction}"/>
                                           </StackPanel>
                                       </DataTemplate>
                                   </ItemsControl.ItemTemplate>
@@ -235,7 +261,6 @@
                               <!-- Passive Selectors-->
                               <ItemsControl ItemsSource="{Binding FeatPassives}">
                                   <ItemsControl.ItemTemplate>
-
                                       <DataTemplate DataType="ls:VMCharacterCreationPassives">
                                           <StackPanel>
                                               <TextBlock x:Name="description" Visibility="{Binding Description.Text, Converter={StaticResource NullToCollapsedConverter}, ConverterParameter='EmptyString'}" ls:TextBlockFormatter.SourceText="{Binding Description.Text}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
@@ -246,7 +271,7 @@
                                                   <Run x:Name="PassiveSelectorMaxText" Text="{Binding MaxSelectedPassiveCount, StringFormat='/{0}'}"/>
                                               </TextBlock>
 
-                                              <ItemsControl ItemsSource="{Binding Passives}" ItemTemplate="{StaticResource SelectablePassiveTemplate}" Margin="0,40,0,0"/>
+                                              <ItemsControl ItemsSource="{Binding Passives}" ItemTemplate="{StaticResource SelectablePassiveTemplate}"/>
 
                                           </StackPanel>
 
@@ -285,28 +310,30 @@
 
               </DockPanel>
 
-        <ControlTemplate.Triggers>
-            <DataTrigger Value="False">
-                <DataTrigger.Binding>
-                    <MultiBinding Converter="{StaticResource EqualConverter}">
-                        <Binding Path="SelectedFeatDetails.FeatDetails.SelectedAbilityCount"/>
-                        <Binding Path="SelectedFeatDetails.FeatDetails.MaxSelectedAbilityCount"/>
-                    </MultiBinding>
-                </DataTrigger.Binding>
-                <Setter TargetName="AbilitySelectionTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-                <Setter TargetName="AbilitySelectionValue" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-            </DataTrigger>
+          <ControlTemplate.Triggers>
+              <DataTrigger Value="False">
+                  <DataTrigger.Binding>
+                      <MultiBinding Converter="{StaticResource EqualConverter}">
+                          <Binding Path="SelectedFeatDetails.FeatDetails.SelectedAbilityCount"/>
+                          <Binding Path="SelectedFeatDetails.FeatDetails.MaxSelectedAbilityCount"/>
+                      </MultiBinding>
+                  </DataTrigger.Binding>
+                  <Setter TargetName="AbilitySelectionTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                  <Setter TargetName="AbilitySelectionValue" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+              </DataTrigger>
 
-            <DataTrigger Value="False">
-                <DataTrigger.Binding>
-                    <MultiBinding Converter="{StaticResource EqualConverter}">
-                        <Binding Path="SelectedFeatDetails.FeatSkills.SelectedSkillCount"/>
-                        <Binding Path="SelectedFeatDetails.FeatSkills.MaxSelectedSkillCount"/>
-                    </MultiBinding>
-                </DataTrigger.Binding>
-                <Setter TargetName="SkillSelectionTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-                <Setter TargetName="SkillSelectionValue" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-            </DataTrigger>
-        </ControlTemplate.Triggers>
+              <DataTrigger Value="False">
+                  <DataTrigger.Binding>
+                      <MultiBinding Converter="{StaticResource EqualConverter}">
+                          <Binding Path="SelectedFeatDetails.FeatSkills.SelectedSkillCount"/>
+                          <Binding Path="SelectedFeatDetails.FeatSkills.MaxSelectedSkillCount"/>
+                      </MultiBinding>
+                  </DataTrigger.Binding>
+                  <Setter TargetName="SkillSelectionTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                  <Setter TargetName="SkillSelectionValue" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+              </DataTrigger>
+          </ControlTemplate.Triggers>
           </ControlTemplate>
+
+          
 </ResourceDictionary>

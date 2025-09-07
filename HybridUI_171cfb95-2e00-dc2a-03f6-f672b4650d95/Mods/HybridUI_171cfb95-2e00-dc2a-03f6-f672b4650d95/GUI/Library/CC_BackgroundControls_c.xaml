@@ -32,21 +32,6 @@
         </DockPanel>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="backgroundDescriptionTemplate">
-          <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-              <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
-                  <TextBlock x:Name="SelectionDescription" ls:TextBlockFormatter.SourceText="{Binding SelectedBackground.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
-              </ContentControl>
-          </StackPanel>
-
-        <ControlTemplate.Triggers>
-            <!-- Split Screen variation -->
-            <DataTrigger Binding="{Binding Layout}" Value="Common">
-                <Setter TargetName="SelectionDescription" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
-            </DataTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
     <ControlTemplate x:Key="backgroundProgressionsTemplate">
         <Grid HorizontalAlignment="Left">
             <Grid.RowDefinitions>

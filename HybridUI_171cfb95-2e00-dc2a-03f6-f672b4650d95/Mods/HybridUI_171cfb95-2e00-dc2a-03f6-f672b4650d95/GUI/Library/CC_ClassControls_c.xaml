@@ -29,21 +29,6 @@
         </DockPanel>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="classDescriptionTemplate">
-          <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-              <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
-                  <TextBlock x:Name="SelectionDescription" ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
-              </ContentControl>
-          </StackPanel>
-
-        <ControlTemplate.Triggers>
-            <!-- Split Screen variation -->
-            <DataTrigger Binding="{Binding Layout}" Value="Common">
-                <Setter TargetName="SelectionDescription" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
-            </DataTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
     <ControlTemplate x:Key="classProgressionsTemplate">
           <Grid HorizontalAlignment="Left">
               <Grid.RowDefinitions>
@@ -278,13 +263,10 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
 
-            <StackPanel x:Name="upperClassPanel">
-                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"></ScaleTransform>
-                    </Image.RenderTransform>
-                </Image>
-                <TextBlock x:Name="classPanelTitleText" ls:TextBlockFormatter.SourceText="{Binding Source=he3ccedd0gceaeg4b1fg8e74g9dfc6da58cd2, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+            <StackPanel x:Name="upperClassPanel" HorizontalAlignment="Center">
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                    <TextBlock x:Name="classPanelTitleText" ls:TextBlockFormatter.SourceText="{Binding Source=he3ccedd0gceaeg4b1fg8e74g9dfc6da58cd2, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                </ContentControl> 
             </StackPanel>
 
             <Grid x:Name="ClassesCarousel" HorizontalAlignment="Center" Width="900" Opacity="{Binding Opacity, ElementName=upperClassPanel}">
@@ -336,8 +318,8 @@
                 </Grid>
 
             <!-- Separator from K&M UI -->
-            <Grid Margin="0,-20,0,-20">
-                <Image x:Name="wideSeparator" Source="{StaticResource SeparatorImage}" Stretch="Uniform"/>
+            <Grid Margin="0,-20,0,-20" HorizontalAlignment="Left" Width="1218">
+                <Image x:Name="wideSeparator" Source="{StaticResource SeparatorImage}" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 <Image x:Name="separatorArrow" Source="{StaticResource UpArrow1Image}" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Image.RenderTransform>
                         <TransformGroup>

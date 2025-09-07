@@ -22,6 +22,7 @@
         <ResourceDictionary Source="CC_SubClassControls_c.xaml"/>
         <ResourceDictionary Source="CC_OriginControls_c.xaml"/>
         <ResourceDictionary Source="CC_SelectorControls_c.xaml"/>
+        <ResourceDictionary Source="CC_SpellControls_c.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

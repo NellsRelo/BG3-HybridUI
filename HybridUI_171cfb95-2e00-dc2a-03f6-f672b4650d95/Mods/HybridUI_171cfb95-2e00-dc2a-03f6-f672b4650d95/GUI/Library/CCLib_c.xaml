@@ -18,6 +18,8 @@
         <ResourceDictionary Source="/Core;component/Library/CCLib.xaml"/>
         <ResourceDictionary Source="/Core;component/Library/ControllerHints.xaml"/>
         <ResourceDictionary Source="/HybridUI;component/Library/CC_SelectorControls_c.xaml"/>
+        <ResourceDictionary Source="/HybridUI;component/Library/CC_SpellControls_c.xaml"/>
+        <ResourceDictionary Source="/HybridUI;component/Library/HUI_Lib.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <System:Single x:Key="TabsPanelHeight">130</System:Single>
@@ -99,6 +101,9 @@
     <BitmapImage x:Key="ListButtonBg_h" UriSource="pack://application:,,,/Core;component/Assets/Shared_c/c_list_buttonBG_h.png"/>
 
     <BitmapImage x:Key="IconProficiency" UriSource="pack://application:,,,/Core;component/Assets/CharacterCreation/ico_proficiency.png"/>
+    <BitmapImage x:Key="IconProficient" UriSource="pack://application:,,,/Core;component/Assets/CharacterPanel/ico_proficient.png"/>
+    <BitmapImage x:Key="IconSpellSaveDC" UriSource="pack://application:,,,/Core;component/Assets/SpellBook/ico_spellSaveDC.png"/>
+    <BitmapImage x:Key="IconSpellAttackBonus" UriSource="pack://application:,,,/Core;component/Assets/SpellBook/ico_spellAttackBonus.png"/>
 
     <BitmapImage x:Key="SideArrowChunky" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_ico_arrow_chunky.png"/>
     <BitmapImage x:Key="NavTabSelector" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_cc_nav_tab_selector.png"/>
@@ -914,6 +919,7 @@
           <Grid>
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
               <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <b:Interaction.Triggers>
@@ -921,51 +927,13 @@
                     <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
                 </b:EventTrigger>
             </b:Interaction.Triggers>
-            <DockPanel Grid.Row="0">
-              <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                      <Image.RenderTransform>
-                          <ScaleTransform ScaleY="-1"></ScaleTransform>
-                      </Image.RenderTransform>
-                  </Image>
+              <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Row="0">
+                  <Control Template="{StaticResource HUI_SpellSelectorTemplate}" />
               </StackPanel>
-              <StackPanel DockPanel.Dock="Top" Margin="0,0,0,50">
+              <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1" Margin="0,40,0,0"/>
 
-                  <TextBlock x:Name="PanelHeader" ls:TextBlockFormatter.SourceText="{Binding Title}" Style="{StaticResource PanelHeaderText}"/>
-                  <TextBlock x:Name="SpellSelectorDescription" ls:TextBlockFormatter.SourceText="{Binding Description}" Style="{StaticResource PanelDescriptionText}" Margin="0,50,0,0"/>
-
-                  <TextBlock x:Name="SelectedTitle" ls:TextBlockFormatter.SourceText="{Binding Source='h46206b54gae33g4546ga5dfg13de4a4c66aa', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0"/>
-                  <ItemsControl x:Name="chosenSpells" ItemsSource="{Binding Additions}" ItemTemplate="{StaticResource removeableSpell}" Style="{StaticResource spellSelectorSpellListStyle}" Margin="0,50,0,0" Width="{Binding Width, ElementName=base}"/>
-
-                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h76bfc212gcdd9g4c2ag899eg6bbeaf84f1e5', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0"/>
-
-              </StackPanel>
-
-              <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                            VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"
-                            DockPanel.Dock="Top" Margin="0,20,0,0">
-                  <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
-
-                      <ItemsControl x:Name="availableSpells" ItemsSource="{Binding Available}" ItemTemplate="{StaticResource selectableSpell}" Style="{StaticResource spellSelectorSpellListStyle}" Margin="-60,50,0,0" Width="{Binding Width, ElementName=base}"/>
-
-                  </StackPanel>
-              </ScrollViewer>
-            </DockPanel>
-            <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Bottom" Grid.Row="1">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="0,-50,0,0" Height="108" HorizontalAlignment="Center" />
-            </StackPanel>
           </Grid>
         </DockPanel>
-
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding IsComplete}" Value="False">
-                <Setter TargetName="SelectedTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-            </DataTrigger>
-            <!-- Split Screen variation -->
-            <DataTrigger Binding="{Binding Layout}" Value="Common">
-                <Setter TargetName="base" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ls:VMCharacterCreationPassives}">
@@ -1921,6 +1889,9 @@
             <Trigger Property="Tag" Value="spellprep">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h15329947gc691g4323gac0fge3fbcecb92d9', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
+            <Trigger Property="Tag" Value="draconic">
+                <Setter TargetName="label" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}"/>
+            </Trigger>
 
             <Trigger Property="Tag" Value="background">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='hebf1e383g9a70g42d6gb3e2g3906281a90b8', Converter={StaticResource TranslatedStringConverter}}"/>
@@ -1950,10 +1921,6 @@
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='hcbc3c9a8g9e80g4139g952bga971015c1f41', Converter={StaticResource TranslatedStringConverter}}"/>
             </MultiDataTrigger>
-            <!-- For LevelUp only (in CC this tab is part of appearance) -->
-            <Trigger Property="Tag" Value="draconic">
-                <Setter TargetName="label" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}"/>
-            </Trigger>
 
             <!-- Show any race subtabs -->
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="race">
@@ -2772,7 +2739,7 @@
 
 
     <DataTemplate x:Key="changeAbilityTemplate" DataType="ls:VMAbility">
-        <ContentControl Template="{StaticResource CarouselButtonTemplate}" Tag="notEnabled" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" ToolTip="{StaticResource ManagedTooltip}" ToolTipService.VerticalOffset="-10" ToolTipService.HorizontalOffset="20">
+        <ContentControl Template="{StaticResource CarouselButtonTemplate}" Tag="notEnabled" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" ToolTip="{Binding Source={StaticResource ManagedTooltip}, FallbackValue={x:Null}, TargetNullValue={x:Null}}" ToolTipService.VerticalOffset="-10" ToolTipService.HorizontalOffset="20">
             <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Control Template="{StaticResource AbilityDisplayName}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" VerticalAlignment="Center"/>
@@ -3251,6 +3218,7 @@
                 </ItemsControl>
               </Viewbox>
 
+              <!-- Initiative -->
               <ContentControl x:Name="initiative" Template="{StaticResource SummaryListItemTemplate}" DataContext="{Binding DummyCharacter.Stats.Initiative}" ToolTip="{StaticResource PlacementParentDCTooltip}" ToolTipService.Placement="Left">
                   <Grid Style="{StaticResource summaryRowStyle}">
 
@@ -3259,12 +3227,28 @@
                       <Image Source="/Core;component/Assets/CharacterPanel/ico_initiative.png" Stretch="None" HorizontalAlignment="Left" Margin="40,0,0,0"/>
                   </Grid>
               </ContentControl>
+
+              <!-- Max HP -->
               <ContentControl x:Name="health" Template="{StaticResource SummaryListItemTemplate}" DataContext="{Binding DummyCharacter.Stats.Health}" ToolTip="{StaticResource PlacementParentDCTooltip}" ToolTipService.Placement="Left">
                   <Grid Style="{StaticResource summaryRowStyle}">
 
                       <Control Template="{StaticResource StatsDisplayName}" Foreground="{StaticResource LS_baseTxtColor}"  FontSize="{StaticResource ScaledDefaultFontSize}" HorizontalAlignment="Left" Margin="100,0,0,0"/>
                       <TextBlock Text="{Binding Max}" Style="{StaticResource summaryRowRightTextStyle}"/>
                       <Image Source="/Core;component/Assets/CharacterPanel/ico_hp.png" Stretch="None" HorizontalAlignment="Left" Margin="40,0,0,0"/>
+
+                  </Grid>
+              </ContentControl>
+
+              <!-- Spell Save DC -->
+              <ContentControl x:Name="spellSaveDC" Template="{StaticResource SummaryListItemTemplate}" DataContext="{Binding DummyCharacter.Stats.SpellDifficultyCheck}" ToolTipService.Placement="Left">
+                      <ContentControl.ToolTip>
+                          <ls:LSTooltip Content="{Binding Path=(ls:TooltipExtender.Owner).Stats.SpellDifficultyCheck, RelativeSource={RelativeSource Mode=Self}}"/>
+                      </ContentControl.ToolTip>
+                  <Grid Style="{StaticResource summaryRowStyle}">
+
+                      <Control Template="{StaticResource StatsDisplayName}" Foreground="{StaticResource LS_baseTxtColor}"  FontSize="{StaticResource ScaledDefaultFontSize}" HorizontalAlignment="Left" Margin="100,0,0,0"/>
+                      <TextBlock Text="{Binding Value}" Style="{StaticResource summaryRowRightTextStyle}"/>
+                      <Image Source="{StaticResource IconSpellSaveDC}" Stretch="None" HorizontalAlignment="Left" Margin="40,0,0,0" />
 
                   </Grid>
               </ContentControl>
@@ -3724,12 +3708,9 @@
             <StackPanel Grid.Column="0" Grid.Row="0" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
               <DockPanel>
                   <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                      <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                          <Image.RenderTransform>
-                              <ScaleTransform ScaleY="-1"></ScaleTransform>
-                          </Image.RenderTransform>
-                      </Image>
-                      <TextBlock x:Name="panelTitle" ls:TextBlockFormatter.SourceText="{Binding Source=h4d0d00cfg4edeg42c3gaa4agcc3908351b8d, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                          <TextBlock x:Name="panelTitle" ls:TextBlockFormatter.SourceText="{Binding Source=h4d0d00cfg4edeg42c3gaa4agcc3908351b8d, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                      </ContentControl>
 
                       <TextBlock x:Name="addClassDescription" Visibility="Collapsed" ls:TextBlockFormatter.SourceText="{Binding Source=h5207e327g4302g4910gaf8cgc2e27cc1b248, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,20"/>
                 </StackPanel>
@@ -3922,11 +3903,7 @@
             <Control Template="{StaticResource setGameplayCameraOffsets}"/>
 
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"></ScaleTransform>
-                    </Image.RenderTransform>
-                </Image>
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
             </StackPanel>
             <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
                 <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h15329947gc691g4323gac0fge3fbcecb92d9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
@@ -4039,11 +4016,7 @@
     <DataTemplate x:Key="PassiveSelectorItemTemplate">
         <DockPanel x:Name="Base">
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"></ScaleTransform>
-                    </Image.RenderTransform>
-                </Image>
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top">
@@ -4105,11 +4078,7 @@
     <DataTemplate x:Key="EquipmentSelectorItemTemplate">
         <DockPanel x:Name="Base">
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"></ScaleTransform>
-                    </Image.RenderTransform>
-                </Image>
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top">
@@ -4311,11 +4280,7 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"></ScaleTransform>
-                    </Image.RenderTransform>
-                </Image>
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top">

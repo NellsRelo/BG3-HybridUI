@@ -20,8 +20,8 @@
                     <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
                         <ListBox x:Name="draconicTabs" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0">
                             <ListBox.Items>
-                                <ListBoxItem Tag="scales" Content="{Binding Source='h85555614g40b2g459dgbfbfg76291036aebe', Converter={StaticResource TranslatedStringConverter}}"/>
-                                <ListBoxItem Tag="colors" Content="{Binding Source='h381a6c0bg214fg4968gae5cg9e5b8a8ffc20', Converter={StaticResource TranslatedStringConverter}}"/>
+                                <ListBoxItem Tag="scales" Content="{Binding Source='h381a6c0bg214fg4968gae5cg9e5b8a8ffc20', Converter={StaticResource TranslatedStringConverter}}"/>
+                                <ListBoxItem Tag="colors" Content="{Binding Source='h85555614g40b2g459dgbfbfg76291036aebe', Converter={StaticResource TranslatedStringConverter}}"/>
                             </ListBox.Items>
                         </ListBox>
                     </ContentControl>
@@ -57,9 +57,7 @@
                 <Setter TargetName="colorsContent" Property="Visibility" Value="Visible"/>
             </DataTrigger>
           </ControlTemplate.Triggers>
-            
           </ControlTemplate>
-
 
           <!-- Appearance Selector for Dragonborn Draconic Bloodline Sorcerers -->
           <ControlTemplate x:Key="draconicAppearanceTemplateDragonBorn">

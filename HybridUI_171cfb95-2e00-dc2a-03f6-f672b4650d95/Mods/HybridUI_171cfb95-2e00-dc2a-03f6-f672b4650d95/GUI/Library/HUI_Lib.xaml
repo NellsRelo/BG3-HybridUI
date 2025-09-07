@@ -8,6 +8,8 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
+    <BitmapImage x:Key="WideDivider" UriSource="pack://application:,,,/Core;component/Assets/CC/divider_levelUp.png"/>
+
     <!-- Decorator for Panel Headers -->
     <!-- Useage:
       <ContentControl Template="{StaticResource HUI_SelectorHeader}">
@@ -27,6 +29,7 @@
         </StackPanel>
     </ControlTemplate>
 
+    <!-- Closing template for Panels using the above header -->
     <ControlTemplate x:Key="HUI_SelectorClosingTemplate">
         <Grid HorizontalAlignment="Left">
             <Grid.RowDefinitions>
@@ -55,15 +58,33 @@
         </Grid>
     </ControlTemplate>
 
+    <!-- Decorator for Sub-Headers, stripped from CCLib_k for broader use -->
+    <ControlTemplate x:Key="HUI_Decorated_Subheader">
+        <ControlTemplate.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource LS_tint100}"/>
+                <Setter Property="FontSize" Value="{StaticResource ScaledMediumFontSize}"/>
+            </Style>
+        </ControlTemplate.Resources>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image Source="pack://application:,,,/Core;component/Assets/CC/decor_header.png" Stretch="None"/>
+            <ContentPresenter Margin="30,0,30,0"/>
+            <Image Source="pack://application:,,,/Core;component/Assets/CC/decor_header.png" Stretch="None">
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleX="-1" CenterX="42"/>
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
+    </ControlTemplate>
+
     <!-- Carousel for Hardcoded Strings -->
-    <!--
-        Useage should look something like this:
+    <!-- Useage:
         <ListBox x:Name="TABNAME" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0" Height="100" Margin="0,0,0,0">
-                  <ListBox.Items>
-                      <ListBoxItem Tag="TAB_ONE" Content="{Binding Source='LOCALESTRING', Converter={StaticResource TranslatedStringConverter}}"/>
-                      <ListBoxItem Tag="TAB_TWO" Content="{Binding Source='LOCALESTRING', Converter={StaticResource TranslatedStringConverter}}"/>
-                  </ListBox.Items>
-              </ListBox>
+            <ListBox.Items>
+                <ListBoxItem Tag="TAB_ONE" Content="{Binding Source='LOCALESTRING', Converter={StaticResource TranslatedStringConverter}}"/>
+                <ListBoxItem Tag="TAB_TWO" Content="{Binding Source='LOCALESTRING', Converter={StaticResource TranslatedStringConverter}}"/>
+            </ListBox.Items>
+        </ListBox>
     -->
     <ControlTemplate x:Key="HUI_HardcodedCarousel" TargetType="ListBox">
         <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
@@ -94,5 +115,61 @@
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <!-- General Purpose Description Side-Panel Template -->
+    <!-- Usage:
+           <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                           Tag="{Binding SelectedClass.Description}" />
+    -->
+    <ControlTemplate x:Key="HUI_DescriptionTemplate">
+        <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+            <ContentControl x:Name="DescriptionBlock" Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top" Margin="-650,200,0,0">
+                <TextBlock x:Name="SelectionDescription" 
+                           ls:TextBlockFormatter.SourceText="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                           Style="{StaticResource CarouselSideDescriptionTextSplitScreen}" />
+            </ContentControl>
+        </StackPanel>
+
+        <ControlTemplate.Triggers>
+            <!-- Split Screen variation -->
+            <DataTrigger Binding="{Binding Layout}" Value="Common">
+                <Setter TargetName="SelectionDescription" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
+                <Setter TargetName="DescriptionBlock" Property="Margin" Value="-400,200,0,0"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Wide Separator for Splitting Content up. See Level-Up Screen for a visual example -->
+    <!-- Useage:
+          <ContentControl Template="{StaticResource HUI_WideSeparator}">
+                .. Content Here
+            </ContentControl>
+    -->
+    <ControlTemplate x:Key="HUI_WideSeparator">
+        <Grid Margin="0,0,0,-30" HorizontalAlignment="Center" Width="Auto">
+            <Image x:Name="wideSeparator" Source="{StaticResource WideDivider}" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            <ContentPresenter Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" 
+                              ContentTemplate="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ContentTemplate}"
+                              />
+        </Grid>
+    </ControlTemplate>
+
+
+    <!-- Ported from CCLib_c directly -->
+    <Style x:Key="CarouselSideDescriptionText" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
+        <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="Width" Value="700"/>
+        <Setter Property="Margin" Value="0,20,0,20"/>
+    </Style>
+
+    <Style x:Key="CarouselSideDescriptionTextSplitScreen" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
+        <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="Width" Value="450"/>
+        <Setter Property="Margin" Value="0,20,0,20"/>
+    </Style>
 
 </ResourceDictionary>
