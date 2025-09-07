@@ -552,7 +552,7 @@
                                                     <ListBoxItem x:Name="skillsTab" Tag="skills" IsEnabled="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                     <ListBoxItem x:Name="expertiseTab" Tag="expertise" IsEnabled="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
 
-                                                    <ListBoxItem x:Name="draconicTab" Tag="draconic" IsEnabled="{Binding Path=HasAppearancePassive, FallbackValue=Collapsed}"/>
+                                                    <ListBoxItem x:Name="draconicTab" Tag="draconic" IsEnabled="{Binding Path=HasAppearancePassive, FallbackValue=False}"/>
                                                     <ListBoxItem x:Name="appearanceTab" Tag="appearance"/>
 
                                                 </ListBox>
