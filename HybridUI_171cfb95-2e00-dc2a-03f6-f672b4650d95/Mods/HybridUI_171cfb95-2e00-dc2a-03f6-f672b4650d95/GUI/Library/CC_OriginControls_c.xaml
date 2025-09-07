@@ -18,20 +18,4 @@
         </DockPanel>
     </ControlTemplate>
 
-    <ControlTemplate x:Key="originDescriptionTemplate">
-      <DockPanel>
-          <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-              <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
-                  <TextBlock x:Name="SelectionDescription" ls:TextBlockFormatter.SourceText="{Binding SelectedOrigin.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
-              </ContentControl>
-          </StackPanel>
-        </DockPanel>
-        <ControlTemplate.Triggers>
-            <!-- Split Screen variation -->
-            <DataTrigger Binding="{Binding Layout}" Value="Common">
-                <Setter TargetName="SelectionDescription" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
-            </DataTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
 </ResourceDictionary>
