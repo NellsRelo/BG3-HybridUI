@@ -10,6 +10,25 @@
 
     <BitmapImage x:Key="WideDivider" UriSource="pack://application:,,,/Core;component/Assets/CC/divider_levelUp.png"/>
 
+
+    <!-- Ported from CCLib_c directly -->
+    <Style x:Key="CarouselSideDescriptionText" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
+        <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="Width" Value="700"/>
+        <Setter Property="Margin" Value="0,20,0,20"/>
+    </Style>
+
+    <Style x:Key="CarouselSideDescriptionTextSplitScreen" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
+        <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="Width" Value="450"/>
+        <Setter Property="Margin" Value="0,20,0,20"/>
+    </Style>
+    <!-- End CCLib_c direct ports -->
+
     <!-- Decorator for Panel Headers -->
     <!-- Useage:
       <ContentControl Template="{StaticResource HUI_SelectorHeader}">
@@ -153,23 +172,5 @@
                               />
         </Grid>
     </ControlTemplate>
-
-
-    <!-- Ported from CCLib_c directly -->
-    <Style x:Key="CarouselSideDescriptionText" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
-        <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="TextAlignment" Value="Left"/>
-        <Setter Property="Width" Value="700"/>
-        <Setter Property="Margin" Value="0,20,0,20"/>
-    </Style>
-
-    <Style x:Key="CarouselSideDescriptionTextSplitScreen" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
-        <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="TextAlignment" Value="Left"/>
-        <Setter Property="Width" Value="450"/>
-        <Setter Property="Margin" Value="0,20,0,20"/>
-    </Style>
 
 </ResourceDictionary>
