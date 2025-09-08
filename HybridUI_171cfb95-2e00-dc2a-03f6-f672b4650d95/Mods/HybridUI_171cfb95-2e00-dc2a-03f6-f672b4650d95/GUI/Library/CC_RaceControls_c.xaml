@@ -8,33 +8,165 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
+      <ControlTemplate x:Key="RaceCarouselWithUIAccept" TargetType="ListBox">
+          <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
+              <Grid>
+                  <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" SoundID="{DynamicResource CarouselButtonSoundEvent}">
+                      <ls:LSRepeatButton.RenderTransform>
+                          <ScaleTransform ScaleX="-1" CenterX="32"/>
+                      </ls:LSRepeatButton.RenderTransform>
+                  </ls:LSRepeatButton>
+                  <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" SoundID="{DynamicResource CarouselButtonSoundEvent}" />
+
+                  <StackPanel x:Name="ExpandGridInput" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,100,0" Opacity="0">
+                      <TextBlock Text="{Binding Source='hdf0c5b51gb587g4f15g839bgecfe6bb1104b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0"  Foreground="{StaticResource LS_baseTxtColor}"/>
+                      <Control x:Name="img" DataContext="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                  </StackPanel>
+
+                  <StackPanel x:Name="CollapseHintInput" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,100,0" Opacity="0">
+                      <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0"  Foreground="{StaticResource LS_baseTxtColor}"/>
+                      <Control x:Name="backImg" DataContext="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                  </StackPanel>
+
+                  <Control Template="{DynamicResource IconCarouselTextTemplate}"/>
+
+                  <!-- Swap to Race ListBox -->
+                  <ls:LSInputBinding x:Name="UIAcceptBinding" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="LSInputBindingReleased">
+                              <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                              <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Visible"/>
+                              <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                  </ls:LSInputBinding>
+
+              </Grid>
+              <b:Interaction.Triggers>
+                  <b:EventTrigger SourceName="leftBtn" EventName="Click">
+                      <ls:SelectNextListBoxItem Reversed="True" TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                  </b:EventTrigger>
+                  <b:EventTrigger SourceName="rightBtn" EventName="Click">
+                      <ls:SelectNextListBoxItem TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                  </b:EventTrigger>
+              </b:Interaction.Triggers>
+          </ContentControl>
+          <ControlTemplate.Triggers>
+              <DataTrigger Binding="{Binding ItemsSource.Count, ElementName=dots}" Value="1">
+                  <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                  <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+              </DataTrigger>
+
+              <MultiDataTrigger>
+                  <MultiDataTrigger.Conditions>
+                      <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                      <Condition Binding="{Binding ElementName=raceListBox, Path=Visibility}" Value="Collapsed"/>
+                  </MultiDataTrigger.Conditions>
+                  <Setter TargetName="ExpandGridInput" Property="Opacity" Value="1"/>
+              </MultiDataTrigger>
+
+              <DataTrigger Binding="{Binding ElementName=raceListBox, Path=Visibility}" Value="Visible">
+                  <Setter TargetName="CollapseHintInput" Property="Opacity" Value="1"/>
+              </DataTrigger>
+          </ControlTemplate.Triggers>
+      </ControlTemplate>
+
       <ControlTemplate x:Key="raceSelectionTemplate">
           <DockPanel>
 
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                   <ContentControl Template="{StaticResource HUI_SelectorHeader}">
                     <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                      <ListBox x:Name="RaceCarousel" Template="{StaticResource SelectableCarouselTemplate}" 
-                              ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}" />
+                      <ListBox x:Name="RaceCarousel" Template="{StaticResource RaceCarouselWithUIAccept}" 
+                              ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}">
+                          <ListBox.Style>
+                              <Style TargetType="ListBox">
+                                  <Style.Triggers>
+                                      <DataTrigger Binding="{Binding ElementName=raceListBox, Path=Visibility}" Value="Visible">
+                                          <Setter Property="IsEnabled" Value="False"/>
+                                      </DataTrigger>
+                                  </Style.Triggers>
+                              </Style>
+                          </ListBox.Style>
+                      </ListBox>
                     </ContentControl>
                   </ContentControl>
               </StackPanel>
 
-              <StackPanel x:Name="selectedSubRaceDescription" Orientation="Horizontal" DockPanel.Dock="Top"
-                          Visibility="{Binding Path=SelectableSubRaces.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                  <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                                VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"
-                                DockPanel.Dock="Top" Margin="0,20,0,0">
-                    <ListBox x:Name="subRaceListBox" ItemTemplate="{StaticResource CustomIconTemplate}"
-                            ItemsSource="{Binding SelectableSubRaces}" SelectedItem="{Binding SelectedSubRace}"
-                            ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
-                            Style="{StaticResource gameplayIconGridStyle}">
-                        <ListBox.Resources>
-                            <Style x:Key="CustomIconStyle" BasedOn="{StaticResource RaceIconStyle}" TargetType="Rectangle"/>
-                        </ListBox.Resources>
-                    </ListBox>
-                  </ScrollViewer>
-              </StackPanel>
+              <ScrollViewer x:Name="raceScrollViewer" Style="{StaticResource gameplayPanelScrollViewerStyle}"
+                            VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"
+                            DockPanel.Dock="Top" Margin="0,20,0,0">
+
+                <StackPanel x:Name="listStackPanel">
+                    <b:Interaction.Triggers>
+                        <b:PropertyChangedTrigger Binding="{Binding ElementName=raceListBox, Path=SelectedItem}">
+                            <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                            <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                        </b:PropertyChangedTrigger>
+                    </b:Interaction.Triggers>
+                    
+                <!-- SubRace ListBox - default visible -->
+                <ListBox x:Name="subRaceListBox" ItemTemplate="{StaticResource CustomIconTemplate}"
+                        ItemsSource="{Binding SelectableSubRaces}" SelectedItem="{Binding SelectedSubRace}"
+                        ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                        Style="{StaticResource gameplayIconGridStyle}">
+                    <ListBox.Resources>
+                        <Style x:Key="CustomIconStyle" BasedOn="{StaticResource RaceIconStyle}" TargetType="Rectangle"/>
+                    </ListBox.Resources>
+                </ListBox>
+                
+                <!-- Race ListBox - hidden by default -->
+                <ListBox x:Name="raceListBox" ItemTemplate="{StaticResource CustomIconTemplate}"
+                        ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}"
+                        ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                        Style="{StaticResource gameplayIconGridStyle}"
+                        IsSynchronizedWithCurrentItem="False"
+                        Visibility="Collapsed">
+                    <ListBox.Resources>
+                        <Style x:Key="CustomIconStyle" BasedOn="{StaticResource RaceIconStyle}" TargetType="Rectangle"/>
+                    </ListBox.Resources>
+                    <b:Interaction.Triggers>
+                        <b:PropertyChangedTrigger Binding="{Binding ElementName=raceListBox, Path=Visibility}">
+                            <b:Interaction.Behaviors>
+                                <b:ConditionBehavior>
+                                    <b:ConditionalExpression>
+                                        <b:ComparisonCondition LeftOperand="{Binding ElementName=raceListBox, Path=Visibility}" Operator="Equal" RightOperand="Visible"/>
+                                    </b:ConditionalExpression>
+                                </b:ConditionBehavior>
+                            </b:Interaction.Behaviors>
+                            <b:ChangePropertyAction TargetName="raceListBox" PropertyName="SelectedItem" Value="{Binding SelectedRace}"/>
+                        </b:PropertyChangedTrigger>
+                    </b:Interaction.Triggers>
+                </ListBox>
+                </StackPanel>
+              </ScrollViewer>
+              
+              <!-- Collapse Race ListBox -->
+              <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=raceListBox, Path=IsVisible}">
+                  <b:Interaction.Triggers>
+                      <b:EventTrigger EventName="LSInputBindingReleased">
+                          <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                          <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                          <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                      </b:EventTrigger>
+                  </b:Interaction.Triggers>
+              </ls:LSInputBinding>
+              
+              <!-- Auto-collapse Race ListBox when SelectedRace changes -->
+              <b:Interaction.Triggers>
+                  <b:PropertyChangedTrigger Binding="{Binding SelectedRace}">
+                      <b:Interaction.Behaviors>
+                          <b:ConditionBehavior>
+                              <b:ConditionalExpression>
+                                  <b:ComparisonCondition LeftOperand="{Binding ElementName=raceListBox, Path=Visibility}" RightOperand="Visible"/>
+                              </b:ConditionalExpression>
+                          </b:ConditionBehavior>
+                      </b:Interaction.Behaviors>
+                      <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                      <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                  </b:PropertyChangedTrigger>
+              </b:Interaction.Triggers>
+              
           </DockPanel>
     </ControlTemplate>
 
