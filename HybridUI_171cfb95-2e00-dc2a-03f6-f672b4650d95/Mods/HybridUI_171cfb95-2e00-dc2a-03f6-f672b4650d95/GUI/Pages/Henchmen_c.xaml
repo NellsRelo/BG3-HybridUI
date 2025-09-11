@@ -27,7 +27,7 @@
     <b:Interaction.Behaviors>
         <ls:CollectionFilterBehavior x:Name="PresetOriginsCollection" ItemsSource="{Binding SelectableOrigins}" Predicate="{Binding IsNotCustomOriginPredicate}"/>
         
-        <!-- Race and SubRace Collections (selectors only, not main tabs) -->
+        <!-- Race and SubRace Collections -->
         <ls:CollectionFilterBehavior x:Name="RaceProgressions" ItemsSource="{Binding RaceProgressionDetails.Progressions}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
         <ls:CollectionFilterBehavior x:Name="SubRaceProgressions" ItemsSource="{Binding RaceProgressionDetails.Progressions}" Predicate="{Binding IsSubProgressionPredicate}"/>
         
@@ -52,6 +52,8 @@
         <!-- Class Passive Collections -->
         <ls:CollectionFilterBehavior x:Name="ClassPassiveFeatures" ItemsSource="{Binding PassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
         <ls:CollectionFilterBehavior x:Name="SubClassPassiveFeatures" ItemsSource="{Binding PassiveFeatures}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="ClassPassiveSelectors" ItemsSource="{Binding ClassProgressionDetails.PassiveSelectors}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubClassPassiveSelectors" ItemsSource="{Binding ClassProgressionDetails.PassiveSelectors}" Predicate="{Binding IsSubProgressionPredicate}"/>
         
         <!-- Equipment Collections -->
         <ls:CollectionFilterBehavior x:Name="ClassEquipmentFeatures" ItemsSource="{Binding EquipmentFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
@@ -91,6 +93,13 @@
                         <b:ChangePropertyAction TargetName="selectionPage" PropertyName="Visibility" Value="Visible" />
                         <b:ChangePropertyAction TargetName="appearancePage" PropertyName="Visibility" Value="Collapsed" />
                     </b:DataTrigger>
+
+                    <!-- Clear gameplaySubPanel when hireling changes to prevent binding crashes -->
+                    <b:PropertyChangedTrigger Binding="{Binding SelectedHireling}">
+                        <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{x:Null}"/>
+                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="0"/>
+                    </b:PropertyChangedTrigger>
+
                 </b:Interaction.Triggers>
 
                 <Control x:Name="selectionPage">
@@ -132,12 +141,6 @@
                                             <ListBox x:Name="gameplayTabs" ItemsPanel="{StaticResource gameplayTabListPanel}" HorizontalAlignment="Center" Margin="0,-20,0,50" SelectedIndex="0">
                                                 <b:Interaction.Behaviors>
                                                     <ls:SubListBoxBehavior x:Name="SubListBoxHelper" RootListBox="{Binding ElementName=gameplayTabs}" DoPrevious="{Binding ElementName=backButton, Path=IsPressed}">
-                                                        <ls:SubListBoxBehavior.DoNext>
-                                                            <MultiBinding Converter="{StaticResource OrConverter}">
-                                                                <Binding ElementName="actionButton" Path="IsPressed"/>
-                                                                <Binding ElementName="ventureForthButton" Path="IsPressed"/>
-                                                            </MultiBinding>
-                                                        </ls:SubListBoxBehavior.DoNext>
                                                     </ls:SubListBoxBehavior>
                                                 </b:Interaction.Behaviors>
                                                 <ListBox.ItemContainerStyle>
@@ -148,27 +151,69 @@
 
                                                 <ListBoxItem x:Name="henchmenTab" Tag="henchmen" IsSelected="True"/>
                                                 <ListBoxItem x:Name="raceTab" Tag="race">
-                                                    <ListBoxItem.IsEnabled>
-                                                        <MultiBinding Converter="{StaticResource OrConverter}">
-                                                            <Binding ElementName="RaceSpellSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
-                                                            <Binding ElementName="RacePassiveSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
-                                                            <Binding Path="RaceEquipments.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
-                                                        </MultiBinding>
-                                                    </ListBoxItem.IsEnabled>
+                                                    <ListBoxItem.Style>
+                                                        <Style TargetType="ListBoxItem">
+                                                            <Setter Property="Template" Value="{StaticResource gameplayTabTemplate}"/>
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding RaceProgressionDetails.NotSubPassiveSelectors.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding RaceProgressionDetails.NotSubSpellSelectors.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding ElementName=RaceProgressions, Path=FilteredItems.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ListBoxItem.Style>
                                                 </ListBoxItem>
                                                 <ListBoxItem x:Name="subraceTab" Tag="subrace">
-                                                    <ListBoxItem.IsEnabled>
-                                                        <MultiBinding Converter="{StaticResource OrConverter}">
-                                                            <Binding ElementName="SubRaceSpellSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
-                                                            <Binding ElementName="SubRacePassiveSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
-                                                            <Binding Path="SubRaceEquipments.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
-                                                        </MultiBinding>
-                                                    </ListBoxItem.IsEnabled>
+                                                    <ListBoxItem.Style>
+                                                        <Style TargetType="ListBoxItem">
+                                                            <Setter Property="Template" Value="{StaticResource gameplayTabTemplate}"/>
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding RaceProgressionDetails.SubPassiveSelectors.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding RaceProgressionDetails.SubSpellSelectors.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding ElementName=SubRaceProgressions, Path=FilteredItems.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ListBoxItem.Style>
                                                 </ListBoxItem>
+                                                <ListBoxItem x:Name="raceSkillsTab" Tag="raceskills" IsEnabled="{Binding AllSkills.RaceProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                 <ListBoxItem x:Name="classTab" Tag="class"/>
                                                 <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                 <ListBoxItem x:Name="deityTab" Tag="deity" IsEnabled="{Binding SelectableDeities.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                 <ListBoxItem x:Name="spellPrepTab" Tag="spellprep" IsEnabled="{Binding SpellPrepare.Preparable.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                                <ListBoxItem x:Name="draconicTab" Tag="draconic" IsEnabled="{Binding Path=HasAppearancePassive, FallbackValue=False}"/>
+
+                                                <ListBoxItem x:Name="expertiseTab" Tag="expertise" IsEnabled="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
 
                                             </ListBox>
                                         </StackPanel>
@@ -347,6 +392,19 @@
                                             <b:EventTrigger EventName="LSButtonReleased">
                                                 <ls:LSPlaySound Sound="UI_HUD_CC_VentureForth_Controller_Release"/>
                                             </b:EventTrigger>
+                                            <b:EventTrigger EventName="Click" >
+                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                    <b:ControlStoryboardAction.Storyboard>
+                                                        <Storyboard FillBehavior="Stop">
+                                                            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(b:Interaction.Behaviors)[0].DoNext" Storyboard.TargetName="gameplayTabs">
+                                                                <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.01" Value="True"/>
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.2" Value="False"/>
+                                                            </BooleanAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </b:ControlStoryboardAction.Storyboard>
+                                                </b:ControlStoryboardAction> 
+                                            </b:EventTrigger>
                                         </b:Interaction.Triggers>
                                     </ls:LSButton>
                                 </ls:LSNineSliceImage>
@@ -429,6 +487,33 @@
                                 </Setter>
                             </DataTrigger>
 
+
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="raceskills">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True">
+                                                  <Grid>
+                                                    <Grid.RowDefinitions>
+                                                      <RowDefinition Height="Auto" />
+                                                      <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                                                      <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                          <Control Template="{StaticResource raceSkillProficiencyPanelTemplate}"/>
+                                                      </StackPanel>
+
+                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+
+                                                    </Grid>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
                                     <Setter TargetName="gameplayPanel" Property="Template">
                                         <Setter.Value>
@@ -502,6 +587,45 @@
                                         </Setter.Value>
                                     </Setter>
                                 </DataTrigger>
+
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="draconic">
+                                <Setter TargetName="gameplayPanel" Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <b:Interaction.Triggers>
+                                                        <b:EventTrigger EventName="Loaded">
+                                                            <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                        </b:EventTrigger>
+                                                    </b:Interaction.Triggers>
+
+                                                    <StackPanel x:Name="draconicAppearanceSelectors" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                        <Control x:Name="draconicAppearanceSelectionTemplate" Template="{StaticResource draconicAppearanceTemplate}"/>
+                                                    </StackPanel>
+
+                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+
+                                                </Grid>
+                                            </DockPanel>
+                                        <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                                                    <Setter TargetName="draconicAppearanceSelectionTemplate" Property="Template" Value="{StaticResource draconicAppearanceTemplateDragonBorn}"/>
+                                                </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+
+                            </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
                                     <Setter TargetName="gameplayPanel" Property="Template">
@@ -577,6 +701,31 @@
                                     </Setter>
                                 </DataTrigger>
 
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="expertise">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True">
+                                                  <Grid>
+                                                    <Grid.RowDefinitions>
+                                                      <RowDefinition Height="Auto" />
+                                                      <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                                                    <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                      <Control Template="{StaticResource skillExpertisePanelTemplate}"/>
+                                                    </StackPanel>
+
+                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+
+                                                  </Grid>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
                                 <!-- Button Control -->
                                 
                                 <!-- Hide button on appearance page -->
@@ -594,28 +743,50 @@
 
 
                                 <!-- Back Button Behavior -->
-                                <!-- On first tab (henchmen): show hold-to-exit, hide back button -->
+                                <!-- On first tab (henchmen): show hold-to-exit, hide back button, and ensure correct Continue/Venture Forth button -->
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="henchmen">
                                     <Setter TargetName="backButton" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="CancelButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
 
-                                <!-- On all other tabs: show back button, hide hold-to-exit -->
+                                <!-- On all other tabs: show back button, hide hold-to-exit, ensure correct button state -->
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="race">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
                                     <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
                                     <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
                                     <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
                                     <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
                                     <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
                                     <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep">
                                     <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
                                     <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
 
                                 <!-- Split Screen variation -->

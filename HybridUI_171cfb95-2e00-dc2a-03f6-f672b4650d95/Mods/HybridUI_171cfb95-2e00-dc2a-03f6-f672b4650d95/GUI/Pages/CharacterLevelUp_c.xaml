@@ -1384,13 +1384,18 @@ ConverterParameter=0}" Value="True"/>
                                                     </b:Interaction.Triggers>
 
                                                     <StackPanel x:Name="draconicAppearanceSelectors" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                        <Control Template="{StaticResource draconicAppearanceTemplate}"/>
+                                                        <Control x:Name="draconicAppearanceSelectionTemplate" Template="{StaticResource draconicAppearanceTemplate}"/>
                                                     </StackPanel>
 
                                                     <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                 </Grid>
                                             </DockPanel>
+                                            <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                                                    <Setter TargetName="draconicAppearanceSelectionTemplate" Property="Template" Value="{StaticResource draconicAppearanceTemplateDragonBorn}"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>

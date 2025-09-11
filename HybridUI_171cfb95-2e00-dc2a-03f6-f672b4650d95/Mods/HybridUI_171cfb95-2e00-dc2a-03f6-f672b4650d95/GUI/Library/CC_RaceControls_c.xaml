@@ -240,7 +240,7 @@
         <DockPanel>
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                 <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                    <TextBlock Text="{Binding Source='he1ff355fg8a83g4370g9178ga6d9364f4290', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}"/>
+                    <TextBlock Text="{Binding Source='he1ff355fg8a83g4370g9178ga6d9364f4290', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
                 </ContentControl>
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.Description}" Style="{StaticResource PanelDescriptionText}"  FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" Margin="0,5,0,0"/>
 
@@ -251,7 +251,7 @@
         <DockPanel>
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                 <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                    <TextBlock Text="{Binding Source='h09806be4gc585g4b00gbd9dg59502d635bd9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}"/>
+                    <TextBlock Text="{Binding Source='h09806be4gc585g4b00gbd9dg59502d635bd9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
                 </ContentControl>
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.Description}" Style="{StaticResource PanelDescriptionText}"  FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" Margin="0,5,0,0"/>
 
