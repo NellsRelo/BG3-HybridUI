@@ -18,4 +18,62 @@
         </DockPanel>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="henchmenControlsTemplate">
+        <DockPanel LastChildFill="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source=hdd1cb010g6baag43e5g92a0ga68099423f90, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                </ContentControl>
+
+                <Control x:Name="henchmenSelector" Grid.Row="1">
+                    <Control.Template>
+                        <ControlTemplate>
+                            <ls:LSScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
+                                               VerticalScrollBarVisibility="Auto" 
+                                               MaxHeight="1200" 
+                                               Height="Auto"  
+                                               Margin="0,20,0,0">
+                                <ListBox x:Name="presetOrigins" ItemTemplate="{StaticResource OriginPortraitTemplate}" ItemsSource="{Binding SelectableOrigins}" SelectedItem="{Binding SelectedOrigin}" Style="{StaticResource gameplayIconGridStyle}">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource CCIconTextListBoxItemStyle}">
+                                            <Style.Triggers>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </ls:LSScrollViewer>
+                        </ControlTemplate>
+                    </Control.Template>
+                </Control>
+
+                <Control Grid.Row="2" Template="{StaticResource HUI_SelectorClosingTemplate}"/>
+
+                <DockPanel Grid.Row="3">
+                        <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
+                            <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Origin}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+
+                            <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.OriginDescription}" Style="{StaticResource PanelDescriptionText}" Margin="0,30,0,0"/>
+                        </StackPanel>
+                </DockPanel>
+
+            </Grid>
+        </DockPanel>
+    </ControlTemplate>
+
 </ResourceDictionary>

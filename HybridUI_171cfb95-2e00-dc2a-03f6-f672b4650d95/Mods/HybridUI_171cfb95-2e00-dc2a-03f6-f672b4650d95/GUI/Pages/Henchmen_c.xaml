@@ -1,0 +1,717 @@
+<ls:UIWidget x:Name="Henchmen_c"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ls="clr-namespace:ls;assembly=Code"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="2160" d:DesignWidth="3840"
+    ls:UIWidget.ContextName="CharacterCreation"
+    FocusDown="UIDown" FocusLeft="UILeft" FocusRight="UIRight" FocusUp="UIUp" ls:MoveFocus.FocusMovementMode="Closest" CanCacheFocusSurroundingElements="False">
+
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding EnableTooltipOnUIElementCommand, ElementName=Henchmen_c}"/>
+        </b:EventTrigger>
+        <b:EventTrigger EventName="GotKeyboardFocus">
+            <b:InvokeCommandAction Command="{Binding ShowTooltipOnUIElementCommand, ElementName=Henchmen_c}" CommandParameter="{Binding Path=FocusedElement, ElementName=Henchmen_c}"/>
+        </b:EventTrigger>
+        <b:DataTrigger Binding="{Binding HasInputEnabled, ElementName=Henchmen_c}" Value="True">
+            <b:InvokeCommandAction Command="{Binding ShowTooltipOnUIElementCommand, ElementName=Henchmen_c}" CommandParameter="{Binding FocusedElement, ElementName=Henchmen_c}"/>
+        </b:DataTrigger>
+    </b:Interaction.Triggers>
+
+    <b:Interaction.Behaviors>
+        <ls:CollectionFilterBehavior x:Name="PresetOriginsCollection" ItemsSource="{Binding SelectableOrigins}" Predicate="{Binding IsNotCustomOriginPredicate}"/>
+        
+        <!-- Race and SubRace Collections (selectors only, not main tabs) -->
+        <ls:CollectionFilterBehavior x:Name="RaceProgressions" ItemsSource="{Binding RaceProgressionDetails.Progressions}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubRaceProgressions" ItemsSource="{Binding RaceProgressionDetails.Progressions}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        
+        <!-- Race Spell Collections -->
+        <ls:CollectionFilterBehavior x:Name="RaceSpellSelectors" ItemsSource="{Binding RaceProgressionDetails.SpellSelectors}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubRaceSpellSelectors" ItemsSource="{Binding RaceProgressionDetails.SpellSelectors}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        
+        <!-- Race Passive Collections -->
+        <ls:CollectionFilterBehavior x:Name="RacePassiveFeatures" ItemsSource="{Binding RacePassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubRacePassiveFeatures" ItemsSource="{Binding RacePassiveFeatures}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="RacePassiveSelectors" ItemsSource="{Binding RaceProgressionDetails.NotSubPassiveSelectors}"/>
+        <ls:CollectionFilterBehavior x:Name="SubRacePassiveSelectors" ItemsSource="{Binding RaceProgressionDetails.SubPassiveSelectors}"/>
+        
+        <!-- Class and SubClass Collections -->
+        <ls:CollectionFilterBehavior x:Name="ClassProgressions" ItemsSource="{Binding ClassProgressionDetails.Progressions}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubClassProgressions" ItemsSource="{Binding ClassProgressionDetails.Progressions}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        
+        <!-- Class Spell Collections -->
+        <ls:CollectionFilterBehavior x:Name="ClassSpellSelectors" ItemsSource="{Binding ClassProgressionDetails.SpellSelectors}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubClassSpellSelectors" ItemsSource="{Binding ClassProgressionDetails.SpellSelectors}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        
+        <!-- Class Passive Collections -->
+        <ls:CollectionFilterBehavior x:Name="ClassPassiveFeatures" ItemsSource="{Binding PassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubClassPassiveFeatures" ItemsSource="{Binding PassiveFeatures}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        
+        <!-- Equipment Collections -->
+        <ls:CollectionFilterBehavior x:Name="ClassEquipmentFeatures" ItemsSource="{Binding EquipmentFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="SubClassEquipmentFeatures" ItemsSource="{Binding EquipmentFeatures}" Predicate="{Binding IsSubProgressionPredicate}"/>
+        
+        <!-- Additional Spell Selector Collections -->
+        <ls:CollectionFilterBehavior x:Name="BackgroundSpellSelectors" ItemsSource="{Binding BackgroundProgressionDetails.SpellSelectors}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="FeatSpellSelectors" ItemsSource="{Binding FeatProgressionDetails.SpellSelectors}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        
+        <!-- Additional Passive Collections -->
+        <ls:CollectionFilterBehavior x:Name="BackgroundPassiveFeatures" ItemsSource="{Binding BackgroundProgressionDetails.PassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        <ls:CollectionFilterBehavior x:Name="FeatPassiveFeatures" ItemsSource="{Binding FeatProgressionDetails.PassiveFeatures}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+        
+        <!-- Race Skills Sorting -->
+        <ls:CollectionSortBehavior x:Name="SortedRaceSkills" ItemsSource="{Binding AllSkills.RaceProficientSkills.Skills}" Comparer="{Binding SkillSortComparer}" />
+        <ls:CollectionSortBehavior x:Name="SortedClassSkills" ItemsSource="{Binding AllSkills.ClassProficientSkills.Skills}" Comparer="{Binding SkillSortComparer}" />
+        <ls:CollectionSortBehavior x:Name="SortedExpertiseSkills" ItemsSource="{Binding AllSkills.ExpertiseSkills.Skills}" Comparer="{Binding SkillSortComparer}" />
+        <ls:CollectionSortBehavior x:Name="SortedSummarySkills" ItemsSource="{Binding ProgressionData.AllProgressions.Skills}" Comparer="{Binding SkillSortComparer}" />
+        
+        <!-- Spell Sorting -->
+        <ls:CollectionSortBehavior x:Name="SortedPreparableSpells" ItemsSource="{Binding SpellPrepare.Preparable}" Comparer="{Binding SpellByLevelSortComparer}" />
+        <ls:CollectionSortBehavior x:Name="SortedPreparableSpellGroupsByLevel" ItemsSource="{Binding SpellPrepare.PreparableByLevel}" Comparer="{Binding SpellGroupByLevelSortComparer}" />
+    </b:Interaction.Behaviors>
+
+    <ls:UIWidget.ContentTemplate>
+        <DataTemplate>
+
+            <Grid x:Name="widgetBase" IsEnabled="{Binding IsLocked, Converter={StaticResource InvertBoolConverter}}" ls:TooltipExtender.Owner="{Binding DummyCharacter}">
+
+                <b:Interaction.Triggers>
+                    <b:DataTrigger Binding="{Binding CharacterCreationStep}" Value="Appearance">
+                        <b:ChangePropertyAction TargetName="selectionPage" PropertyName="Visibility" Value="Collapsed" />
+                        <b:ChangePropertyAction TargetName="appearancePage" PropertyName="Visibility" Value="Visible" />
+                    </b:DataTrigger>
+
+                    <b:DataTrigger Binding="{Binding CharacterCreationStep}" Value="Origin">
+                        <b:ChangePropertyAction TargetName="selectionPage" PropertyName="Visibility" Value="Visible" />
+                        <b:ChangePropertyAction TargetName="appearancePage" PropertyName="Visibility" Value="Collapsed" />
+                    </b:DataTrigger>
+                </b:Interaction.Triggers>
+
+                <Control x:Name="selectionPage">
+                    <Control.Template>
+                        <ControlTemplate TargetType="Control">
+                            <Grid>
+                                <Control Template="{StaticResource setOverviewCamera}"/>
+
+                                <Grid>
+                                    <Rectangle x:Name="bottomShading" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="{StaticResource bottomBackgroundHeight}" Fill="{StaticResource BottomShadingBrush}"/>
+                                    <Rectangle x:Name="leftSideShading" HorizontalAlignment="Left" Width="{StaticResource leftSidePanelBackgroundWidthSplitscreen}" Fill="{StaticResource LeftSideShadingBrush}" OpacityMask="{StaticResource OpacityMaskShadingBrush}"/>
+
+                                    <!-- FocusScope for returning from Summary -->
+                                    <Grid x:Name="leftSidePanels" ls:MoveFocus.IsMoveFocusScope="True" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="1218" Margin="0,20,0,0">
+                                        
+                                        <ContentControl x:Name="gameplaySubPanel" Content="{Binding .}">
+                                            <b:Interaction.Triggers>
+                                                <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=gameplayTabs}">
+                                                    <b:Interaction.Behaviors>
+                                                        <b:ConditionBehavior>
+                                                            <b:ConditionalExpression>
+                                                                <b:ComparisonCondition LeftOperand="{Binding Path=SelectedIndex, ElementName=gameplayTabs}" Operator="NotEqual" RightOperand="-1"/>
+                                                            </b:ConditionalExpression>
+                                                        </b:ConditionBehavior>
+                                                    </b:Interaction.Behaviors>
+                                                    <!-- clear subtab panel -->
+                                                    <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{x:Null}"/>
+                                                </b:PropertyChangedTrigger>
+                                            </b:Interaction.Triggers>
+                                        </ContentControl>
+                                        
+                                        <Control x:Name="gameplayPanel" Height="{StaticResource gameplayPanelHeightSplit}" />
+                                        
+                                    </Grid>
+
+                                    <Grid x:Name="tabNavigation" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,80" Width="{StaticResource gameplaySideWidth}">
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <!-- Tab ListBox -->
+                                            <ListBox x:Name="gameplayTabs" ItemsPanel="{StaticResource gameplayTabListPanel}" HorizontalAlignment="Center" Margin="0,-20,0,50" SelectedIndex="0">
+                                                <b:Interaction.Behaviors>
+                                                    <ls:SubListBoxBehavior x:Name="SubListBoxHelper" RootListBox="{Binding ElementName=gameplayTabs}" DoPrevious="{Binding ElementName=backButton, Path=IsPressed}">
+                                                        <ls:SubListBoxBehavior.DoNext>
+                                                            <MultiBinding Converter="{StaticResource OrConverter}">
+                                                                <Binding ElementName="actionButton" Path="IsPressed"/>
+                                                                <Binding ElementName="ventureForthButton" Path="IsPressed"/>
+                                                            </MultiBinding>
+                                                        </ls:SubListBoxBehavior.DoNext>
+                                                    </ls:SubListBoxBehavior>
+                                                </b:Interaction.Behaviors>
+                                                <ListBox.ItemContainerStyle>
+                                                    <Style TargetType="ListBoxItem">
+                                                        <Setter Property="Template" Value="{StaticResource gameplayTabTemplate}"/>
+                                                    </Style>
+                                                </ListBox.ItemContainerStyle>
+
+                                                <ListBoxItem x:Name="henchmenTab" Tag="henchmen" IsSelected="True"/>
+                                                <ListBoxItem x:Name="raceTab" Tag="race">
+                                                    <ListBoxItem.IsEnabled>
+                                                        <MultiBinding Converter="{StaticResource OrConverter}">
+                                                            <Binding ElementName="RaceSpellSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
+                                                            <Binding ElementName="RacePassiveSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
+                                                            <Binding Path="RaceEquipments.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
+                                                        </MultiBinding>
+                                                    </ListBoxItem.IsEnabled>
+                                                </ListBoxItem>
+                                                <ListBoxItem x:Name="subraceTab" Tag="subrace">
+                                                    <ListBoxItem.IsEnabled>
+                                                        <MultiBinding Converter="{StaticResource OrConverter}">
+                                                            <Binding ElementName="SubRaceSpellSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
+                                                            <Binding ElementName="SubRacePassiveSelectors" Path="FilteredItems.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
+                                                            <Binding Path="SubRaceEquipments.Count" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="0"/>
+                                                        </MultiBinding>
+                                                    </ListBoxItem.IsEnabled>
+                                                </ListBoxItem>
+                                                <ListBoxItem x:Name="classTab" Tag="class"/>
+                                                <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                                <ListBoxItem x:Name="deityTab" Tag="deity" IsEnabled="{Binding SelectableDeities.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                                <ListBoxItem x:Name="spellPrepTab" Tag="spellprep" IsEnabled="{Binding SpellPrepare.Preparable.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid x:Name="summary" Visibility="Collapsed" HorizontalAlignment="Right">
+                                    <b:Interaction.Triggers>
+                                        <b:DataTrigger Binding="{Binding ElementName=summary, Path=IsVisible}" Value="False">
+                                            <b:ChangePropertyAction TargetName="focusSummaryPanelButton" PropertyName="Visibility" Value="Visible"/>
+                                        </b:DataTrigger>
+                                    </b:Interaction.Triggers>
+
+                                    <Rectangle x:Name="summaryBackground" HorizontalAlignment="Right" Width="{StaticResource summaryPanelBackgroundWidth}" RenderTransformOrigin="1,0.5" Fill="{StaticResource RightSideShadingBrush}" OpacityMask="{StaticResource OpacityMaskShadingBrush}">
+                                        <Rectangle.RenderTransform>
+                                            <ScaleTransform/>
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+
+                                    <Grid x:Name="summaryAnimPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,230,34,0">
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform X="0"/>
+                                        </Grid.RenderTransform>
+
+                                        <Control x:Name="summaryPanel" IsEnabled="False" ls:MoveFocus.IsMoveFocusScope="True" Template="{StaticResource summaryPanelTemplate}"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,16,0"/>
+
+                                        <ls:LSInputBinding x:Name="backFromFocusedSummary" IsEnabled="{Binding IsEnabled, ElementName=summaryPanel}" BoundEvent="UICancel">
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="LSInputBindingReleased" >
+                                                    <b:ChangePropertyAction TargetName="leftSidePanels" PropertyName="IsEnabled" Value="True"/>
+                                                    <b:ChangePropertyAction TargetName="bottomButtonsHolder" PropertyName="IsEnabled" Value="True"/>
+                                                    <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="False"/>
+                                                    <b:ChangePropertyAction TargetName="focusSummaryPanelButton" PropertyName="Visibility" Value="Visible"/>
+                                                    <b:ChangePropertyAction TargetName="focusGameplayPanelButton" PropertyName="Visibility" Value="Hidden"/>
+                                                    <ls:SetMoveFocusAction TargetName="Henchmen_c" FocusElement="{Binding ElementName=leftSidePanels}"/>
+                                                    <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource unfocusSummaryPanelStoryboard}"/>
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+                                        </ls:LSInputBinding>
+
+                                        <ls:LSButton x:Name="focusGameplayPanelButton" 
+                                                     Visibility="Hidden" 
+                                                     Tag=" "
+                                                     ContentTemplate="{StaticResource ControllerButtonHint}"
+                                                     Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UITabNext'}"
+                                                     BoundEvent="UITabNext"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Top">
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click" >
+                                                    <b:ChangePropertyAction TargetName="leftSidePanels" PropertyName="IsEnabled" Value="True"/>
+                                                    <b:ChangePropertyAction TargetName="bottomButtonsHolder" PropertyName="IsEnabled" Value="True"/>
+                                                    <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="False"/>
+                                                    <b:ChangePropertyAction TargetName="focusSummaryPanelButton" PropertyName="Visibility" Value="Visible"/>
+                                                    <b:ChangePropertyAction TargetName="focusGameplayPanelButton" PropertyName="Visibility" Value="Hidden"/>
+                                                    <ls:SetMoveFocusAction TargetName="Henchmen_c" FocusElement="{Binding ElementName=leftSidePanels}"/>
+                                                    <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource unfocusSummaryPanelStoryboard}"/>
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+                                        </ls:LSButton>
+
+                                        <ls:LSButton x:Name="focusSummaryPanelButton" 
+                                                     Tag=" " 
+                                                     ContentTemplate="{StaticResource ControllerButtonHint}"
+                                                     Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UITabNext'}"
+                                                     BoundEvent="UITabNext"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Top">
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Click" >
+                                                    <b:ChangePropertyAction TargetName="leftSidePanels" PropertyName="IsEnabled" Value="False"/>
+                                                    <b:ChangePropertyAction TargetName="bottomButtonsHolder" PropertyName="IsEnabled" Value="False"/>
+                                                    <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="True"/>
+                                                    <b:ChangePropertyAction TargetName="focusSummaryPanelButton" PropertyName="Visibility" Value="Hidden"/>
+                                                    <b:ChangePropertyAction TargetName="focusGameplayPanelButton" PropertyName="Visibility" Value="Visible"/>
+                                                    <ls:SetMoveFocusAction TargetName="Henchmen_c" FocusElement="{Binding ElementName=summaryPanel}"/>
+                                                    <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource focusSummaryPanelStoryboard}"/>
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
+                                        </ls:LSButton>
+                                    </Grid>
+                                </Grid>
+
+                                <StackPanel x:Name="bottomButtonsHolder" Margin="0,0,24,56" Style="{StaticResource ButtonHint.Container.Right}">
+                                    <ls:LSButton x:Name="gotoAppearanceButton"
+                                                 ContentTemplate="{StaticResource ControllerButtonHint}" 
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICreate, Converter={StaticResource FindInputEventConverter}}" 
+                                                 BoundEvent="UICreate" 
+                                                 Tag="{Binding Source=h4d42df61g362eg4b5cg9ffcgd381a84c2930,Converter={StaticResource TranslatedStringConverter}}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Appearance"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSButton>
+
+                                    <Control x:Name="bottomButtons" Template="{StaticResource StandardBottomButtonsTemplate2}"/>
+
+                                    <!-- Dynamic Back/Cancel Button -->
+                                    <ls:LSButton x:Name="backButton" 
+                                                 ContentTemplate="{StaticResource ControllerButtonHint}"
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" 
+                                                 BoundEvent="UICancel"
+                                                 Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" 
+                                                 Margin="50,0,0,0">
+                                        <!-- Default behavior: go back one tab -->
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click" >
+                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                    <b:ControlStoryboardAction.Storyboard>
+                                                        <Storyboard FillBehavior="Stop">
+                                                            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(b:Interaction.Behaviors)[0].DoPrevious" Storyboard.TargetName="gameplayTabs">
+                                                                <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.01" Value="True"/>
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.2" Value="False"/>
+                                                            </BooleanAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </b:ControlStoryboardAction.Storyboard>
+                                                </b:ControlStoryboardAction> 
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSButton>
+
+                                    <!-- Hold to Exit Button (only visible on first tab) -->
+                                    <ls:LSButton x:Name="CancelButton" 
+                                                 Tag="{Binding Source='hbc80c075g1c12g45a7gb006gfdc65eea207d', Converter={StaticResource TranslatedStringConverter}}"  
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" 
+                                                 Command="{Binding DataContext.CancelHenchmenCreating, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                                 EatInput="False"
+                                                 Style="{StaticResource ControllerHoldButtonStyle}" 
+                                                 VerticalAlignment="Bottom"
+                                                 Visibility="Collapsed"/>
+                                </StackPanel>
+
+                                <!-- Action Button (Continue/Venture Forth) -->
+                                <!-- Continue Button (for normal tabs) -->
+                                <ls:LSButton x:Name="actionButton" 
+                                             Style="{StaticResource nextCCTabNavButtonStyle}"
+                                             BoundEvent="UIDelete"
+                                             IsEnabled="{Binding DataContext.IsComplete, ElementName=gameplaySubPanel}"
+                                             HorizontalAlignment="Center" 
+                                             VerticalAlignment="Bottom" 
+                                             Margin="0,0,0,148">
+                                        <b:Interaction.Triggers>
+                                            <!-- Advance to next tab -->
+                                            <b:EventTrigger EventName="Click" >
+                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                    <b:ControlStoryboardAction.Storyboard>
+                                                        <Storyboard FillBehavior="Stop">
+                                                            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(b:Interaction.Behaviors)[0].DoNext" Storyboard.TargetName="gameplayTabs">
+                                                                <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.01" Value="True"/>
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.2" Value="False"/>
+                                                            </BooleanAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </b:ControlStoryboardAction.Storyboard>
+                                                </b:ControlStoryboardAction> 
+                                            </b:EventTrigger>
+                                            <b:EventTrigger EventName="LSButtonReleased">
+                                                <ls:LSPlaySound Sound="UI_HUD_CC_Continue_Controller_Release"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                </ls:LSButton>
+                                
+                                <!-- Venture Forth Button (for last tab only) -->
+                                <ls:LSNineSliceImage x:Name="ventureForthButton" Visibility="Collapsed" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" Style="{StaticResource PrimaryButton9Slice}" Margin="0,0,0,148">
+                                    <ls:LSButton Style="{StaticResource ControllerHoldButtonStyle}" 
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIDelete'}" 
+                                                 Tag="{Binding Source='h06b74424gf3bdg4b6cgbe63g84b32198e162', Converter={StaticResource TranslatedStringConverter}}" 
+                                                 BoundEvent="UIDelete"
+                                                 Command="{Binding DataContext.FinishHenchmenCreating, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"
+                                                 SoundID="UI_HUD_CC_VentureForth"
+                                                 IsEnabled="{Binding DataContext.IsComplete, ElementName=gameplaySubPanel}"
+                                                 Margin="6,0,8,0">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="LSButtonReleased">
+                                                <ls:LSPlaySound Sound="UI_HUD_CC_VentureForth_Controller_Release"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSButton>
+                                </ls:LSNineSliceImage>
+
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <!-- Tab Content Templates -->
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="henchmen">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Control Template="{StaticResource henchmenControlsTemplate}" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="race">
+                                <Setter TargetName="gameplayPanel" Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <b:Interaction.Triggers>
+                                                        <b:EventTrigger EventName="Loaded">
+                                                            <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                        </b:EventTrigger>
+                                                    </b:Interaction.Triggers>
+
+                                                    <StackPanel x:Name="RaceProgressions" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                        <Control Template="{StaticResource HUI_HenchRaceHeader}"/>
+                                                    </StackPanel>
+                                                    <Control Template="{StaticResource HUI_HenchRaceProgressions}" Grid.Row="1" />
+                                                </Grid>
+                                            </DockPanel>
+
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
+                                <Setter TargetName="gameplayPanel" Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <b:Interaction.Triggers>
+                                                        <b:EventTrigger EventName="Loaded">
+                                                            <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                        </b:EventTrigger>
+                                                    </b:Interaction.Triggers>
+
+                                                    <StackPanel x:Name="RaceProgressions" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                        <Control Template="{StaticResource HUI_HenchSubRaceHeader}"/>
+                                                    </StackPanel>
+                                                    <Control Template="{StaticResource HUI_HenchSubRaceProgressions}" Grid.Row="1" />
+                                                </Grid>
+                                            </DockPanel>
+
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <b:Interaction.Triggers>
+                                                            <b:EventTrigger EventName="Loaded">
+                                                                <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                            </b:EventTrigger>
+                                                        </b:Interaction.Triggers>
+
+                                                        <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                                                        <StackPanel x:Name="classCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                            <Control Template="{StaticResource classSelectionTemplate}"/>
+                                                        </StackPanel>
+
+                                                        <Control Template="{StaticResource classProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                        <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                        HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                        Tag="{Binding SelectedClass.Description}" />
+                                                    </Grid>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <b:Interaction.Triggers>
+                                                            <b:EventTrigger EventName="Loaded">
+                                                                <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                            </b:EventTrigger>
+                                                        </b:Interaction.Triggers>
+
+                                                        <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                                                        <StackPanel x:Name="subClassCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                            <Control Template="{StaticResource subClassSelectionTemplate}"/>
+                                                        </StackPanel>
+
+                                                        <Control Template="{StaticResource subClassProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                        <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                        HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                        Tag="{Binding SelectedSubClass.Description}" />
+                                                    </Grid>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <b:Interaction.Triggers>
+                                                            <b:EventTrigger EventName="Loaded">
+                                                                <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                            </b:EventTrigger>
+                                                        </b:Interaction.Triggers>
+
+                                                        <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                                                        <StackPanel x:Name="deityCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                            <Control Template="{StaticResource deitySelectionTemplate}"/>
+                                                        </StackPanel>
+
+                                                        <Control Template="{StaticResource deityProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                        <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                        HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                        Tag="{Binding SelectedDeity.Description}" />
+                                                    </Grid>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep">
+                                    <Setter TargetName="gameplayPanel" Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <b:Interaction.Triggers>
+                                                            <b:EventTrigger EventName="Loaded">
+                                                                <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
+                                                            </b:EventTrigger>
+                                                        </b:Interaction.Triggers>
+
+                                                        <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                                                        <StackPanel x:Name="spellPreperationScreen" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
+                                                            <Control Template="{StaticResource HUI_SpellPrepTemplate}"/>
+                                                        </StackPanel>
+
+                                                        <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+                                                        <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
+                                                                        HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
+                                                                        Tag="{Binding Source='he47d6cc7g50c3g4ab6g9027g2c54a173db29', Converter={StaticResource TranslatedStringConverter}}" /> 
+                                                    </Grid>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                                <!-- Button Control -->
+                                
+                                <!-- Hide button on appearance page -->
+                                <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Appearance">
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                
+                                <!-- On last tab: Show Venture Forth, hide Continue -->
+                                <!-- Use HasNext from SubListBoxBehavior to determine if we're on the last tab -->
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=(b:Interaction.Behaviors)[0].HasNext}" Value="False">
+                                    <Setter TargetName="actionButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+
+
+                                <!-- Back Button Behavior -->
+                                <!-- On first tab (henchmen): show hold-to-exit, hide back button -->
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="henchmen">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+
+                                <!-- On all other tabs: show back button, hide hold-to-exit -->
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep">
+                                    <Setter TargetName="backButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="CancelButton" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+
+                                <!-- Split Screen variation -->
+                                <DataTrigger Binding="{Binding Layout}" Value="Common">
+                                    <Setter TargetName="leftSidePanels" Property="Margin" Value="170,20,0,0"/>
+                                    <Setter TargetName="leftSideShading" Property="Width" Value="{StaticResource leftSidePanelBackgroundWidth}"/>
+                                    <Setter TargetName="gameplayPanel" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
+                                    <Setter TargetName="bottomButtonsHolder" Property="Margin" Value="0,0,90,56"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Layout}" Value="Common">
+                                    <Setter TargetName="summary" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Tag, ElementName=summary}" Value="ShowIfPossible">
+                                    <Setter TargetName="summary" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="summary" Property="Tag" Value=""/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Tag, ElementName=summary}" Value="HideIfPossible">
+                                    <Setter TargetName="summary" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="summary" Property="Tag" Value=""/>
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Control.Template>
+                </Control>
+
+                <Control x:Name="appearancePage" Visibility="Collapsed" ls:MoveFocus.IsMoveFocusScope="True">
+                    <Control.Template>
+                        <ControlTemplate TargetType="Control">
+                            <Grid>
+                                <b:Interaction.Triggers>
+                                    <b:DataTrigger Binding="{Binding ElementName=appearancePage, Path=IsVisible}" Value="True">
+                                        <b:InvokeCommandAction Command="{Binding Path=SetCameraOffsets}">
+                                            <b:InvokeCommandAction.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                                    <Binding>
+                                                        <Binding.Source>
+                                                            <System:Single>1.3</System:Single>
+                                                        </Binding.Source>
+                                                    </Binding>
+                                                    <Binding>
+                                                        <Binding.Source>
+                                                            <System:Single>1.3</System:Single>
+                                                        </Binding.Source>
+                                                    </Binding>
+                                                    <Binding>
+                                                        <Binding.Source>
+                                                            <System:Single>2.7</System:Single>
+                                                        </Binding.Source>
+                                                    </Binding>
+                                                </MultiBinding>
+                                            </b:InvokeCommandAction.CommandParameter>
+                                        </b:InvokeCommandAction>
+                                    </b:DataTrigger>
+                                </b:Interaction.Triggers>
+
+                                <Control x:Name="setCameras" Template="{StaticResource setAppearanceCamera_Splitscreen}"/>
+                                <Control Template="{StaticResource AppearanceBackgroundTemplate}"/>
+                                <Control x:Name="appearancePanel" Template="{StaticResource AppearancePanelTemplate}" Height="{StaticResource appearancePanelHeight_SplitScreen}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,250,50,0"/>
+
+                                <Grid x:Name="dummyMotionKey" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="50,0,0,200">
+                                    <Image Source="{StaticResource CameraActionIndication}" Stretch="None"/>
+                                    <Image Source="{StaticResource CameraActionStickIcon}" Stretch="None" Margin="0,8,0,0"/>
+                                </Grid>
+
+                                <StackPanel Style="{StaticResource ButtonHint.Container.Right}">
+                                    <ls:LSButton x:Name="backFromAppearanceButton"
+                                                 ContentTemplate="{StaticResource ControllerButtonHint}" 
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICreate, Converter={StaticResource FindInputEventConverter}}" 
+                                                 BoundEvent="UICreate" 
+                                                 Tag="{Binding Source=hdd1cb010g6baag43e5g92a0ga68099423f90,Converter={StaticResource TranslatedStringConverter}}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Origin"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSButton>
+                                </StackPanel>
+
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Layout}" Value="Common">
+                                    <Setter TargetName="setCameras" Property="Template" Value="{StaticResource setAppearanceCamera}"/>
+                                    <Setter TargetName="appearancePanel" Property="Height" Value="{StaticResource appearancePanelHeight}"/>
+                                    <Setter TargetName="appearancePanel" Property="Margin" Value="0,250,200,0"/>
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Control.Template>
+                </Control>
+
+            </Grid>
+
+            <DataTemplate.Triggers>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </ls:UIWidget.ContentTemplate>
+</ls:UIWidget>

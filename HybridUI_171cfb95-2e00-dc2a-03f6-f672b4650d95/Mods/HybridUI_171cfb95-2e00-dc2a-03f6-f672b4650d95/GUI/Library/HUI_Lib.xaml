@@ -11,7 +11,7 @@
     <BitmapImage x:Key="WideDivider" UriSource="pack://application:,,,/Core;component/Assets/CC/divider_levelUp.png"/>
 
 
-    <!-- Ported from CCLib_c directly -->
+    <!-- Ported from CCLib_c directly for the sake of HUI_DescriptionTemplate -->
     <Style x:Key="CarouselSideDescriptionText" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
         <Setter Property="Foreground" Value="{StaticResource CCTextLight}"/>
         <Setter Property="FontWeight" Value="Normal"/>
