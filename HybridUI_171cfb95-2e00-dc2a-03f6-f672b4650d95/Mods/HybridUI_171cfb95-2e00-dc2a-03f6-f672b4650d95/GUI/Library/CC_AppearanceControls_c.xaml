@@ -17,13 +17,17 @@
                     </ContentControl>
                     
                     <!-- Tab Carousel for Scales/Colors -->
-                    <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <ContentControl x:Name="draconicTabsCarousel" Template="{StaticResource HUI_CarouselHeaderDecorator}">
                         <ListBox x:Name="draconicTabs" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0">
                             <ListBox.Items>
                                 <ListBoxItem Tag="scales" Content="{Binding Source='h24787db3gf28dg4d79g8c0age428d4067710', Converter={StaticResource TranslatedStringConverter}}"/>
                                 <ListBoxItem Tag="colors" Content="{Binding Source='h9a8b7a34g0b55g47dbg9bd3ga7cd487fe423', Converter={StaticResource TranslatedStringConverter}}"/>
                             </ListBox.Items>
                         </ListBox>
+                    </ContentControl>
+
+                    <ContentControl x:Name="draconicTabsEmpty" Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                      <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h24787db3gf28dg4d79g8c0age428d4067710', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,0,0,0" />
                     </ContentControl>
                 </StackPanel>
 
@@ -56,6 +60,14 @@
             <DataTrigger Binding="{Binding ElementName=draconicTabs, Path=SelectedItem.Tag}" Value="colors">
                 <Setter TargetName="scalesContent" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="colorsContent" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
+                <Setter TargetName="draconicTabsCarousel" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="draconicTabsEmpty" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="False">
+                <Setter TargetName="draconicTabsCarousel" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="draconicTabsEmpty" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
           </ControlTemplate.Triggers>
           </ControlTemplate>
