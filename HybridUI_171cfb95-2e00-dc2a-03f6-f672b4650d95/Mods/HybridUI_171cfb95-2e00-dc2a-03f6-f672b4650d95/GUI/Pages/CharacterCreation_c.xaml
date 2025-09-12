@@ -281,6 +281,11 @@
                                             </b:DataTrigger>
                                         </b:Interaction.Triggers>
 
+                                        <!-- Mode controller for appearance/gameplay mode switching -->
+                                        <Grid x:Name="modeController" Tag="" Visibility="Collapsed"/>
+                                        
+
+
                                         <Rectangle x:Name="tabBarBackground" Width="3000" Height="{StaticResource TabsPanelHeight}" Fill="{StaticResource NavShadingBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                                         <StackPanel x:Name="tabBar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="216,0,0,0" Width="3000" Tag="CanJumpToAppearance">
@@ -555,7 +560,6 @@
                                                     <ListBoxItem x:Name="expertiseTab" Tag="expertise" IsEnabled="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
 
                                                     <ListBoxItem x:Name="draconicTab" Tag="draconic" IsEnabled="{Binding Path=HasAppearancePassive, FallbackValue=False}"/>
-                                                    <ListBoxItem x:Name="appearanceTab" Tag="appearance"/>
 
                                                 </ListBox>
 
@@ -565,18 +569,18 @@
                                                         <ControlTemplate TargetType="ListBox">
                                                             <Grid x:Name="templateRoot">
                                                                 <b:Interaction.Behaviors>
-                                                                    <ls:SubListBoxBehavior x:Name="AppearanceSubListBoxHelper" RootListBox="{Binding RelativeSource={RelativeSource TemplatedParent}}" DoPrevious="{Binding ElementName=prevTabButton, Path=IsPressed}" DoNext="{Binding ElementName=nextTabButton, Path=IsPressed}"/>
+                                                                    <ls:SubListBoxBehavior x:Name="AppearanceTabNavigator" RootListBox="{Binding RelativeSource={RelativeSource TemplatedParent}}" DoPrevious="{Binding ElementName=prevTabButton, Path=IsPressed}" DoNext="{Binding ElementName=nextTabButton, Path=IsPressed}"/>
                                                                 </b:Interaction.Behaviors>
 
                                                                 <!-- Appearance backplate -->
-                                                                <Grid x:Name="appearanceBackplate" Width="{Binding ElementName=AppearanceSubListBoxHelper, Path=BackplateWidth}" MinWidth="{Binding ElementName=AppearanceSubListBoxHelper, Path=RootListBox.SelectedItem.ActualWidth}"
-                                                                      Height="{StaticResource TabsPanelHeight}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden">
+                                                                <Grid x:Name="appearanceBackplate" Width="{Binding ElementName=AppearanceTabNavigator, Path=BackplateWidth}" MinWidth="{Binding ElementName=AppearanceTabNavigator, Path=RootListBox.SelectedItem.ActualWidth}"
+                                                                      Height="{StaticResource TabsPanelHeight}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Visible">
                                                                     <Grid.Tag>
                                                                         <MultiBinding Converter="{StaticResource AddMultipleConverter}">
-                                                                            <Binding ElementName="AppearanceSubListBoxHelper" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
+                                                                            <Binding ElementName="AppearanceTabNavigator" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
                                                                             <Binding ElementName="appearanceTabSelector" Path="Width" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-0.5"/>
                                                                             <Binding ElementName="tabBarClipper" Path="Tag"/>
-                                                                            <Binding ElementName="AppearanceSubListBoxHelper" Path="BackplateOffset"/>
+                                                                            <Binding ElementName="AppearanceTabNavigator" Path="BackplateOffset"/>
                                                                         </MultiBinding>
                                                                     </Grid.Tag>
 
@@ -600,7 +604,7 @@
                                                                     </Grid.Resources>
 
                                                                     <b:Interaction.Triggers>
-                                                                        <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=AppearanceSubListBoxHelper}">
+                                                                        <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=AppearanceTabNavigator}">
                                                                             <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideAppearanceBackplateAnimation}"/>
                                                                             <ls:LSControlStoryboard ControlStoryboardOption="Play" >
                                                                                 <ls:LSControlStoryboard.Storyboard>
@@ -618,7 +622,7 @@
                                                                 <Grid x:Name="appearanceItemsPanel">
                                                                     <Grid.Tag>
                                                                         <MultiBinding Converter="{StaticResource AddMultipleConverter}">
-                                                                            <Binding ElementName="AppearanceSubListBoxHelper" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
+                                                                            <Binding ElementName="AppearanceTabNavigator" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
                                                                             <Binding ElementName="appearanceTabSelector" Path="Width" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-0.5"/>
                                                                             <Binding ElementName="tabBarClipper" Path="Tag"/>
                                                                         </MultiBinding>
@@ -636,7 +640,7 @@
                                                                     </Grid.Resources>
 
                                                                     <b:Interaction.Triggers>
-                                                                        <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=AppearanceSubListBoxHelper}">
+                                                                        <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=AppearanceTabNavigator}">
                                                                             <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource ScrollAppearanceTabsAnimation}"/>
                                                                         </b:PropertyChangedTrigger>
                                                                     </b:Interaction.Triggers>
@@ -658,6 +662,15 @@
                                                         </Style>
                                                     </ListBox.ItemContainerStyle>
 
+
+
+                                                    <ListBoxItem x:Name="generalTab" Tag="general" Content="{Binding Source=h4c12a52dgcd71g43b9ga266gf506b54b0c55, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="faceTab" Tag="face" Content="{Binding Source=h1cb3665cgbe61g4230g8861g9bbfa408442b, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="hairTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="eyesTab" Tag="eyes" Content="{Binding Source=h0a5735bfg27d4g4761gb6a8ga5605f9d4afa, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="accessoriesTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="featuresTab" Tag="features" Content="{Binding Source=h97cb756egd22dg488aga292g7cd93aeaaa6e, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="passiveFeaturesTab" Tag="passivefeatures" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <b:Interaction.Triggers>
                                                         <b:EventTrigger EventName="SelectionChanged">
                                                             <b:Interaction.Behaviors>
@@ -670,14 +683,6 @@
                                                             <b:ChangePropertyAction TargetName="appearanceTabs" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=appearanceTabs}" />
                                                         </b:EventTrigger>
                                                     </b:Interaction.Triggers>
-
-                                                    <ListBoxItem x:Name="generalTab" Tag="general" Content="{Binding Source=h4c12a52dgcd71g43b9ga266gf506b54b0c55, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="faceTab" Tag="face" Content="{Binding Source=h1cb3665cgbe61g4230g8861g9bbfa408442b, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="hairTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="eyesTab" Tag="eyes" Content="{Binding Source=h0a5735bfg27d4g4761gb6a8ga5605f9d4afa, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="accessoriesTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="featuresTab" Tag="features" Content="{Binding Source=h97cb756egd22dg488aga292g7cd93aeaaa6e, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="passiveFeaturesTab" Tag="passivefeatures" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}"/>
                                                 </ListBox>
 
                                             </Grid>
@@ -689,7 +694,7 @@
                                             </Grid>
 
                                             <Grid x:Name="selectedAppearanceTabUnderline" HorizontalAlignment="Left" Margin="102,-56,0,0" Width="600" Visibility="Collapsed">
-                                                <!-- Appearance underline positioned in same coordinate system as gameplay underline -->
+                                                <!-- Appearance underline positioned to align with first appearance tab -->
                                                 <ls:LSNineSliceImage x:Name="appearanceTabSelector" Style="{StaticResource tabSelectorStyle}" Width="0" Margin="0,-20,0,20"/>
                                             </Grid>                                        </StackPanel>
 
@@ -843,11 +848,11 @@
                                     <Setter TargetName="gotoNamingButton" Property="IsEnabled" Value="False"/>
                                 </DataTrigger>
 
-                                <!-- Common layout with appearance tabs -->
+                                <!-- Common layout with appearance mode -->
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Layout}" Value="Common"/>
-                                        <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="appearance"/>
+                                        <Condition Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance"/>
                                     </MultiDataTrigger.Conditions>
                                     <Setter TargetName="selectedAppearanceTabUnderline" Property="Margin" Value="252,-54,0,0" />
                                 </MultiDataTrigger>
@@ -1431,13 +1436,15 @@
 
 
                                 <!-- Appearance mode for all layout types -->
-                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="appearance">
+                                <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
 
                                     <!-- Hide the gameplay tabs and show appearance tabs -->
                                     <Setter TargetName="gameplayTabs" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="appearanceTabs" Property="Visibility" Value="Visible"/>
                                     
+                                    <!-- Hide all gameplay content panels -->
                                     <Setter TargetName="gameplayPanel" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="gameplaySubPanel" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="appearanceContentsPanel" Property="Visibility" Value="Visible"/>
                                     <Setter TargetName="summary" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="summaryBackground" Property="Visibility" Value="Collapsed"/>

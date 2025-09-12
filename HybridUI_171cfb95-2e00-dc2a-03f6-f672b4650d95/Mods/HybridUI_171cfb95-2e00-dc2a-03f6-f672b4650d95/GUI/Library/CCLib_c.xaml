@@ -2031,12 +2031,6 @@
         </Grid>
 
         <ControlTemplate.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
-            </Trigger>
-            <Trigger Property="IsSelected" Value="False">
-                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
-            </Trigger>
         </ControlTemplate.Triggers>
 
     </ControlTemplate>
@@ -4603,7 +4597,7 @@
                 <Setter TargetName="useRecommended" Property="Visibility" Value="Visible"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="appearance">
+            <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
                 <Setter TargetName="showSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
@@ -4655,8 +4649,11 @@
                 Tag="{Binding Source=h4d42df61g362eg4b5cg9ffcgd381a84c2930,Converter={StaticResource TranslatedStringConverter}}" >
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="Click">
-                        <b:ChangePropertyAction TargetName="tabBar" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=gameplayTabs}" />
-                        <b:ChangePropertyAction TargetName="appearanceTab" PropertyName="IsSelected" Value="True" />
+                        <!-- Store the original gameplay tab index in gameplayTabs.Tag for later compensation -->
+                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=gameplayTabs}" />
+                        <!-- Switch to appearance mode -->
+                        <b:ChangePropertyAction TargetName="modeController" PropertyName="Tag" Value="appearance" />
+                        <!-- Restore to the last selected appearance tab -->
                         <b:ChangePropertyAction TargetName="appearanceTabs" PropertyName="SelectedIndex" Value="{Binding Tag, ElementName=appearanceTabs, FallbackValue=0}" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
@@ -4686,8 +4683,10 @@
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="Click">
                         <b:ChangePropertyAction TargetName="appearanceTabs" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=appearanceTabs}" />
-                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="{Binding Tag, ElementName=tabBar}" />
-                        <b:ChangePropertyAction TargetName="tabBar" PropertyName="Tag" Value="CanJumpToAppearance" />
+                        <!-- Exit appearance mode -->
+                        <b:ChangePropertyAction TargetName="modeController" PropertyName="Tag" Value="" />
+                        <!-- Restore to the originally stored tab index (compensate for any corruption) -->
+                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="{Binding Tag, ElementName=gameplayTabs, FallbackValue=0}" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </ls:LSButton>
@@ -4707,7 +4706,7 @@
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Visible"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag, FallbackValue=''}" Value="appearance">
+            <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
                 <Setter TargetName="showSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Collapsed"/>
@@ -5631,7 +5630,7 @@
                             </Grid>
                         </ContentControl>
                         <ControlTemplate.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="appearance">
+                            <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
                                 <Setter TargetName="leftBtn" Property="Command" Value="{Binding RandomAppearance}"/>
                                 <Setter TargetName="rightBtn" Property="Command" Value="{Binding RandomAppearance}"/>
                                 <Setter TargetName="leftBtn" Property="IsEnabled" Value="{Binding HasPreviousAppearance}"/>
@@ -6186,7 +6185,7 @@
                 <Setter TargetName="newRandomAppearance" Property="BoundEvent" Value="UIAccept"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="appearance">
+            <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
                 <Setter TargetName="newRandomAppearance" Property="Command" Value="{Binding RandomAppearance}"/>
                 <Setter TargetName="daisyRace" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="daisySubRace" Property="Visibility" Value="Collapsed"/>
