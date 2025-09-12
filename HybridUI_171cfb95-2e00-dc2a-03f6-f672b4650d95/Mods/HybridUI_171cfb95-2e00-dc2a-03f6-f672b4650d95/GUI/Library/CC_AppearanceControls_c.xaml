@@ -108,4 +108,94 @@
           </ControlTemplate.Triggers>
           </ControlTemplate>
 
+          <!-- General Appearance Template -->
+          <ControlTemplate x:Key="GeneralAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="General Appearance" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Body Type, Skin Tone, Voice options would appear here." Foreground="White" Margin="0,0,0,20"/>
+                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
+                        <TextBlock Text="General appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
+          <!-- Face Appearance Template -->
+          <ControlTemplate x:Key="FaceAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="Face" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Face options, scars, and facial features." Foreground="White" Margin="0,0,0,20"/>
+                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
+                        <TextBlock Text="Face appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
+          <!-- Hair Appearance Template -->
+          <ControlTemplate x:Key="HairAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="Hair" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Hairstyles, hair colors, and facial hair." Foreground="White" Margin="0,0,0,20"/>
+                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
+                        <TextBlock Text="Hair appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
+          <!-- Eyes Appearance Template -->
+          <ControlTemplate x:Key="EyesAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="Eyes" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Eye colors and shapes." Foreground="White" Margin="0,0,0,20"/>
+                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
+                        <TextBlock Text="Eyes appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
+          <!-- Accessories Appearance Template -->
+          <ControlTemplate x:Key="AccessoriesAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="Accessories" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Tattoos, piercings, and makeup." Foreground="White" Margin="0,0,0,20"/>
+                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
+                        <TextBlock Text="Accessories appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
+          <!-- Features Appearance Template -->
+          <ControlTemplate x:Key="FeaturesAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="Features" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Special features like horns, tails, etc." Foreground="White" Margin="0,0,0,20"/>
+                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
+                        <TextBlock Text="Features appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
+          <!-- Passive Features Appearance Template -->
+          <ControlTemplate x:Key="PassiveFeaturesAppearanceTemplate">
+            <Grid Background="Transparent">
+                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
+                    <TextBlock Text="Passive Features" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
+                    <TextBlock Text="Draconic bloodline and other passive appearance options." Foreground="White" Margin="0,0,0,20"/>
+                    <!-- Use the existing draconic appearance content for passive features -->
+                    <ContentControl Template="{StaticResource draconicAppearanceTemplate}"/>
+                </StackPanel>
+            </Grid>
+          </ControlTemplate>
+
 </ResourceDictionary>

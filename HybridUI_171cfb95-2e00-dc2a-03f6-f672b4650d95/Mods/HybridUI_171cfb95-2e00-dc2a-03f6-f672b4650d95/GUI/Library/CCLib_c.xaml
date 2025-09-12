@@ -1980,6 +1980,47 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!-- Appearance tabs template - simplified version for appearance tabs -->
+    <ControlTemplate x:Key="appearanceTabTemplate2" TargetType="ListBoxItem">
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,4">
+
+                <Grid x:Name="tabItem" Width="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}">
+
+                    <TextBlock x:Name="label" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Center"
+                               Text="{Binding Content, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
+                        
+                        <b:Interaction.Triggers>
+                            <!-- Set the tab underline asset width when selected -->
+                            <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="setSelectorWidth">
+                                            <DoubleAnimation Storyboard.TargetName="appearanceTabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                    </TextBlock>
+
+                </Grid>
+
+            </StackPanel>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+
+    </ControlTemplate>
+
     <ControlTemplate x:Key="ChoiceButtonTemplate" TargetType="RadioButton">
         <Grid>
             <Image x:Name="bg" Source="{StaticResource AltButton_d}" Stretch="None"/>
@@ -4594,8 +4635,9 @@
                 Tag="{Binding Source=h4d42df61g362eg4b5cg9ffcgd381a84c2930,Converter={StaticResource TranslatedStringConverter}}" >
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="Click">
-                        <b:ChangePropertyAction TargetName="tabBar" PropertyName="Tag" Value="{Binding Tag, ElementName=gameplayTabs}" />
+                        <b:ChangePropertyAction TargetName="tabBar" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=gameplayTabs}" />
                         <b:ChangePropertyAction TargetName="appearanceTab" PropertyName="IsSelected" Value="True" />
+                        <b:ChangePropertyAction TargetName="appearanceTabs" PropertyName="SelectedIndex" Value="{Binding Tag, ElementName=appearanceTabs, FallbackValue=0}" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </ls:LSButton>
@@ -4615,6 +4657,21 @@
                 </b:Interaction.Triggers>
             </ls:LSButton>
 
+            <!-- Back from appearance button -->
+            <ls:LSButton x:Name="backFromAppearanceButton" Visibility="Collapsed"
+                         ContentTemplate="{StaticResource ControllerButtonHint}" 
+                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICreate, Converter={StaticResource FindInputEventConverter}}" 
+                         BoundEvent="UICreate" 
+                         Tag="{Binding Source=hb6342179gece9g4eddgbbe8ga11c8273bbeb,Converter={StaticResource TranslatedStringConverter}}" >
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Click">
+                        <b:ChangePropertyAction TargetName="appearanceTabs" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=appearanceTabs}" />
+                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="{Binding Tag, ElementName=tabBar}" />
+                        <b:ChangePropertyAction TargetName="tabBar" PropertyName="Tag" Value="CanJumpToAppearance" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ls:LSButton>
+
             <!-- Toggle tooltips -->
             <ls:LSButton x:Name="ToggleTooltips"
                                  Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
@@ -4630,10 +4687,11 @@
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Visible"/>
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="appearance">
+            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag, FallbackValue=''}" Value="appearance">
                 <Setter TargetName="showSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="backFromAppearanceButton" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="raceskills">
                 <Setter TargetName="selectButton" Property="Visibility" Value="Visible"/>
