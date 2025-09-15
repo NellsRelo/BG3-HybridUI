@@ -10,6 +10,9 @@
 
     <BitmapImage x:Key="WideDivider" UriSource="pack://application:,,,/Core;component/Assets/CC/divider_levelUp.png"/>
 
+    <!-- Resources for Face icon sizing -->
+    <System:Single x:Key="gridIconSize">234</System:Single>
+    <System:Single x:Key="gridIconFrameSize">274</System:Single>
 
     <!-- Ported from CCLib_c directly for the sake of HUI_DescriptionTemplate -->
     <Style x:Key="CarouselSideDescriptionText" TargetType="TextBlock" BasedOn="{StaticResource PanelDescriptionText}">
@@ -173,4 +176,546 @@
         </Grid>
     </ControlTemplate>
 
+    <!-- Custom Green Selection Template - Uses DropShadowEffect for green tinting -->
+    <ControlTemplate x:Key="HUI_GreenSelectionIndicatorTemplate">
+        <Grid>
+            <!-- Base template from FocusedAndSelectedIndicatorTemplate -->
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource selectorStoryboard}"/>
+                </EventTrigger>
+            </Grid.Triggers>
+            
+            <!-- Base SelectorSelected images with ULTRA GREEN DropShadowEffect -->
+            <ls:LSNineSliceImage x:Name="img1" ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="0" BlurRadius="50" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+                <ls:LSNineSliceImage.OpacityMask>
+                    <RadialGradientBrush Center="0.5,0.5" RadiusX="1" RadiusY="1">
+                        <GradientStop Color="#FF00FF00" Offset="0"/>
+                        <GradientStop Color="#FF00FF00" Offset="0.3"/>
+                        <GradientStop Color="#FF00FF00" Offset="0.7"/>
+                        <GradientStop Color="#FF00FF00" Offset="1"/>
+                    </RadialGradientBrush>
+                </ls:LSNineSliceImage.OpacityMask>
+            </ls:LSNineSliceImage>
+            
+            <!-- ADDITIONAL GREEN LAYER 1 -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="2" Direction="0" BlurRadius="40" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            
+            <!-- ADDITIONAL GREEN LAYER 2 -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="4" Direction="90" BlurRadius="35" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+
+            <ls:LSNineSliceImage x:Name="img2" ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="2" Direction="270" BlurRadius="45" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+                <ls:LSNineSliceImage.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF00FF00" Offset="0"/>
+                        <GradientStop Color="#FF00FF00" Offset="0.5"/>
+                        <GradientStop Color="#FF00FF00" Offset="1"/>
+                    </LinearGradientBrush>
+                </ls:LSNineSliceImage.OpacityMask>
+            </ls:LSNineSliceImage>
+            
+            <!-- EXTRA GREEN LAYER FOR IMG2 -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="6" Direction="180" BlurRadius="60" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            <ls:LSNineSliceImage x:Name="img3" ImageSource="{StaticResource SelectorSelected2}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="0">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="1" Direction="45" BlurRadius="18" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+                <ls:LSNineSliceImage.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF00FF00" Offset="0"/>
+                        <GradientStop Color="#FF00CC00" Offset="0.5"/>
+                        <GradientStop Color="#FF00FF00" Offset="1"/>
+                    </LinearGradientBrush>
+                </ls:LSNineSliceImage.OpacityMask>
+            </ls:LSNineSliceImage>
+            <ls:LSNineSliceImage x:Name="img4" ImageSource="{StaticResource SelectorSelected2}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="0">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="4" Direction="135" BlurRadius="25" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+                <ls:LSNineSliceImage.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF00FF00" Offset="0"/>
+                        <GradientStop Color="#FF00BB00" Offset="0.5"/>
+                        <GradientStop Color="#FF00FF00" Offset="1"/>
+                    </LinearGradientBrush>
+                </ls:LSNineSliceImage.OpacityMask>
+            </ls:LSNineSliceImage>
+            <ls:LSNineSliceImage x:Name="img5" ImageSource="{StaticResource SelectorSelected2}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="0" Direction="0" BlurRadius="100" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+                <ls:LSNineSliceImage.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF00FF00" Offset="0"/>
+                        <GradientStop Color="#FF00FF00" Offset="0.5"/>
+                        <GradientStop Color="#FF00FF00" Offset="1"/>
+                    </LinearGradientBrush>
+                </ls:LSNineSliceImage.OpacityMask>
+            </ls:LSNineSliceImage>
+            
+            <!-- FINAL ULTIMATE GREEN BLAST LAYER -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected2}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="8" Direction="315" BlurRadius="150" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            
+            <!-- GREEN NUCLEAR EXPLOSION LAYER -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="12" Direction="225" BlurRadius="200" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            
+            <!-- GREEN SATURATION OVERLAY 1 - Zero blur for direct color override -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="0" Direction="0" BlurRadius="0" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            
+            <!-- GREEN SATURATION OVERLAY 2 - Minimal blur for sharp color -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected2}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="1" Direction="90" BlurRadius="1" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            
+            <!-- GREEN SATURATION OVERLAY 3 - Another zero blur layer -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected1}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="0" Direction="180" BlurRadius="0" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+            
+            <!-- GREEN SATURATION OVERLAY 4 - Final color domination layer -->
+            <ls:LSNineSliceImage ImageSource="{StaticResource SelectorSelected2}" Slices="{StaticResource selectorSlices}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Opacity="1">
+                <ls:LSNineSliceImage.Effect>
+                    <DropShadowEffect Color="#FF00FF00" ShadowDepth="0" Direction="270" BlurRadius="0" Opacity="1.0"/>
+                </ls:LSNineSliceImage.Effect>
+            </ls:LSNineSliceImage>
+        </Grid>
+    </ControlTemplate>
+
+    <!-- Custom Face Grid Item Template - Uses proper appearance icon selection styling -->
+    <DataTemplate x:Key="HUI_FaceIconTemplate" DataType="{x:Type ls:VMSelectable}">
+        <StackPanel x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Margin="8" ToolTipService.Placement="Bottom">
+            <StackPanel.ToolTip>
+                <ls:LSTooltip Content="{Binding DataContext.Name, ElementName=base}"/>
+            </StackPanel.ToolTip>
+            <Grid HorizontalAlignment="Center">
+                <Rectangle x:Name="icon" Fill="{Binding Icon}" Width="{StaticResource gridIconSize}" Height="{StaticResource gridIconSize}" RadiusX="6" RadiusY="6"/>
+                <!-- Frame uses original sizing to preserve focused appearance -->
+                <Control x:Name="frame" Width="{StaticResource gridIconFrameSize}" Height="{StaticResource gridIconFrameSize}" Margin="-20"/>
+                <Image x:Name="tick" Visibility="Hidden" Source="{StaticResource IconTick}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
+            </Grid>
+            <ls:LSInputBinding IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" BoundEvent="UIAccept">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="LSInputBindingReleased">
+                        <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" PropertyName="SelectedItem" Value="{Binding .}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </ls:LSInputBinding>
+        </StackPanel>
+
+        <DataTemplate.Triggers>
+            <!-- Selected state - use custom green template -->
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                <Setter TargetName="frame" Property="Template" Value="{StaticResource HUI_GreenSelectionIndicatorTemplate}"/>
+                <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+
+            <!-- Focused only state - normal focus indicator -->
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="frame" Property="Template" Value="{StaticResource FocusedOnlyIndicatorTemplate}"/>
+            </DataTrigger>
+
+            <!-- Both focused and selected - use custom green template -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="frame" Property="Template" Value="{StaticResource HUI_GreenSelectionIndicatorTemplate}"/>
+            </MultiDataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!-- HUI Appearance Icon Grid Style - hybrid between appearance and gameplay styles -->
+    <Style x:Key="HUI_AppearanceIconGridStyle" TargetType="ListBox" BasedOn="{StaticResource appearanceIconGridStyle}">
+        <!-- Use appearanceIconGridStyle as base for compatibility with appearance data -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Border x:Name="gridContainer" ls:MoveFocus.Focusable="True" Focusable="True">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      Width="{StaticResource gameplayPanelWidth}"
+                                      HorizontalAlignment="Left">
+                            <ItemsPresenter HorizontalAlignment="Center"/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate" Value="{StaticResource HUI_FaceIconTemplate}"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" 
+                               HorizontalAlignment="Center" 
+                               FlowDirection="LeftToRight"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Allow navigation out of grid -->
+        <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Continue"/>
+        <Setter Property="FlowDirection" Value="LeftToRight"/>
+    </Style>
+
+
+
+    <!-- HUI Carousel Template - Reusable carousel structure -->
+    <!-- 
+    This template consolidates the common patterns from HUI_BodyTypeBoxComponent, HUI_IdentityBoxComponent, 
+    HUI_GenitaliaBoxComponent, HUI_VoiceBoxComponent, and HUI_RandomizeCharacterBoxComponent.
+    
+    Usage Pattern:
+    1. Use this template for the ListBox.Template property
+    2. Customize text binding on the cTxt element (Content, Name, or custom text)
+    3. Add custom command bindings to leftBtn/rightBtn if needed (otherwise uses default navigation)
+    4. Customize actionArea content for components that need hint buttons (Voice/Randomize)
+
+    -->
+    <ControlTemplate x:Key="HUI_CarouselTemplate" TargetType="ListBox">
+        <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}" HorizontalAlignment="Center" Tag="notEnabled">
+            <Grid>
+                <!-- Default Navigation Buttons (for generic carousels) -->
+                <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
+
+                <!-- Identity-Specific Navigation Buttons (collapsed by default) -->
+                <ls:LSRepeatButton x:Name="identityLeftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                  Command="{Binding DataContext.SelectPreviousIdentity, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  SoundID="UI_HUD_CC_Gender" Visibility="Collapsed">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="identityRightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                  Command="{Binding DataContext.SelectNextIdentity, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  SoundID="UI_HUD_CC_Gender" Visibility="Collapsed"/>
+
+                <!-- Body Type-Specific Navigation Buttons (collapsed by default) -->
+                <ls:LSRepeatButton x:Name="bodyTypeLeftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                  Command="{Binding DataContext.SelectPreviousBodyType, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="bodyTypeRightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                  Command="{Binding DataContext.SelectNextBodyType, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed"/>
+
+                <!-- Voice-Specific Navigation Buttons (collapsed by default) -->
+                <ls:LSRepeatButton x:Name="voiceLeftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                  Command="{Binding DataContext.PrevComboItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  CommandParameter="{Binding Voices}"
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="voiceRightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                  Command="{Binding DataContext.NextComboItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  CommandParameter="{Binding Voices}"
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed"/>
+
+                <!-- Randomize Buttons: Use RandomCharacter command with prev/next parameters -->
+                <ls:LSRepeatButton x:Name="randomizeLeftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                  IsEnabled="{Binding HasPreviousCharacter}"
+                                  Command="{Binding DataContext.RandomAppearance, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  CommandParameter="prev"
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="randomizeRightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                  IsEnabled="{Binding HasNextCharacter}"
+                                  Command="{Binding DataContext.RandomAppearance, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                  CommandParameter="next"
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed"/>
+
+                <!-- Center Text Display -->
+                <TextBlock x:Name="cTxt" Text="{Binding SelectedItem.Name, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Style="{StaticResource CarouselText}"/>
+
+                <!-- Hidden element to hold the random value for Shuffle -->
+                <TextBlock x:Name="randomValueHolder" Visibility="Collapsed"
+                            Text="{Binding Source=0, ConverterParameter=5, Converter={StaticResource RandomConverter}}"/>
+                    
+
+
+                
+                <!-- Dynamic random generation using carousel's SelectedIndex as trigger -->
+                <TextBlock x:Name="randomFloatHolder" Visibility="Collapsed" Tag="0">
+                    <TextBlock.Text>
+                        <Binding Path="SelectedIndex" 
+                                 RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"
+                                 Converter="{StaticResource RandomConverter}" 
+                                 ConverterParameter="5"
+                                 StringFormat="{}{0}"
+                                 FallbackValue="0"/>
+                    </TextBlock.Text>
+                </TextBlock>
+                
+                <!-- Convert the random float to integer index -->
+                <TextBlock x:Name="randomIndexHolder" Visibility="Collapsed">
+                    <TextBlock.Text>
+                        <Binding ElementName="randomFloatHolder" 
+                                 Path="Text"
+                                 Converter="{StaticResource RoundUpConverter}" 
+                                 FallbackValue="0"/>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <!-- Left Action Area (Voice hint area) -->
+                <StackPanel x:Name="leftActionArea" Orientation="Horizontal" HorizontalAlignment="Left" 
+                           VerticalAlignment="Center" Margin="100,-5,0,0" Opacity="0">
+                    <!-- Voice-specific content (collapsed by default) -->
+                    <Grid x:Name="voiceActionContent" Visibility="Collapsed">
+                        <StackPanel x:Name="playVoiceButton" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,-5,0,0" Opacity="0">
+                            <Control x:Name="playVoiceIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            <TextBlock Text="{Binding Source=hbf7b56f9g7cd9g4b08g9986ge231edbbde18,Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Left" Margin="10,0,0,0" Foreground="{StaticResource CCTextPrimary}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Right Action Area (Randomize/Shuffle hint area) -->
+                <StackPanel x:Name="rightActionArea" Orientation="Horizontal" HorizontalAlignment="Right" 
+                           VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
+                    
+                    <!-- Randomize-specific content (collapsed by default) -->
+                    <Grid x:Name="randomizeActionContent" Visibility="Collapsed">
+                        <StackPanel x:Name="randomizeButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,40,0" Opacity="0">
+                            <Control x:Name="randomizeIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Shuffle-specific content (collapsed by default) -->
+                    <Grid x:Name="shuffleActionContent" Visibility="Collapsed">
+                        <StackPanel x:Name="shuffleButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,40,0" Opacity="0">
+                            <TextBlock Text="{Binding Source='hda71b4dbg90ffg4c40g9248g575dbd3edfe8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
+                            <Control x:Name="shuffleIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                
+                <ls:LSInputBinding x:Name="playVoiceInput" BoundEvent="UICancel" IsEnabled="False">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="LSInputBindingPressed">
+                            <b:InvokeCommandAction Command="{Binding PlayVoice}"/>
+                            <ls:LSPlaySound Sound="UI_HUD_CC_ListenVoice" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSInputBinding>
+                
+                <ls:LSInputBinding x:Name="randomizeInput" BoundEvent="UIAccept" IsEnabled="False">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="LSInputBindingPressed">
+                            <b:InvokeCommandAction Command="{Binding DataContext.RandomAppearance, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="new"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSInputBinding>
+                
+                <!-- Shuffle Input Binding for ItemsSource-based carousels (Voice, Genitalia) -->
+                <ls:LSInputBinding x:Name="shuffleInput" BoundEvent="UIAccept" IsEnabled="False">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="LSInputBindingPressed">
+                            <!-- Force RandomConverter re-evaluation by temporarily changing SelectedIndex -->
+                            <!-- This triggers the binding since RandomConverter source is now SelectedIndex -->
+                            <b:ChangePropertyAction PropertyName="SelectedIndex" 
+                                                   TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                   Value="-1"/>
+                            <!-- Update the index using RoundUpConverter chain -->
+                            <b:ChangePropertyAction TargetName="randomIndexHolder" PropertyName="Text">
+                                <b:ChangePropertyAction.Value>
+                                    <Binding ElementName="randomFloatHolder" 
+                                             Path="Text"
+                                             Converter="{StaticResource RoundUpConverter}" 
+                                             FallbackValue="0"/>
+                                </b:ChangePropertyAction.Value>
+                            </b:ChangePropertyAction>
+                            <!-- Set final random SelectedIndex -->
+                            <b:ChangePropertyAction PropertyName="SelectedIndex" 
+                                                   TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                   Value="{Binding ElementName=randomIndexHolder, Path=Text}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSInputBinding>
+            </Grid>
+            
+            <!-- Default navigation interactions -->
+            <b:Interaction.Triggers>
+                <b:EventTrigger SourceName="leftBtn" EventName="Click">
+                    <ls:SelectNextListBoxItem Reversed="True" TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                </b:EventTrigger>
+                <b:EventTrigger SourceName="rightBtn" EventName="Click">
+                    <ls:SelectNextListBoxItem TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </ContentControl>
+        
+        <!-- Focus state styling and tag-based button visibility -->
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="cTxt" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
+                <Setter TargetName="leftActionArea" Property="Opacity" Value="1"/>
+                <Setter TargetName="rightActionArea" Property="Opacity" Value="1"/>
+                <Setter TargetName="shuffleButton" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            
+            <!-- Identity Tag: Show Identity buttons, hide default buttons, use Content for text -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Identity">
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="identityLeftBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="identityRightBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="cTxt" Property="Text" Value="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
+            </DataTrigger>
+            
+            <!-- BodyType Tag: Show BodyType buttons, hide default buttons, use Content for text -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="BodyType">
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="bodyTypeLeftBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="bodyTypeRightBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="cTxt" Property="Text" Value="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
+            </DataTrigger>
+            
+            <!-- Voice Tag: Show Voice buttons, hide default buttons, show voice action content, keep Name for text (default behavior) -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Voice">
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="voiceLeftBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="voiceRightBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="voiceActionContent" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="shuffleActionContent" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            
+            <!-- Genitalia Tag: Show default buttons, show shuffle action content, keep Name for text (default behavior) -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Genitalia">
+                <Setter TargetName="shuffleActionContent" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            
+            <!-- Randomize Tag: Show Randomize buttons, hide default buttons, show randomize action content, use fixed text -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Randomize">
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="randomizeLeftBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="randomizeRightBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="randomizeActionContent" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="cTxt" Property="Text" Value="{Binding Source='h13bbfa20g4e29g4974g90degb60346fdb770', Converter={StaticResource TranslatedStringConverter}}"/>
+            </DataTrigger>
+            
+            <!-- Voice focused: Show play voice button and enable input when Voice tag and focused -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Voice"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="playVoiceButton" Property="Opacity" Value="1"/>
+                <Setter TargetName="playVoiceInput" Property="IsEnabled" Value="True"/>
+            </MultiDataTrigger>
+            
+            <!-- Randomize focused: Show randomize button and enable input when Randomize tag and focused -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Randomize"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="randomizeButton" Property="Opacity" Value="1"/>
+                <Setter TargetName="randomizeInput" Property="IsEnabled" Value="True"/>
+            </MultiDataTrigger>
+            
+            <!-- Shuffle focused for Voice: Show shuffle button when Voice tag and focused -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Voice"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="shuffleButton" Property="Opacity" Value="1"/>
+            </MultiDataTrigger>
+            
+            <!-- Shuffle focused for Genitalia: Show shuffle button when Genitalia tag and focused -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Genitalia"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="shuffleButton" Property="Opacity" Value="1"/>
+            </MultiDataTrigger>
+
+            <!-- Enable shuffle input bindings for ItemsSource-based carousels only -->
+            <!-- Voice Tag: Enable shuffle binding when focused -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Voice"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="shuffleInput" Property="IsEnabled" Value="True"/>
+            </MultiDataTrigger>
+            
+            <!-- Genitalia Tag: Enable shuffle binding when focused -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Genitalia"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="shuffleInput" Property="IsEnabled" Value="True"/>
+            </MultiDataTrigger>
+            
+
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

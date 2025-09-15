@@ -4691,6 +4691,25 @@
                 </b:Interaction.Triggers>
             </ls:LSButton>
 
+            <!-- Nudity Toggle Button - Only visible in appearance mode -->
+            <!-- Display Equipment Toggle Button - Only visible in appearance mode -->
+            <Grid x:Name="nudityToggleButtonContainer" Visibility="Collapsed" Margin="50,0,0,0">
+                <Grid x:Name="nudityToggleState" Tag="{StaticResource TrueValue}">
+                    <ls:LSButton x:Name="nudityToggleButton"
+                                 ContentTemplate="{StaticResource ControllerButtonHint}" 
+                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UISort, Converter={StaticResource FindInputEventConverter}}" 
+                                 BoundEvent="UISort" 
+                                 Tag="{Binding Source=h2389d8eegb11ag4daegb2c9g887ec575da70, Converter={StaticResource TranslatedStringConverter}}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="nudityToggleState" PropertyName="Tag" Value="{Binding Tag, ElementName=nudityToggleState, Converter={StaticResource InvertBoolConverter}}"/>
+                                <b:InvokeCommandAction Command="{Binding DisplayEquipment}" CommandParameter="{Binding Tag, ElementName=nudityToggleState}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+                </Grid>
+            </Grid>
+
             <!-- Toggle tooltips -->
             <ls:LSButton x:Name="ToggleTooltips"
                                  Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
@@ -4711,12 +4730,22 @@
                 <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="backFromAppearanceButton" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="nudityToggleButtonContainer" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="raceskills">
                 <Setter TargetName="selectButton" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="skills">
                 <Setter TargetName="selectButton" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            
+            <!-- Update display equipment toggle button text based on nudityToggleState.Tag -->
+            <!-- nudityToggleState.Tag=True means clothes are ON, False means clothes are OFF -->
+            <DataTrigger Binding="{Binding Tag, ElementName=nudityToggleState}" Value="True">
+                <Setter TargetName="nudityToggleButton" Property="Tag" Value="{Binding Source=h2389d8eegb11ag4daegb2c9g887ec575da70, Converter={StaticResource TranslatedStringConverter}}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, ElementName=nudityToggleState}" Value="False">
+                <Setter TargetName="nudityToggleButton" Property="Tag" Value="{Binding Source=h7a229d68g0721g4292gbdf9g0bfec9bafea3, Converter={StaticResource TranslatedStringConverter}}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="equipment">
                 <Setter TargetName="selectButton" Property="Visibility" Value="Visible"/>

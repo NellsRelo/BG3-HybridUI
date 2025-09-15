@@ -1695,19 +1695,21 @@
                                 <Grid.Resources>
                                     <!-- Replacements for Avatar Appearance Templates -->
                                     <ControlTemplate x:Key="StandardBottomButtonsTemplate2">
-                                        <ls:LSButton x:Name="backFromDaisyButton"
-                                        ContentTemplate="{StaticResource ControllerButtonHint}" 
-                                        Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" 
-                                        BoundEvent="UICancel" 
-                                        Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" 
-                                        Margin="50,0,0,0">
-                                            <b:Interaction.Triggers>
-                                                <b:EventTrigger EventName="Click">
-                                                    <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Visible" />
-                                                    <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Collapsed" />
-                                                </b:EventTrigger>
-                                            </b:Interaction.Triggers>
-                                        </ls:LSButton>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ls:LSButton x:Name="backFromDaisyButton"
+                                            ContentTemplate="{StaticResource ControllerButtonHint}" 
+                                            Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" 
+                                            BoundEvent="UICancel" 
+                                            Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" 
+                                            Margin="50,0,0,0">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="Click">
+                                                        <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Visible" />
+                                                        <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Collapsed" />
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSButton>
+                                        </StackPanel>
                                     </ControlTemplate>
 
                                     <ControlTemplate x:Key="AppearanceItemSelectableBottomButtons">

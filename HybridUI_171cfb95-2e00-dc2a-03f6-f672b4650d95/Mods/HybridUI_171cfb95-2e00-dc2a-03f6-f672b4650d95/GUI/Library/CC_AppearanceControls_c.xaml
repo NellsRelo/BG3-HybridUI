@@ -70,10 +70,10 @@
                 <Setter TargetName="draconicTabsEmpty" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
           </ControlTemplate.Triggers>
-          </ControlTemplate>
+        </ControlTemplate>
 
           <!-- Appearance Selector for Dragonborn Draconic Bloodline Sorcerers -->
-          <ControlTemplate x:Key="draconicAppearanceTemplateDragonBorn">
+        <ControlTemplate x:Key="draconicAppearanceTemplateDragonBorn">
             <DockPanel>
                 <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                     <ContentControl Template="{StaticResource HUI_SelectorHeader}">
@@ -97,216 +97,478 @@
 
                 </StackPanel>
             </DockPanel>
-          <ControlTemplate.Triggers>
-              <DataTrigger Binding="{Binding ElementName=draconicDragonbornToggle, Path=(ls:MoveFocus.IsFocused)}" Value="True">
-                  <Setter TargetName="draconicDragonbornToggle" Property="BoundEvent" Value="UIAccept"/>
-              </DataTrigger>
-              <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
-                  <Setter TargetName="draconicDragonbornColourOptionList" Property="Visibility" Value="Collapsed"/>
-                  <Setter TargetName="draconicDragonbornColourOptionGrid" Property="Visibility" Value="Collapsed"/>
-              </DataTrigger>
-          </ControlTemplate.Triggers>
-          </ControlTemplate>
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding ElementName=draconicDragonbornToggle, Path=(ls:MoveFocus.IsFocused)}" Value="True">
+                    <Setter TargetName="draconicDragonbornToggle" Property="BoundEvent" Value="UIAccept"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
+                    <Setter TargetName="draconicDragonbornColourOptionList" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="draconicDragonbornColourOptionGrid" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
 
           <!-- Appearance Components -->
 
+          <!-- General Tab Components -->
           <!-- Name Input -->
-           <ControlTemplate x:Key="HUI_NamingBoxComponent">
-              <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,50">
+          <ControlTemplate x:Key="HUI_NamingBoxComponent">
+              <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20">
                   <Grid>
                       <StackPanel>
-                          <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,0">
+                          <ContentControl x:Name="nameSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,0">
                               <TextBlock x:Name="text" ls:TextBlockFormatter.SourceText="{Binding Source='h5cd3cabag657ag4abfga33fg9b1b2808ee7f', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
                           </ContentControl>
 
-                          <Grid x:Name="textInputBox" HorizontalAlignment="Center" Focusable="True">
-                              <ls:LSNineSliceImage x:Name="textInputBg" Padding="20,0,20,0" Slices="150,86,150,86" ImageSource="pack://application:,,,/Core;component/Assets/CC/btn_namegroupBG_01.png" MinWidth="740" MinHeight="256">
-                                  <Grid HorizontalAlignment="Center">
-                                      <Image x:Name="textInputDashes" Source="pack://application:,,,/Core;component/Assets/CC/btn_namegroup_input_d.png" Stretch="Fill" Height="126" MinWidth="584" Width="{Binding ElementName=characterName, Path=ActualWidth}"/>
-                                      <ls:LSTextBox x:Name="characterName" Text="{Binding CharacterName}" IsEnabled="{Binding CanEditName}" MaxLength="20" TextImmediateSourceUpdate="True" Foreground="{StaticResource CCTextPrimary}" FontSize="{StaticResource MassiveFontSize}" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="60,0,60,0"/>
-                                  </Grid>
-                              </ls:LSNineSliceImage>
-                          </Grid>
+                          <ContentControl x:Name="textInputBox" HorizontalAlignment="Center" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}">
+                              <b:Interaction.Triggers>
+                                  <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=textInputBox}" Value="True">
+                                      <ls:BringIntoViewAction TargetName="nameSubheader"/>
+                                  </b:DataTrigger>
+                              </b:Interaction.Triggers>
+                              <Grid MinWidth="740" MinHeight="256">
+                                  <!-- UIAccept input binding to focus the text input -->
+                                  <ls:LSInputBinding BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=textInputBox}">
+                                      <b:Interaction.Triggers>
+                                          <b:EventTrigger EventName="LSInputBindingPressed">
+                                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" Reset="True"/>
+                                              <noesis:SetFocusAction TargetName="characterName"/>
+                                          </b:EventTrigger>
+                                      </b:Interaction.Triggers>
+                                  </ls:LSInputBinding>
+                                  
+                                  <!-- Main input background -->
+                                  <ls:LSNineSliceImage x:Name="textInputBg" Padding="20,0,20,0" Slices="150,86,150,86" ImageSource="pack://application:,,,/Core;component/Assets/CC/btn_namegroupBG_01.png" MinWidth="740" MinHeight="256">
+                                  </ls:LSNineSliceImage>
+                                  
+                                  <!-- Animated border inside input area when focused -->
+                                  <Control x:Name="innerAnimatedBorder" Visibility="Collapsed"
+                                           Style="{StaticResource FocusableBorderCarouselStyle}"
+                                           Height="126" Width="1015"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                  
+                                  <ls:LSTextBox x:Name="characterName" Text="{Binding CharacterName}" IsEnabled="{Binding CanEditName}" MaxLength="20" TextImmediateSourceUpdate="True" Foreground="{StaticResource CCTextPrimary}" FontSize="{StaticResource MassiveFontSize}" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="60,0,60,0"/>
+                                  
+                                  <!-- Focus Naming Button inside the text input box -->
+                                  <ls:LSButton x:Name="focusNaming" IsEnabled="{Binding CanEditName}" Visibility="Collapsed" 
+                                               Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}" 
+                                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                                               Margin="0,0,80,0">
+                                      <ls:LSButton.ContentTemplate>
+                                          <DataTemplate DataType="ls:VMInputEvent">
+                                              <Control x:Name="ImageSwitcher" Template="{StaticResource ControllerButton.ImageSwitcher}" VerticalAlignment="Center" Width="{StaticResource ScaledControllerHintSizeSmall}" Height="{StaticResource ScaledControllerHintSizeSmall}"/>
+                                          </DataTemplate>
+                                      </ls:LSButton.ContentTemplate>
+                                      <b:Interaction.Triggers>
+                                          <b:EventTrigger EventName="Click">
+                                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" Reset="True"/>
+                                              <noesis:SetFocusAction TargetName="characterName"/>
+                                          </b:EventTrigger>
+                                      </b:Interaction.Triggers>
+                                  </ls:LSButton>
+                              </Grid>
+                          </ContentControl>
                       </StackPanel>
-
-                      <ls:LSButton x:Name="focusNaming" IsEnabled="{Binding CanEditName}" Visibility="Collapsed" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}" HorizontalAlignment="Right" VerticalAlignment="Top">
-                          <ls:LSButton.ContentTemplate>
-                              <DataTemplate DataType="ls:VMInputEvent">
-                                  <Control x:Name="ImageSwitcher" Template="{StaticResource ControllerButton.ImageSwitcher}" VerticalAlignment="Center" Width="{StaticResource ScaledControllerHintSizeSmall}" Height="{StaticResource ScaledControllerHintSizeSmall}"/>
-                              </DataTemplate>
-                          </ls:LSButton.ContentTemplate>
-                          <b:Interaction.Triggers>
-                          <b:EventTrigger EventName="Click">
-                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" Reset="True"/>
-                              <noesis:SetFocusAction TargetName="characterName"/>
-                          </b:EventTrigger>
-                      </b:Interaction.Triggers>
-                      </ls:LSButton>
                   </Grid>
                 </StackPanel>
-            </ControlTemplate>
+                <ControlTemplate.Triggers>
+                    <!-- Show animated border inside input when textbox has focus -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsFocused, ElementName=characterName}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <Setter TargetName="innerAnimatedBorder" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="focusNaming" Property="Visibility" Value="Visible"/>
+                    </MultiDataTrigger>
+                    <!-- Show animated border inside input when textInputBox has controller focus -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=textInputBox}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <Setter TargetName="innerAnimatedBorder" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="focusNaming" Property="Visibility" Value="Visible"/>
+                    </MultiDataTrigger>
+                    <!-- Show animated border inside input when focusNaming button has focus -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=focusNaming}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <Setter TargetName="innerAnimatedBorder" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="focusNaming" Property="Visibility" Value="Visible"/>
+                    </MultiDataTrigger>
+                </ControlTemplate.Triggers>
+          </ControlTemplate>
 
-            <!-- Body Type Selection -->
-            <ControlTemplate x:Key="HUI_BodyTypeBoxComponent">
-                <StackPanel d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}">
-                    <b:Interaction.Triggers>
-                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Female">
-                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="0"/>
-                        </b:DataTrigger>
-                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Male">
-                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="1"/>
-                        </b:DataTrigger>
-                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="FemaleStrong">
-                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="2"/>
-                        </b:DataTrigger>
-                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="MaleStrong">
-                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="3"/>
-                        </b:DataTrigger>
-                    </b:Interaction.Triggers>
+          <!-- Body Type Selection -->
+          <ControlTemplate x:Key="HUI_BodyTypeBoxComponent">
+              <StackPanel d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}">
+                  <b:Interaction.Triggers>
+                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Female">
+                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="0"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Male">
+                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="1"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="FemaleStrong">
+                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="2"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="MaleStrong">
+                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="3"/>
+                      </b:DataTrigger>
+                  </b:Interaction.Triggers>
 
-                    <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,0">
-                        <TextBlock Text="{Binding Source='hc4f5c05bgc2feg4333ga08fg229b33c42437', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
-                    </ContentControl>
-                    <ListBox x:Name="bodyTypeCarousel" Margin="0,12,0,0">
-                        <ListBox.Template>
-                            <ControlTemplate>
-                                <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}" HorizontalAlignment="Center" Tag="notEnabled">
-                                    <Grid>
-                                        <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0"
-                                                Command="{Binding DataContext.SelectPreviousBodyType, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" SoundID="{DynamicResource CarouselButtonSoundEvent}">
-                                            <ls:LSRepeatButton.RenderTransform>
-                                                <ScaleTransform ScaleX="-1" CenterX="32"/>
-                                            </ls:LSRepeatButton.RenderTransform>
-                                        </ls:LSRepeatButton>
-                                        <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0"
-                                                Command="{Binding DataContext.SelectNextBodyType, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
+                  <ContentControl x:Name="bodyTypeSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                      <TextBlock Text="{Binding Source='hc4f5c05bgc2feg4333ga08fg229b33c42437', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                  </ContentControl>
+                  <ListBox x:Name="bodyTypeCarousel" Margin="0,12,0,0" 
+                           Tag="BodyType" Template="{StaticResource HUI_CarouselTemplate}">
+                      <b:Interaction.Triggers>
+                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                              <ls:BringIntoViewAction TargetName="bodyTypeSubheader"/>
+                              <!-- Update local debug panel -->
+                              <b:ChangePropertyAction TargetName="localDebugText" PropertyName="Text" Value="FOCUSED: BODY TYPE - Items: 4"/>
+                              <b:ChangePropertyAction TargetName="localDebugText" PropertyName="Visibility" Value="Visible"/>
+                          </b:DataTrigger>
+                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="False">
+                              <b:ChangePropertyAction TargetName="localDebugText" PropertyName="Visibility" Value="Collapsed"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <ListBoxItem x:Name="female" Content="1"/>
+                      <ListBoxItem x:Name="male" Content="2"/>
+                      <ListBoxItem x:Name="femaleStrong" Content="3"/>
+                      <ListBoxItem x:Name="maleStrong" Content="4"/>
+                  </ListBox>
+                  
+                  <!-- Local Debug Text -->
+                  <TextBlock x:Name="localDebugText" Text="" Foreground="Red" FontSize="24" FontWeight="Bold" 
+                             HorizontalAlignment="Center" Visibility="Collapsed" Margin="0,10,0,0"/>
+              </StackPanel>
+          </ControlTemplate>
 
-                                        <TextBlock x:Name="cTxt" Text="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Style="{StaticResource CarouselText}"/>
+          <!-- Identity Selection -->
+          <ControlTemplate x:Key="HUI_IdentityBoxComponent">
+              <StackPanel x:Name="IdentityContainer" Visibility="{Binding CanShowIdentity, Converter={StaticResource BoolToVisibleConverter}}">
+                  <b:Interaction.Triggers>
+                      <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Male">
+                          <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="0"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Female">
+                          <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="1"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Neutral">
+                          <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="2"/>
+                      </b:DataTrigger>
+                  </b:Interaction.Triggers>
 
-                                    </Grid>
-                                </ContentControl>
-                                <ControlTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
-                                        <Setter TargetName="cTxt" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
-                                    </DataTrigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </ListBox.Template>
+                  <ContentControl x:Name="identitySubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                      <TextBlock Text="{Binding Source='hcc23cfaagbc1eg4bb0gafb9g9f720497b786', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
+                  </ContentControl>
 
-                        <ListBoxItem x:Name="female" Content="1"/>
-                        <ListBoxItem x:Name="male" Content="2"/>
-                        <ListBoxItem x:Name="femaleStrong" Content="3"/>
-                        <ListBoxItem x:Name="maleStrong" Content="4"/>
-                    </ListBox>
-                </StackPanel>
-            </ControlTemplate>
+                  <ListBox x:Name="identityCarousel" IsEnabled="{Binding IsIdentityEnabled}" Margin="0,12,0,0" 
+                           Tag="Identity" Template="{StaticResource HUI_CarouselTemplate}">
+                      <b:Interaction.Triggers>
+                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                              <ls:BringIntoViewAction TargetName="identitySubheader"/>
+                              <!-- Update debug panel -->
+                              <b:ChangePropertyAction TargetName="focusedCarouselName" PropertyName="Text" Value="IDENTITY"/>
+                              <b:ChangePropertyAction TargetName="focusedCarouselItemCount" PropertyName="Text" Value="Item Count: 3"/>
+                              <b:ChangePropertyAction TargetName="focusedCarouselSelectedIndex" PropertyName="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex, StringFormat='Selected Index: {0}'}"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                      <ListBox.Items>
+                          <ListBoxItem x:Name="male" Content="{Binding Source='hf12d3837gd6fbg448ag813dg9cf6d9a4d412', Converter={StaticResource TranslatedStringConverter}}"/>
+                          <ListBoxItem x:Name="female" Content="{Binding Source='h5d60ad1cg41dcg4d9fgaba8gda842c090327', Converter={StaticResource TranslatedStringConverter}}"/>
+                          <ListBoxItem x:Name="neutral" Content="{Binding Source='hea2ce077g2b7ag42dfgb194g928c3dd108a7', Converter={StaticResource TranslatedStringConverter}}"/>
+                      </ListBox.Items>
+                  </ListBox>
+              </StackPanel>
+          </ControlTemplate>
 
-            <!-- Identity Selection -->
-            <ControlTemplate x:Key="HUI_IdentityBoxComponent">
-                <StackPanel x:Name="IdentityContainer" Visibility="{Binding CanShowIdentity, Converter={StaticResource BoolToVisibleConverter}}">
-                    <b:Interaction.Triggers>
-                        <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Male">
-                            <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="0"/>
-                        </b:DataTrigger>
-                        <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Female">
-                            <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="1"/>
-                        </b:DataTrigger>
-                        <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Neutral">
-                            <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="2"/>
-                        </b:DataTrigger>
-                    </b:Interaction.Triggers>
+          <!-- Genitals Selection -->
+          <ControlTemplate x:Key="HUI_GenitaliaBoxComponent">
+              <StackPanel x:Name="GenitaliaContainer" Visibility="{Binding CanShowGenitalia, Converter={StaticResource BoolToVisibleConverter}}">
+                  <b:Interaction.Triggers>
+                      <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Male">
+                          <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="0"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Female">
+                          <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="1"/>
+                      </b:DataTrigger>
+                      <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Neutral">
+                          <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="2"/>
+                      </b:DataTrigger>
+                  </b:Interaction.Triggers>
 
-                    <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,0">
-                        <TextBlock Text="{Binding Source='hcc23cfaagbc1eg4bb0gafb9g9f720497b786', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
-                    </ContentControl>
+                  <ContentControl x:Name="genitaliaSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                      <TextBlock Text="{Binding Source='h72410e08g770dg48c8g98e8g5a5a933a2254', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
+                  </ContentControl>
 
-                    <ListBox x:Name="identityCarousel" IsEnabled="{Binding IsIdentityEnabled}" Margin="0,12,0,0">
-                        <ListBox.Template>
-                            <ControlTemplate>
-                                <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}" HorizontalAlignment="Center" Tag="notEnabled">
-                                    <Grid>
-                                        <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" Command="{Binding DataContext.SelectPreviousIdentity, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" SoundID="UI_HUD_CC_Gender">
-                                            <ls:LSRepeatButton.RenderTransform>
-                                                <ScaleTransform ScaleX="-1" CenterX="32"/>
-                                            </ls:LSRepeatButton.RenderTransform>
-                                        </ls:LSRepeatButton>
-                                        <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" Command="{Binding DataContext.SelectNextIdentity, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" SoundID="UI_HUD_CC_Gender"/>
-
-                                        <TextBlock x:Name="cTxt" Text="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Style="{StaticResource CarouselText}"/>
-
-                                    </Grid>
-                                </ContentControl>
-                                <ControlTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
-                                        <Setter TargetName="cTxt" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
-                                    </DataTrigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </ListBox.Template>
-
-                        <ListBoxItem x:Name="male" Content="{Binding Source='hf12d3837gd6fbg448ag813dg9cf6d9a4d412', Converter={StaticResource TranslatedStringConverter}}"/>
-                        <ListBoxItem x:Name="female" Content="{Binding Source='h5d60ad1cg41dcg4d9fgaba8gda842c090327', Converter={StaticResource TranslatedStringConverter}}"/>
-                        <ListBoxItem x:Name="neutral" Content="{Binding Source='hea2ce077g2b7ag42dfgb194g928c3dd108a7', Converter={StaticResource TranslatedStringConverter}}"/>
-                    </ListBox>
-                </StackPanel>
-            </ControlTemplate>
+                  <ListBox x:Name="genitaliaCarousel" ItemsSource="{Binding SelectableGenitals}" SelectedItem="{Binding SelectedGenitals}" 
+                            Margin="0,12,0,0" Visibility="{Binding SelectableGenitals.Count, Converter={StaticResource CountToVisibilityConverter}}"
+                            Template="{StaticResource HUI_CarouselTemplate}" Tag="Genitalia">
+                      <b:Interaction.Triggers>
+                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                              <ls:BringIntoViewAction TargetName="genitaliaSubheader"/>
+                              <!-- Update debug panel -->
+                              <b:ChangePropertyAction TargetName="focusedCarouselName" PropertyName="Text" Value="GENITALIA"/>
+                              <b:ChangePropertyAction TargetName="focusedCarouselItemCount" PropertyName="Text" Value="{Binding SelectableGenitals.Count, StringFormat='Item Count: {0}'}"/>
+                              <b:ChangePropertyAction TargetName="focusedCarouselSelectedIndex" PropertyName="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex, StringFormat='Selected Index: {0}'}"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                  </ListBox>
+              </StackPanel>
+          </ControlTemplate>
 
             <!-- Voice Selector Component -->
             <ControlTemplate x:Key="HUI_VoiceBoxComponent">
                 <StackPanel x:Name="VoiceContainer">
-                    <ContentControl Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,50,0,0">
+                    <ContentControl x:Name="voiceSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
                         <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h81102ec7gef4dg42edg85b5g60d7fb1d13f9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
                     </ContentControl>
 
-                    <ListBox x:Name="voiceCarousel" ItemsSource="{Binding Voices.ComboItems}" SelectedItem="{Binding Voices.SelectedItem}" >
+                    <ListBox x:Name="voiceCarousel" ItemsSource="{Binding Voices.ComboItems}" SelectedItem="{Binding Voices.SelectedItem}" 
+                             Tag="Voice" Template="{StaticResource HUI_CarouselTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="voiceSubheader"/>
+                                <!-- Update debug panel -->
+                                <b:ChangePropertyAction TargetName="focusedCarouselName" PropertyName="Text" Value="VOICE"/>
+                                <b:ChangePropertyAction TargetName="focusedCarouselItemCount" PropertyName="Text" Value="{Binding Voices.ComboItems.Count, StringFormat='Item Count: {0}'}"/>
+                                <b:ChangePropertyAction TargetName="focusedCarouselSelectedIndex" PropertyName="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex, StringFormat='Selected Index: {0}'}"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding Voices}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+            <!-- Randomize Character -->
+            <ControlTemplate x:Key="HUI_RandomizeCharacterBoxComponent">
+                <StackPanel>
+                    <ContentControl x:Name="randomizeSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock Text="{Binding Source='h1595c068g30a1g4efegbd7fg072665991b3b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                    </ContentControl>
+                    
+                    <ListBox x:Name="randomizeCarousel" Margin="0,12,0,0">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="randomizeSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
                         <ListBox.Template>
                             <ControlTemplate>
                                 <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}" HorizontalAlignment="Center" Tag="notEnabled">
                                     <Grid>
-                                        <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" Command="{Binding DataContext.PrevComboItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding Voices}">
+                                        <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" IsEnabled="{Binding HasPreviousCharacter}" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                                Command="{Binding DataContext.RandomCharacter, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="prev" SoundID="{DynamicResource CarouselButtonSoundEvent}">
                                             <ls:LSRepeatButton.RenderTransform>
                                                 <ScaleTransform ScaleX="-1" CenterX="32"/>
                                             </ls:LSRepeatButton.RenderTransform>
                                         </ls:LSRepeatButton>
-                                        <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" Command="{Binding DataContext.NextComboItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding Voices}"/>
+                                        <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" IsEnabled="{Binding HasNextCharacter}" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                                Command="{Binding DataContext.RandomCharacter, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="next" SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
 
-                                        <TextBlock x:Name="cTxt" Text="{Binding SelectedItem.Name, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Style="{StaticResource CarouselText}"/>
+                                        <TextBlock x:Name="cTxt" Text="{Binding Source='h13bbfa20g4e29g4974g90degb60346fdb770', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselText}"/>
 
-                                        <StackPanel x:Name="playVoiceButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                            <TextBlock Text="{Binding Source=hbf7b56f9g7cd9g4b08g9986ge231edbbde18,Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
-                                            <Control x:Name="playVoiceIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                        <!-- Randomize Action Button - appears when focused -->
+                                        <StackPanel x:Name="randomizeButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
+                                            <Control x:Name="randomizeIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
                                         </StackPanel>
 
-                                        <ls:LSInputBinding x:Name="playVoiceInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
+                                        <ls:LSInputBinding x:Name="randomizeInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
                                             <b:Interaction.Triggers>
                                                 <b:EventTrigger EventName="LSInputBindingPressed">
-                                                    <b:InvokeCommandAction Command="{Binding PlayVoice}"/>
-                                                    <ls:LSPlaySound Sound="UI_HUD_CC_ListenVoice" />
+                                                    <b:InvokeCommandAction Command="{Binding DataContext.RandomCharacter, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="new"/>
                                                 </b:EventTrigger>
                                             </b:Interaction.Triggers>
                                         </ls:LSInputBinding>
-
                                     </Grid>
                                 </ContentControl>
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
                                         <Setter TargetName="cTxt" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
-                                        <Setter TargetName="playVoiceButton" Property="Opacity" Value="1"/>
+                                        <Setter TargetName="randomizeButton" Property="Opacity" Value="1"/>
                                     </DataTrigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </ListBox.Template>
-
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="SelectionChanged">
-                        <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding Voices}"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-
                     </ListBox>
                 </StackPanel>
             </ControlTemplate>
             
+            <!-- Face Tab Components -->
+            <!-- Face  Component -->
+            <ControlTemplate x:Key="HUI_FaceBoxComponent">
+                <DockPanel>
+                    <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+                        <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                            <!-- Face Carousel -->
+                            <ListBox x:Name="faceCarousel" Tag="faces" 
+                              ItemsSource="{Binding SelectableHeads}" 
+                              SelectedItem="{Binding SelectedHead}"
+                              Visibility="{Binding SelectableHeads.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                    <b:Interaction.Triggers>
+                        <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                            <ls:BringIntoViewAction TargetName="faceCarousel"/>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
+                    <ListBox.Template>
+                        <ControlTemplate>
+                            <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
+                                <Grid>
+                                    <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" SoundID="{DynamicResource CarouselButtonSoundEvent}">
+                                        <ls:LSRepeatButton.RenderTransform>
+                                            <ScaleTransform ScaleX="-1" CenterX="32"/>
+                                        </ls:LSRepeatButton.RenderTransform>
+                                    </ls:LSRepeatButton>
+                                    <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
+
+                                    <Control Template="{DynamicResource IconCarouselTextTemplate}"/>
+
+                                    <!-- Expand Grid Action Button - appears when focused -->
+                                    <StackPanel x:Name="expandButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
+                                        <TextBlock Text="{Binding Source='hdf0c5b51gb587g4f15g839bgecfe6bb1104b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
+                                        <Control x:Name="expandIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                    </StackPanel>
+
+                                    <!-- Collapse Grid Hint - shows when grid is visible -->
+                                    <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
+                                        <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
+                                        <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                    </StackPanel>
+
+                                    <!-- Expand Face Grid -->
+                                    <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="LSInputBindingReleased">
+                                                <b:ChangePropertyAction TargetName="faceGridScrollViewer" PropertyName="Visibility" Value="Visible"/>
+                                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceGrid}"/>
+                                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSInputBinding>
+                                    
+                                    <!-- Navigate down to grid when UIDown is pressed and grid is visible -->
+                                    <ls:LSInputBinding BoundEvent="UIDown" IsEnabled="{Binding ElementName=faceGridScrollViewer, Path=IsVisible}">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="LSInputBindingPressed">
+                                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceGrid}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSInputBinding>
+                                    
+
+                                </Grid>
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger SourceName="leftBtn" EventName="Click">
+                                        <ls:SelectNextListBoxItem Reversed="True" TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                                    </b:EventTrigger>
+                                    <b:EventTrigger SourceName="rightBtn" EventName="Click">
+                                        <ls:SelectNextListBoxItem TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </ContentControl>
+                            <ControlTemplate.Triggers>
+                                <!-- Show carousel buttons only if more than one item -->
+                                <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Value="1">
+                                    <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                
+                                <!-- Show expand button when focused and grid is hidden -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                        <Condition Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Collapsed"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
+                                </MultiDataTrigger>
+                                
+                                <!-- Show collapse button when grid is visible -->
+                                <DataTrigger Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Visible">
+                                    <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                    <Setter TargetName="faceCarousel" Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ListBox.Template>
+                            </ListBox>
+                        </ContentControl>
+                    </StackPanel>
+
+                    <!-- Face Selection Grid - hidden by default -->
+                    <ScrollViewer x:Name="faceGridScrollViewer" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="Collapsed"
+                                  Style="{StaticResource gameplayPanelScrollViewerStyle}"
+                                  VerticalScrollBarVisibility="Auto" MaxHeight="600" Height="Auto"
+                                  ls:MoveFocus.Focusable="True" Focusable="True">
+                        <StackPanel>
+                            <ListBox x:Name="faceGrid" ItemsSource="{Binding SelectableHeads}" SelectedItem="{Binding SelectedHead}"
+                                     Style="{StaticResource HUI_AppearanceIconGridStyle}">
+                                <b:Interaction.Triggers>
+                                    <b:PropertyChangedTrigger Binding="{Binding ElementName=faceGrid, Path=SelectedItem}">
+                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                    </b:PropertyChangedTrigger>
+                                </b:Interaction.Triggers>
+                            </ListBox>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    
+                    <!-- Collapse Face Grid and return focus to carousel -->
+                    <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=faceGridScrollViewer, Path=IsVisible}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="LSInputBindingPressed">
+                                <b:ChangePropertyAction TargetName="faceGridScrollViewer" PropertyName="Visibility" Value="Collapsed"/>
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceCarousel}"/>
+                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSInputBinding>
+
+
+                </DockPanel>
+            </ControlTemplate>
+
+            <!-- Skin Colour -->
+            <ControlTemplate x:Key="HUI_SkinColourBoxComponent">
+
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="HUI_MaturityBoxComponent">
+              
+            </ControlTemplate>
+          
+            <ControlTemplate x:Key="HUI_FreckleQuantityBoxComponent">
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="HUI_FreckleIntensityBoxComponent">
+            </ControlTemplate>
+
+            <!-- Vitiligo -->
+            <ControlTemplate x:Key="HUI_VitiligoBoxComponent">
+            </ControlTemplate>
+
+            <!-- Lip Options -->
+            <ControlTemplate x:Key="HUI_LipTintBoxComponent">
+            </ControlTemplate>
+
+            <!-- Lip Intensity -->
+            <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
+            </ControlTemplate>
+
+            <!-- Lip Metallic Finish -->
+            <ControlTemplate x:Key="HUI_LipMetallicBoxComponent">
+            </ControlTemplate>
+
+            <!-- Lip Glossy Finish -->
+            <ControlTemplate x:Key="HUI_LipGlossyBoxComponent">
+            </ControlTemplate>
 
             <!-- Appearance Tab Containers -->
              
@@ -321,21 +583,36 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                       </Grid.RowDefinitions>
+                      
+
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0">
                           <TextBlock ls:TextBlockFormatter.SourceText="General Appearance" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
                       </ContentControl>
-                      <ScrollViewer Grid.Row="1" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
-                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1200" Visibility="Visible">
+                      
+                      <ScrollViewer Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1600" Visibility="Visible">
 
                           <StackPanel Width="{StaticResource gameplayPanelWidth}">
                               <Control x:Name="nameInput" Template="{StaticResource HUI_NamingBoxComponent}" />
- 
+
+                              <StackPanel x:Name="randomizeCharacter" HorizontalAlignment="Center" Margin="0,0,0,0">
+                                  <ContentControl x:Name="randomizeSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                                      <TextBlock Text="{Binding Source='h1595c068g30a1g4efegbd7fg072665991b3b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                                  </ContentControl>
+                                  
+                                  <ListBox x:Name="randomizeCarousel" Margin="0,12,0,0" 
+                                           Tag="Randomize" Template="{StaticResource HUI_CarouselTemplate}">
+                                      <b:Interaction.Triggers>
+                                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                              <ls:BringIntoViewAction TargetName="randomizeSubheader"/>
+                                          </b:DataTrigger>
+                                      </b:Interaction.Triggers>
+                                  </ListBox>
+                              </StackPanel>
                               <Control x:Name="bodyType" Template="{StaticResource HUI_BodyTypeBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="identity" Template="{StaticResource HUI_IdentityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="voice" Template="{StaticResource HUI_VoiceBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-
-                              <!-- Randomisation controls -->
-                              <Control x:Name="RandomizeCharacterOrigins" Template="{StaticResource ChangeRandomCharacterCarouselTemplate}" Visibility="Collapsed" Margin="0,47,0,0"/>
+                              <Control x:Name="genitals" Template="{StaticResource HUI_GenitaliaBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
                           </StackPanel>
                       </ScrollViewer>
@@ -344,17 +621,61 @@
           </ControlTemplate>
 
           <!-- Face Appearance Template -->
-           <!-- Face, Skin Solour, Maturity, Freckle Quantity, Freckle Intensity, Vitiligo, Lip Tint + Intensity, Metallic, Glossy -->
+           <!-- Face, Skin Colour, Maturity, Freckle Quantity, Freckle Intensity, Vitiligo, Lip Tint + Intensity, Metallic, Glossy -->
           <ControlTemplate x:Key="FaceAppearanceTemplate">
-            <Grid Background="Transparent">
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
-                    <TextBlock Text="Face" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
-                    <TextBlock Text="Face options, scars, and facial features." Foreground="White" Margin="0,0,0,20"/>
-                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
-                        <TextBlock Text="Face appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-                    </Border>
-                </StackPanel>
-            </Grid>
+              <DockPanel>
+                  <Grid>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                      </Grid.RowDefinitions>
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0">
+                          <Control x:Name="faceVisual" Template="{StaticResource HUI_FaceBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                      </ContentControl>
+                      <ScrollViewer x:Name="faceAppearanceScroller" Grid.Row="1" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1600" Visibility="Visible">
+
+                          <StackPanel Width="{StaticResource gameplayPanelWidth}">
+                              
+                              <!-- Face Grid - integrated into main scroller -->
+                              <StackPanel x:Name="faceGridContainer" Visibility="Collapsed" Margin="0,0,0,30">
+                                  <ListBox x:Name="integratedFaceGrid" ItemsSource="{Binding SelectableHeads}" SelectedItem="{Binding SelectedHead}"
+                                           Style="{StaticResource HUI_AppearanceIconGridStyle}">
+                                      <b:Interaction.Triggers>
+                                          <b:PropertyChangedTrigger Binding="{Binding ElementName=integratedFaceGrid, Path=SelectedItem}">
+                                              <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                          </b:PropertyChangedTrigger>
+                                      </b:Interaction.Triggers>
+                                  </ListBox>
+                              </StackPanel>
+                              
+                              <Control x:Name="skinColour" Template="{StaticResource HUI_SkinColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="maturity" Template="{StaticResource HUI_MaturityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="freckleQuantity" Template="{StaticResource HUI_FreckleQuantityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="freckleIntensity" Template="{StaticResource HUI_FreckleIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="vitiligo" Template="{StaticResource HUI_VitiligoBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipTint" Template="{StaticResource HUI_LipTintBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipIntensity" Template="{StaticResource HUI_LipIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipMetallic" Template="{StaticResource HUI_LipMetallicBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipGlossy" Template="{StaticResource HUI_LipGlossyBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                          </StackPanel>
+                      </ScrollViewer>
+                  </Grid>
+              </DockPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Show integrated face grid when the separate grid is visible -->
+                  <DataTrigger Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Visible">
+                      <Setter TargetName="faceGridContainer" Property="Visibility" Value="Visible"/>
+                  </DataTrigger>
+                  
+                  <!-- Hide integrated face grid when the separate grid is collapsed -->
+                  <DataTrigger Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Collapsed">
+                      <Setter TargetName="faceGridContainer" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Hair Appearance Template -->
