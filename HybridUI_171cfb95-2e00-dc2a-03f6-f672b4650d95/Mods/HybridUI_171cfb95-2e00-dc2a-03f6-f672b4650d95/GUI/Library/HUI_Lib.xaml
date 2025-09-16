@@ -406,7 +406,7 @@
 
     -->
     <ControlTemplate x:Key="HUI_CarouselTemplate" TargetType="ListBox">
-        <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}" HorizontalAlignment="Center" Tag="notEnabled">
+        <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}" HorizontalAlignment="Center" Tag="notEnabled" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
             <Grid>
                 <!-- Default Navigation Buttons (for generic carousels) -->
                 <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
@@ -490,34 +490,79 @@
                 <!-- Center Text Display -->
                 <TextBlock x:Name="cTxt" Text="{Binding SelectedItem.Name, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Style="{StaticResource CarouselText}"/>
 
-                <!-- Hidden element to hold the random value for Shuffle -->
-                <TextBlock x:Name="randomValueHolder" Visibility="Collapsed"
-                            Text="{Binding Source=0, ConverterParameter=5, Converter={StaticResource RandomConverter}}"/>
+                <!-- Hidden element to access ItemsSource.Count from DataContext -->
+                <TextBlock x:Name="itemsCountHolder" Visibility="Collapsed" 
+                           Text="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
+
+                <!-- Random generators for different ItemsSource.Count values -->
+                <StackPanel>
+                    <TextBlock x:Name="random1" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=0, StringFormat={}{0}, FallbackValue=0}"/>
                     
+                    <TextBlock x:Name="random2" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=1, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random3" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=2, StringFormat={}{0}, FallbackValue=0}"/>
 
-
-                
-                <!-- Dynamic random generation using carousel's SelectedIndex as trigger -->
-                <TextBlock x:Name="randomFloatHolder" Visibility="Collapsed" Tag="0">
-                    <TextBlock.Text>
-                        <Binding Path="SelectedIndex" 
-                                 RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"
-                                 Converter="{StaticResource RandomConverter}" 
-                                 ConverterParameter="5"
-                                 StringFormat="{}{0}"
-                                 FallbackValue="0"/>
-                    </TextBlock.Text>
-                </TextBlock>
+                    <TextBlock x:Name="random4" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=3, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random5" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=4, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random6" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=5, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random7" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=6, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random8" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=7, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random9" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=8, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random10" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=9, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random11" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=10, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random12" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=11, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random13" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=12, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random14" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=13, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random15" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=14, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random16" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=15, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random17" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=16, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random18" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=17, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random19" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=18, StringFormat={}{0}, FallbackValue=0}"/>
+                    
+                    <TextBlock x:Name="random20" Visibility="Collapsed" 
+                              Text="{Binding Path=SelectedIndex, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Converter={StaticResource RandomConverter}, ConverterParameter=19, StringFormat={}{0}, FallbackValue=0}"/>
+                </StackPanel>
+                <!-- Dynamic random generation - will be bound to appropriate random source via DataTriggers -->
+                <!-- Default to random2 binding, DataTriggers will override for other counts -->
+                <TextBlock x:Name="randomFloatHolder" Visibility="Collapsed" Tag="0" Text="{Binding ElementName=random2, Path=Text}"/>
                 
                 <!-- Convert the random float to integer index -->
-                <TextBlock x:Name="randomIndexHolder" Visibility="Collapsed">
-                    <TextBlock.Text>
-                        <Binding ElementName="randomFloatHolder" 
-                                 Path="Text"
-                                 Converter="{StaticResource RoundUpConverter}" 
-                                 FallbackValue="0"/>
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock x:Name="randomIndexHolder" Visibility="Collapsed" 
+                           Text="{Binding ElementName=randomFloatHolder, Path=Text, Converter={StaticResource RoundUpConverter}, FallbackValue=0}"/>
 
                 <!-- Left Action Area (Voice hint area) -->
                 <StackPanel x:Name="leftActionArea" Orientation="Horizontal" HorizontalAlignment="Left" 
@@ -714,6 +759,189 @@
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="shuffleInput" Property="IsEnabled" Value="True"/>
             </MultiDataTrigger>
+
+            <!-- ItemsSource.Count-based RandomConverter overrides -->
+            <!-- Now using direct ItemsSource.Count binding since DataContext is set to the ListBox -->
+            
+            <!-- DataTrigger for ItemsSource.Count = 1 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="1">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random1" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 2 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="2">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random2" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 3 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="3">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random3" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 4 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="4">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random4" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 5 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="5">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random5" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 6 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="6">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random6" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 7 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="7">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random7" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 8 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="8">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random8" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 9 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="9">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random9" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 10 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="10">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random10" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 11 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="11">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random11" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 12 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="12">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random12" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 13 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="13">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random13" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 14 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="14">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random14" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 15 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="15">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random15" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 16 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="16">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random16" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 17 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="17">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random17" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 18 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="18">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random18" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 19 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="19">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random19" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <!-- DataTrigger for ItemsSource.Count = 20 -->
+            <DataTrigger Binding="{Binding ElementName=itemsCountHolder, Path=Text}" Value="20">
+                <Setter TargetName="randomFloatHolder" Property="Text">
+                    <Setter.Value>
+                        <Binding ElementName="random20" Path="Text"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
             
 
         </ControlTemplate.Triggers>
