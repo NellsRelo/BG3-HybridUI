@@ -410,7 +410,7 @@
                         <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
                             <!-- Face Carousel -->
                             <ListBox x:Name="faceCarousel" Tag="faces" 
-                              ItemsSource="{Binding SelectableHeads}" 
+                              ItemsSource="{Binding SelectableHeads}"
                               SelectedItem="{Binding SelectedHead}"
                               Visibility="{Binding SelectableHeads.Count, Converter={StaticResource CountToVisibilityConverter}}">
                     <b:Interaction.Triggers>

@@ -564,19 +564,19 @@
                 <TextBlock x:Name="randomIndexHolder" Visibility="Collapsed" 
                            Text="{Binding ElementName=randomFloatHolder, Path=Text, Converter={StaticResource RoundUpConverter}, FallbackValue=0}"/>
 
-                <!-- Left Action Area (Voice hint area) -->
+                <!-- Left Action Area (Shuffle hint area) -->
                 <StackPanel x:Name="leftActionArea" Orientation="Horizontal" HorizontalAlignment="Left" 
                            VerticalAlignment="Center" Margin="100,-5,0,0" Opacity="0">
-                    <!-- Voice-specific content (collapsed by default) -->
-                    <Grid x:Name="voiceActionContent" Visibility="Collapsed">
-                        <StackPanel x:Name="playVoiceButton" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,-5,0,0" Opacity="0">
-                            <Control x:Name="playVoiceIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                            <TextBlock Text="{Binding Source=hbf7b56f9g7cd9g4b08g9986ge231edbbde18,Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Left" Margin="10,0,0,0" Foreground="{StaticResource CCTextPrimary}"/>
+                    <!-- Shuffle-specific content (collapsed by default) -->
+                    <Grid x:Name="shuffleActionContent" Visibility="Collapsed">
+                        <StackPanel x:Name="shuffleButton" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,-5,0,0" Opacity="0">
+                            <Control x:Name="shuffleIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIShowInfo'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            <TextBlock Text="{Binding Source='hda71b4dbg90ffg4c40g9248g575dbd3edfe8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Left" Margin="10,0,0,0" Foreground="{StaticResource CCTextPrimary}"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
 
-                <!-- Right Action Area (Randomize/Shuffle hint area) -->
+                <!-- Right Action Area (Randomize/Voice hint area) -->
                 <StackPanel x:Name="rightActionArea" Orientation="Horizontal" HorizontalAlignment="Right" 
                            VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
                     
@@ -587,16 +587,16 @@
                         </StackPanel>
                     </Grid>
                     
-                    <!-- Shuffle-specific content (collapsed by default) -->
-                    <Grid x:Name="shuffleActionContent" Visibility="Collapsed">
-                        <StackPanel x:Name="shuffleButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,40,0" Opacity="0">
-                            <TextBlock Text="{Binding Source='hda71b4dbg90ffg4c40g9248g575dbd3edfe8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
-                            <Control x:Name="shuffleIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                    <!-- Voice-specific content (collapsed by default) -->
+                    <Grid x:Name="voiceActionContent" Visibility="Collapsed">
+                        <StackPanel x:Name="playVoiceButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,40,0" Opacity="0">
+                            <TextBlock Text="{Binding Source=hbf7b56f9g7cd9g4b08g9986ge231edbbde18,Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
+                            <Control x:Name="playVoiceIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
                 
-                <ls:LSInputBinding x:Name="playVoiceInput" BoundEvent="UICancel" IsEnabled="False">
+                <ls:LSInputBinding x:Name="playVoiceInput" BoundEvent="UIAccept" IsEnabled="False">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="LSInputBindingPressed">
                             <b:InvokeCommandAction Command="{Binding DataContext.PlayVoice, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"/>
@@ -614,7 +614,7 @@
                 </ls:LSInputBinding>
                 
                 <!-- Shuffle Input Binding for ItemsSource-based carousels (Voice, Genitalia) -->
-                <ls:LSInputBinding x:Name="shuffleInput" BoundEvent="UIAccept" IsEnabled="False">
+                <ls:LSInputBinding x:Name="shuffleInput" BoundEvent="UIShowInfo" IsEnabled="False">
                     <b:Interaction.Triggers>
                         <b:EventTrigger EventName="LSInputBindingPressed">
                             <!-- Force RandomConverter re-evaluation by temporarily changing SelectedIndex -->
@@ -942,7 +942,6 @@
                     </Setter.Value>
                 </Setter>
             </DataTrigger>
-            
 
         </ControlTemplate.Triggers>
     </ControlTemplate>
