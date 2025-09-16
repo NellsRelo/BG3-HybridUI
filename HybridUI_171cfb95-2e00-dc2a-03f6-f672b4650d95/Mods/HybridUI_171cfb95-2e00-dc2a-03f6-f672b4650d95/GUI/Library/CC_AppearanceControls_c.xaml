@@ -225,12 +225,6 @@
                       <b:Interaction.Triggers>
                           <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
                               <ls:BringIntoViewAction TargetName="bodyTypeSubheader"/>
-                              <!-- Update local debug panel -->
-                              <b:ChangePropertyAction TargetName="localDebugText" PropertyName="Text" Value="FOCUSED: BODY TYPE - Items: 4"/>
-                              <b:ChangePropertyAction TargetName="localDebugText" PropertyName="Visibility" Value="Visible"/>
-                          </b:DataTrigger>
-                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="False">
-                              <b:ChangePropertyAction TargetName="localDebugText" PropertyName="Visibility" Value="Collapsed"/>
                           </b:DataTrigger>
                       </b:Interaction.Triggers>
                       
@@ -239,10 +233,6 @@
                       <ListBoxItem x:Name="femaleStrong" Content="3"/>
                       <ListBoxItem x:Name="maleStrong" Content="4"/>
                   </ListBox>
-                  
-                  <!-- Local Debug Text -->
-                  <TextBlock x:Name="localDebugText" Text="" Foreground="Red" FontSize="24" FontWeight="Bold" 
-                             HorizontalAlignment="Center" Visibility="Collapsed" Margin="0,10,0,0"/>
               </StackPanel>
           </ControlTemplate>
 
@@ -270,10 +260,6 @@
                       <b:Interaction.Triggers>
                           <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
                               <ls:BringIntoViewAction TargetName="identitySubheader"/>
-                              <!-- Update debug panel -->
-                              <b:ChangePropertyAction TargetName="focusedCarouselName" PropertyName="Text" Value="IDENTITY"/>
-                              <b:ChangePropertyAction TargetName="focusedCarouselItemCount" PropertyName="Text" Value="Item Count: 3"/>
-                              <b:ChangePropertyAction TargetName="focusedCarouselSelectedIndex" PropertyName="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex, StringFormat='Selected Index: {0}'}"/>
                           </b:DataTrigger>
                       </b:Interaction.Triggers>
                       <ListBox.Items>
@@ -310,10 +296,6 @@
                       <b:Interaction.Triggers>
                           <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
                               <ls:BringIntoViewAction TargetName="genitaliaSubheader"/>
-                              <!-- Update debug panel -->
-                              <b:ChangePropertyAction TargetName="focusedCarouselName" PropertyName="Text" Value="GENITALIA"/>
-                              <b:ChangePropertyAction TargetName="focusedCarouselItemCount" PropertyName="Text" Value="{Binding SelectableGenitals.Count, StringFormat='Item Count: {0}'}"/>
-                              <b:ChangePropertyAction TargetName="focusedCarouselSelectedIndex" PropertyName="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex, StringFormat='Selected Index: {0}'}"/>
                           </b:DataTrigger>
                       </b:Interaction.Triggers>
                   </ListBox>
@@ -332,10 +314,6 @@
                         <b:Interaction.Triggers>
                             <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
                                 <ls:BringIntoViewAction TargetName="voiceSubheader"/>
-                                <!-- Update debug panel -->
-                                <b:ChangePropertyAction TargetName="focusedCarouselName" PropertyName="Text" Value="VOICE"/>
-                                <b:ChangePropertyAction TargetName="focusedCarouselItemCount" PropertyName="Text" Value="{Binding Voices.ComboItems.Count, StringFormat='Item Count: {0}'}"/>
-                                <b:ChangePropertyAction TargetName="focusedCarouselSelectedIndex" PropertyName="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex, StringFormat='Selected Index: {0}'}"/>
                             </b:DataTrigger>
                         </b:Interaction.Triggers>
 
@@ -427,7 +405,26 @@
 
             <!-- Skin Colour -->
             <ControlTemplate x:Key="HUI_SkinColourBoxComponent">
+                <StackPanel x:Name="SkinColourContainer">
+                    <ContentControl x:Name="skinColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hc81ba7bcgb2ccg4423ga050g253fd53ce2c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
 
+                    <ListBox x:Name="skinColourCarousel" ItemsSource="{Binding SelectableSkinColours}" SelectedItem="{Binding SelectedSkinColour}" 
+                             Tag="SkinColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="skinColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
             </ControlTemplate>
 
             <ControlTemplate x:Key="HUI_MaturityBoxComponent">

@@ -6214,4 +6214,188 @@
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <!-- Custom Carousel Button Template for Color Selection -->
+    <!-- Extends CarouselButtonTemplate with subtle rounded corners for pill-like appearance -->
+    <ControlTemplate x:Key="CarouselColourButtonTemplate" TargetType="ContentControl">
+        <Grid Width="1180" MinHeight="125" Margin="{StaticResource CClistPadding}">
+            <!-- Rounded background container with subtle ornate styling -->
+            <Border CornerRadius="48" BorderBrush="#30808080" BorderThickness="1">
+                <Border.Background>
+                    <ImageBrush x:Name="backgroundBrush" ImageSource="{StaticResource CarouselButtonBG}" Stretch="Fill"/>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="3" Direction="315" Color="#60000000" 
+                                    Opacity="0.4" BlurRadius="6"/>
+                </Border.Effect>
+            </Border>
+            
+            <!-- Subtle inner bevel for crafted appearance -->
+            <Border CornerRadius="44" BorderThickness="1" BorderBrush="#15FFFFFF" 
+                    Margin="1" IsHitTestVisible="False"/>
+            
+            <!-- Very subtle outer glow for mystique -->
+            <Border CornerRadius="49" BorderThickness="1" BorderBrush="#20D4AF37" 
+                    Margin="-1" IsHitTestVisible="False"/>
+            
+            <!-- Focus elements identical to regular carousel -->
+            <Rectangle x:Name="focusedFill" Fill="{StaticResource focusedFillGradiant}" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <Control x:Name="Frame" Visibility="Collapsed" Style="{StaticResource FocusableBorderCarouselStyle}" />
+
+            <ContentPresenter x:Name="content" IsEnabled="True"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Tag, ElementName=base}" Value="notEnabled">
+                <Setter TargetName="content" Property="IsEnabled" Value="False"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="content" Property="IsEnabled" Value="True"/>
+                <Setter TargetName="Frame" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="focusedFill" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding DataContext.LevelUpStep, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Value="Started">
+                <Setter TargetName="backgroundBrush" Property="ImageSource" Value="{StaticResource ListButtonBg}"/>
+                <Setter TargetName="Frame" Property="Visibility" Value="Hidden"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- HUI Color Carousel Template -->
+    <!-- A carousel with color preview using custom rounded button template -->
+    <ControlTemplate x:Key="HUI_CarouselColourTemplate" TargetType="ListBox">
+        <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselColourButtonTemplate}" HorizontalAlignment="Center" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+            <Grid Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Center">
+                <!-- Navigation Buttons (positioned outside pill for proper spacing) -->
+                <ls:LSRepeatButton x:Name="leftBtn" 
+                                  BoundEvent="UILeft" 
+                                  Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" 
+                                  VerticalAlignment="Center" 
+                                  Margin="40,0,0,0" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="rightBtn" 
+                                  BoundEvent="UIRight" 
+                                  Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" 
+                                  VerticalAlignment="Center" 
+                                  Margin="0,0,40,0" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
+                    
+                    <Grid>
+                        <!-- Diagonal Color Overlay Background -->
+                        <Grid x:Name="colorOverlayContainer" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <!-- Create clipping path for diagonal effect (extended to reach focus border) -->
+                            <Grid.Clip>
+                                <GeometryGroup>
+                                    <!-- Extended container rect to reach focus border -->
+                                    <RectangleGeometry Rect="0,0,1400,125"/>
+                                </GeometryGroup>
+                            </Grid.Clip>
+                            
+                            <!-- Color overlay to the right of diagonal line (extends to focus border) -->
+                            <Rectangle x:Name="colorOverlay" 
+                                       Fill="{Binding SelectedItem.Colour, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                       Opacity="0.9"
+                                       Width="1400"
+                                       Height="125"
+                                       HorizontalAlignment="Left" 
+                                       VerticalAlignment="Top">
+                                <!-- Use Path geometry to create the diagonal overlay shape that reaches the focus border -->
+                                <Rectangle.Clip>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="980,7">
+                                            <LineSegment Point="1195,7"/>
+                                            <LineSegment Point="1195,125"/>
+                                            <LineSegment Point="820,125"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Rectangle.Clip>
+                            </Rectangle>
+                            
+                            <!-- Soft diagonal shadow using blur effect -->
+                            <Line x:Name="diagonalShadow" 
+                                  X1="975" Y1="10" 
+                                  X2="815" Y2="128"
+                                  Stroke="#40000000"
+                                  StrokeThickness="6">
+                                <Line.Effect>
+                                    <BlurEffect Radius="3"/>
+                                </Line.Effect>
+                            </Line>
+                            
+                            <!-- White horizontal line on top of overlay -->
+                            <Line x:Name="overlayTopLine" 
+                                  X1="980" Y1="7" 
+                                  X2="1195" Y2="7"
+                                  Stroke="White"
+                                  StrokeThickness="1"
+                                  Opacity="0.6"/>
+                            
+                            <!-- Anti-aliasing border for diagonal overlay edge -->
+                            <Line x:Name="overlayDiagonalBorder" 
+                                  X1="981" Y1="7" 
+                                  X2="821" Y2="125"
+                                  Stroke="{Binding SelectedItem.Colour, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                  StrokeThickness="1"
+                                  Opacity="0.4"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"/>
+
+                        </Grid>
+                        
+                        <!-- Centered text content -->
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <!-- Standard carousel text with original styling -->
+                            <TextBlock x:Name="cTxt" 
+                                       Text="{Binding SelectedItem.Name, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+                                       Style="{StaticResource CarouselText}"
+                                       TextWrapping="NoWrap" 
+                                       MaxWidth="400" 
+                                       TextTrimming="CharacterEllipsis"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Grid>
+
+                <!-- Hidden ItemsPresenter for data binding -->
+                <ItemsPresenter x:Name="itemsPresenter" Visibility="Collapsed"/>
+            </Grid>
+            <b:Interaction.Triggers>
+                <b:EventTrigger SourceName="leftBtn" EventName="Click">
+                    <ls:SelectNextListBoxItem Reversed="True" TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                </b:EventTrigger>
+                <b:EventTrigger SourceName="rightBtn" EventName="Click">
+                    <ls:SelectNextListBoxItem TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </ContentControl>
+        
+        <!-- Visual state triggers -->
+        <ControlTemplate.Triggers>
+            <!-- Hide navigation buttons when only one item -->
+            <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource Self}}" Value="1">
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            
+            <!-- Focus state styling (matches other carousels) -->
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="cTxt" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
+            </DataTrigger>
+            
+            <!-- Fallback for empty color name -->
+            <DataTrigger Binding="{Binding SelectedItem.Name, RelativeSource={RelativeSource Self}}" Value="">
+                <Setter TargetName="cTxt" Property="Text" Value="Selected Color"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SelectedItem.Name, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                <Setter TargetName="cTxt" Property="Text" Value="Selected Color"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
 </ResourceDictionary>
