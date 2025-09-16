@@ -407,129 +407,19 @@
             <ControlTemplate x:Key="HUI_FaceBoxComponent">
                 <DockPanel>
                     <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                        <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                            <!-- Face Carousel -->
-                            <ListBox x:Name="faceCarousel" Tag="faces" 
-                              ItemsSource="{Binding SelectableHeads}"
-                              SelectedItem="{Binding SelectedHead}"
-                              Visibility="{Binding SelectableHeads.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                    <b:Interaction.Triggers>
-                        <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                            <ls:BringIntoViewAction TargetName="faceCarousel"/>
-                        </b:DataTrigger>
-                    </b:Interaction.Triggers>
-                    <ListBox.Template>
-                        <ControlTemplate>
-                            <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
-                                <Grid>
-                                    <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" SoundID="{DynamicResource CarouselButtonSoundEvent}">
-                                        <ls:LSRepeatButton.RenderTransform>
-                                            <ScaleTransform ScaleX="-1" CenterX="32"/>
-                                        </ls:LSRepeatButton.RenderTransform>
-                                    </ls:LSRepeatButton>
-                                    <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
-
-                                    <Control Template="{DynamicResource IconCarouselTextTemplate}"/>
-
-                                    <!-- Expand Grid Action Button - appears when focused -->
-                                    <StackPanel x:Name="expandButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                        <TextBlock Text="{Binding Source='hdf0c5b51gb587g4f15g839bgecfe6bb1104b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
-                                        <Control x:Name="expandIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                                    </StackPanel>
-
-                                    <!-- Collapse Grid Hint - shows when grid is visible -->
-                                    <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                        <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
-                                        <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                                    </StackPanel>
-
-                                    <!-- Expand Face Grid -->
-                                    <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
-                                        <b:Interaction.Triggers>
-                                            <b:EventTrigger EventName="LSInputBindingReleased">
-                                                <b:ChangePropertyAction TargetName="faceGridScrollViewer" PropertyName="Visibility" Value="Visible"/>
-                                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceGrid}"/>
-                                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                            </b:EventTrigger>
-                                        </b:Interaction.Triggers>
-                                    </ls:LSInputBinding>
-                                    
-                                    <!-- Navigate down to grid when UIDown is pressed and grid is visible -->
-                                    <ls:LSInputBinding BoundEvent="UIDown" IsEnabled="{Binding ElementName=faceGridScrollViewer, Path=IsVisible}">
-                                        <b:Interaction.Triggers>
-                                            <b:EventTrigger EventName="LSInputBindingPressed">
-                                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceGrid}"/>
-                                            </b:EventTrigger>
-                                        </b:Interaction.Triggers>
-                                    </ls:LSInputBinding>
-                                    
-
-                                </Grid>
-                                <b:Interaction.Triggers>
-                                    <b:EventTrigger SourceName="leftBtn" EventName="Click">
-                                        <ls:SelectNextListBoxItem Reversed="True" TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
-                                    </b:EventTrigger>
-                                    <b:EventTrigger SourceName="rightBtn" EventName="Click">
-                                        <ls:SelectNextListBoxItem TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
-                                    </b:EventTrigger>
-                                </b:Interaction.Triggers>
-                            </ContentControl>
-                            <ControlTemplate.Triggers>
-                                <!-- Show carousel buttons only if more than one item -->
-                                <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Value="1">
-                                    <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
-                                    <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                                
-                                <!-- Show expand button when focused and grid is hidden -->
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
-                                        <Condition Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Collapsed"/>
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
-                                </MultiDataTrigger>
-                                
-                                <!-- Show collapse button when grid is visible -->
-                                <DataTrigger Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Visible">
-                                    <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                    <Setter TargetName="faceCarousel" Property="IsEnabled" Value="False"/>
-                                </DataTrigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ListBox.Template>
-                            </ListBox>
-                        </ContentControl>
+                        <!-- Face Carousel with Grid and Shuffle -->
+                        <ListBox x:Name="faceCarousel" Tag="faces" 
+                          ItemsSource="{Binding SelectableHeads}"
+                          SelectedItem="{Binding SelectedHead}"
+                          Template="{StaticResource HUI_CarouselGridTemplate}"
+                          Visibility="{Binding SelectableHeads.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            <b:Interaction.Triggers>
+                                <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                    <ls:BringIntoViewAction TargetName="faceCarousel"/>
+                                </b:DataTrigger>
+                            </b:Interaction.Triggers>
+                        </ListBox>
                     </StackPanel>
-
-                    <!-- Face Selection Grid - hidden by default -->
-                    <ScrollViewer x:Name="faceGridScrollViewer" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="Collapsed"
-                                  Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                                  VerticalScrollBarVisibility="Auto" MaxHeight="600" Height="Auto"
-                                  ls:MoveFocus.Focusable="True" Focusable="True">
-                        <StackPanel>
-                            <ListBox x:Name="faceGrid" ItemsSource="{Binding SelectableHeads}" SelectedItem="{Binding SelectedHead}"
-                                     Style="{StaticResource HUI_AppearanceIconGridStyle}">
-                                <b:Interaction.Triggers>
-                                    <b:PropertyChangedTrigger Binding="{Binding ElementName=faceGrid, Path=SelectedItem}">
-                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                    </b:PropertyChangedTrigger>
-                                </b:Interaction.Triggers>
-                            </ListBox>
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    
-                    <!-- Collapse Face Grid and return focus to carousel -->
-                    <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=faceGridScrollViewer, Path=IsVisible}">
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="LSInputBindingPressed">
-                                <b:ChangePropertyAction TargetName="faceGridScrollViewer" PropertyName="Visibility" Value="Collapsed"/>
-                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceCarousel}"/>
-                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                    </ls:LSInputBinding>
 
 
                 </DockPanel>
