@@ -392,11 +392,28 @@
     </Style>
 
     <!-- HUI Color Grid Style - Simplified working version -->
-    <Style x:Key="HUI_ColorGridStyle" TargetType="ListBox" BasedOn="{StaticResource appearanceIconGridStyle}">
+    <Style x:Key="HUI_ColorGridStyle" TargetType="ListBox">
         <!-- Prevent arrow keys from auto-selecting items -->
         <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
         <!-- Configure ListBox navigation to allow individual item focus -->
         <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Continue"/>
+        <!-- Configure virtualization for better scrolling behavior -->
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+        <Setter Property="VirtualizingPanel.CacheLength" Value="20,10"/>
+        <Setter Property="VirtualizingPanel.CacheLengthUnit" Value="Item"/>
+        <!-- Template with ScrollViewer for proper scrolling -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  CanContentScroll="True">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <!-- Custom ListBoxItem containers to not interfere with inner focus -->
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
@@ -6458,8 +6475,8 @@
                                             <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <b:ChangePropertyAction TargetName="colorGridScrollViewer" PropertyName="Visibility" Value="Visible"/>
-                                                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=colorGrid}"/>
+                                                        <b:ChangePropertyAction TargetName="colorGridContainer" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=base}"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
@@ -6482,19 +6499,24 @@
                                             <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                         
-                                        <!-- Show expand button when focused and grid is hidden -->
+                                        <!-- Show expand button when carousel focused and grid is hidden -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
-                                                <Condition Binding="{Binding ElementName=colorGridScrollViewer, Path=Visibility}" Value="Collapsed"/>
+                                                <Condition Binding="{Binding ElementName=colorGridContainer, Path=Visibility}" Value="Collapsed"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
                                         </MultiDataTrigger>
                                         
-                                        <!-- Show collapse button when grid is visible -->
-                                        <DataTrigger Binding="{Binding ElementName=colorGridScrollViewer, Path=Visibility}" Value="Visible">
-                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                        </DataTrigger>
+                                        <!-- Show collapse button when grid is visible AND (carousel focused OR grid has focus) -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding ElementName=colorGridContainer, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
                                         
                                         <!-- Disable carousel and buttons when grid is visible AND carousel is not focused -->
                                         <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="False">
@@ -6521,44 +6543,82 @@
                 </StackPanel>
 
                 <!-- Color Grid Selection View - hidden by default, sized for 10 rows -->
-                <ScrollViewer x:Name="colorGridScrollViewer" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="Collapsed"
-                              Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                              VerticalScrollBarVisibility="Auto" MaxHeight="880" Height="Auto"
-                              ls:MoveFocus.Focusable="True" Focusable="True">
-                    <StackPanel>
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="Loaded">
-                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                        
+                <StackPanel x:Name="colorGridContainer" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="Collapsed">
+                    <!-- All Colors Checkbox - using proper ColorOptionsStyle -->
+                    <ItemsControl ItemsSource="{Binding SkinColorOptions}" 
+                                  Style="{StaticResource ColorOptionsStyle}" 
+                                  HorizontalAlignment="Center" 
+                                  Margin="0,10,0,20"/>
+                    
+                    <Grid x:Name="colorGridScrollViewer" MaxHeight="860" Height="Auto">                        
                         <ListBox x:Name="colorGrid" 
                                 ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}" 
                                 SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                                Style="{StaticResource HUI_ColorGridStyle}">
+                                Style="{StaticResource HUI_ColorGridStyle}"
+                                ls:MoveFocus.Focusable="True" Focusable="True">
                             <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="Loaded">
+                                    <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
+                                </b:EventTrigger>
                                 <b:PropertyChangedTrigger Binding="{Binding ElementName=colorGrid, Path=SelectedItem}">
                                     <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                 </b:PropertyChangedTrigger>
                             </b:Interaction.Triggers>
                         </ListBox>
+                    </Grid>
 
-                        <!-- Collapse Grid Input Binding -->
-                        <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=colorGridScrollViewer, Path=IsVisible}">
-                            <b:Interaction.Triggers>
-                                <b:EventTrigger EventName="LSInputBindingPressed">
-                                    <b:ChangePropertyAction TargetName="colorGridScrollViewer" PropertyName="Visibility" Value="Collapsed"/>
-                                    <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=carouselDisplay}"/>
-                                    <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                </b:EventTrigger>
-                            </b:Interaction.Triggers>
-                        </ls:LSInputBinding>
-                    </StackPanel>
-                </ScrollViewer>
+                    <!-- Collapse Grid Input Binding -->
+                    <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=colorGridContainer, Path=IsVisible}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="LSInputBindingPressed">
+                                <b:ChangePropertyAction TargetName="colorGridContainer" PropertyName="Visibility" Value="Collapsed"/>
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=carouselDisplay}"/>
+                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSInputBinding>
+                </StackPanel>
             </DockPanel>
         </Grid>
 
         <ControlTemplate.Triggers>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- HUI Color Grid Bottom Buttons Template -->
+    <!-- Extends AppearanceItemSelectedBottomButtons with color options toggle -->
+    <ControlTemplate x:Key="HUI_ColorGridBottomButtons">
+        <StackPanel Orientation="Horizontal">
+            <!-- Standard appearance buttons -->
+            <ls:LSButton x:Name="selectButton" ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}" Tag="{Binding Source=hd0c08193ga7f2g4a7eg8225g63748c7b3096,Converter={StaticResource TranslatedStringConverter}}" OverwriteClickSound="UI_DefaultButton_Click"/>
+
+            <!-- Toggle tooltips -->
+            <ls:LSButton x:Name="ToggleTooltips"
+                         Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
+                         CommandParameter="{Binding FocusedElement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ls:UIWidget}}"
+                         BoundEvent="UIShowInfo"
+                         ContentTemplate="{StaticResource ControllerButtonHint}"
+                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIShowInfo, Converter={StaticResource FindInputEventConverter}}"
+                         Tag="{Binding Source='hf8dd4c2fg97e0g4ccdgac1ag3cd1fe5060ef', Converter={StaticResource TranslatedStringConverter}}" TapTime="{StaticResource DefaultButtonTapTime}"/>
+
+            <!-- All Colors Toggle Button - binds to the SkinColorOptions toggle -->
+            <ls:LSButton x:Name="colorToggleButton"
+                         BoundEvent="JumpToFromTab"
+                         ContentTemplate="{StaticResource ControllerButtonHint}"
+                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=JumpToFromTab, Converter={StaticResource FindInputEventConverter}}"
+                         Tag="{Binding Source='h4b7b0c9fg6a2fg4e1fg8b4fg123456789abc', Converter={StaticResource TranslatedStringConverter}, FallbackValue='All Colors'}"
+                         DataContext="{Binding SkinColorOptions[0]}"
+                         Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"
+                         CommandParameter="{Binding .}"
+                         OverwriteClickSound="UI_DefaultButton_Click"/>
+
+            <ls:LSButton x:Name="backButton" ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" OverwriteClickSound="UI_DefaultButton_Click"/>
+        </StackPanel>
+
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding ShowUIElementTooltip, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Value="True">
+                <Setter TargetName="ToggleTooltips" Property="Tag" Value="{Binding Source='hb33ec471gd611g4ee3gbbffg699af8f79167', Converter={StaticResource TranslatedStringConverter}}"/>
+            </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
