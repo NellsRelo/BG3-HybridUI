@@ -81,16 +81,23 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Grid Width="144" Height="140" ClipToBounds="False">
+                    <Grid Width="108" Height="105" ClipToBounds="False">
                         <Image x:Name="img" Source="pack://application:,,,/Core;component/Assets/Buttons/btn_hudNav_d.png" 
-                               Stretch="Uniform" Width="144" Height="140" VerticalAlignment="Center" />
+                               Stretch="Uniform" Width="108" Height="105" VerticalAlignment="Center" />
+                        <!-- Bright tropical aqua circular overlay when focused -->
+                        <Ellipse x:Name="colorOverlay" Fill="#8000CED1" Width="86" Height="86" 
+                                Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <Image x:Name="ico" Source="pack://application:,,,/Core;component/Assets/Options/ico_scrubber_d.png" 
-                               Stretch="Uniform" Width="48" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                               Stretch="Uniform" Width="36" Height="36" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Source" Value="pack://application:,,,/Core;component/Assets/Buttons/btn_hudNav_disabled.png" TargetName="img"/>
                         </Trigger>
+                        <!-- Show light aqua overlay when slider is focused -->
+                        <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource AncestorType=Slider}}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" TargetName="colorOverlay"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -2172,19 +2179,12 @@
 
             <!-- Main Grid Layout -->
             <DockPanel>
-                <!-- Header Section -->
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                    <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                        <!-- Carousel Mode Display -->
-                        <ListBox x:Name="carouselDisplay" 
-                                ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
-                                SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                            <b:Interaction.Triggers>
-                                <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                    <ls:BringIntoViewAction TargetName="carouselDisplay"/>
-                                </b:DataTrigger>
-                            </b:Interaction.Triggers>
+                <!-- Carousel Mode Display -->
+                <ListBox x:Name="carouselDisplay" 
+                        ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
+                        SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
+                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource.Count, Converter={StaticResource CountToVisibilityConverter}}"
+                        Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                             <ListBox.Template>
                                 <ControlTemplate>
                                     <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
@@ -2196,7 +2196,15 @@
                                             </ls:LSRepeatButton>
                                             <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
 
-                                            <Control Template="{DynamicResource IconCarouselTextTemplate}"/>
+                                            <!-- <Control Template="{DynamicResource IconCarouselTextTemplate}"/> -->
+                                            <TextBlock x:Name="cTxt" 
+                                                               Text="{Binding SelectedItem.Name, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+                                                               Style="{StaticResource CarouselText}"
+                                                               TextWrapping="NoWrap" 
+                                                               MaxWidth="400" 
+                                                               TextTrimming="CharacterEllipsis"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
 
                                             <!-- Left Action Area (Shuffle hint area) -->
                                             <StackPanel x:Name="leftActionArea" Orientation="Horizontal" HorizontalAlignment="Left" 
@@ -2210,37 +2218,39 @@
                                                 </Grid>
                                             </StackPanel>
 
-                                            <!-- Expand Grid Action Button - appears when focused -->
-                                            <StackPanel x:Name="expandButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                                <TextBlock Text="{Binding Source='hdf0c5b51gb587g4f15g839bgecfe6bb1104b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
-                                                <Control x:Name="expandIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                                            </StackPanel>
+                            <!-- Expand Grid Action Button - appears when focused -->
+                            <StackPanel x:Name="expandButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
+                                <TextBlock Text="{Binding Source='hdf0c5b51gb587g4f15g839bgecfe6bb1104b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
+                                <Control x:Name="expandIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            </StackPanel>
 
-                                            <!-- Collapse Grid Hint - shows when grid is visible -->
-                                            <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                                <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource LS_baseTxtColor}"/>
-                                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                                            </StackPanel>
-
-                                            <!-- Expand Grid Input Binding -->
+                            <!-- Collapse Grid Hint - shows when grid is visible -->
+                            <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
+                                <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
+                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            </StackPanel>
+                                            <!-- Expand Grid Input Binding - Show separate expanded grid -->
                                             <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <b:ChangePropertyAction TargetName="gridScrollViewer" PropertyName="Visibility" Value="Visible"/>
-                                                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=itemGrid}"/>
+                                                        <!-- Set a tag on the root element that the faceGrid can bind to -->
+                                                        <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="ShowExpandedGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
-                                            <!-- Navigate down to grid when UIDown is pressed and grid is visible -->
-                                            <ls:LSInputBinding BoundEvent="UIDown" IsEnabled="{Binding ElementName=gridScrollViewer, Path=IsVisible}">
+                                            <!-- Collapse Grid Input Binding - Hide expanded grid from carousel -->
+                                            <ls:LSInputBinding x:Name="collapseInput" BoundEvent="UICancel" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingPressed">
-                                                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=itemGrid}"/>
+                                                        <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
+
+                                            
                                             <!-- Shuffle Input Binding for ItemsSource-based carousels -->
                                             <ls:LSInputBinding x:Name="shuffleInput" BoundEvent="UIShowInfo" IsEnabled="False">
                                                 <b:Interaction.Triggers>
@@ -2284,19 +2294,16 @@
                                             <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                         
-                                        <!-- Show expand button when focused and grid is hidden -->
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
-                                                <Condition Binding="{Binding ElementName=gridScrollViewer, Path=Visibility}" Value="Collapsed"/>
-                                            </MultiDataTrigger.Conditions>
+                                        <!-- Show expand button when focused and grid is not open -->
+                                        <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
                                             <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
-                                        </MultiDataTrigger>
+                                        </DataTrigger>
                                         
-                                        <!-- Show collapse button when grid is visible -->
-                                        <DataTrigger Binding="{Binding ElementName=gridScrollViewer, Path=Visibility}" Value="Visible">
+                                        <!-- Show collapse button when grid is open -->
+                                        <DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="GridOpen">
                                             <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                            <Setter TargetName="carouselDisplay" Property="IsEnabled" Value="False"/>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
                                         </DataTrigger>
 
                                         <!-- Show shuffle action when focused and has multiple items available -->
@@ -2333,42 +2340,13 @@
                                 </ControlTemplate>
                             </ListBox.Template>
                         </ListBox>
-                    </ContentControl>
-                </StackPanel>
 
-                <!-- Grid Selection View - hidden by default -->
-                <ScrollViewer x:Name="gridScrollViewer" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="Collapsed"
-                              Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                              VerticalScrollBarVisibility="Auto" MaxHeight="600" Height="Auto"
-                              ls:MoveFocus.Focusable="True" Focusable="True">
-                    <StackPanel>
-                        <ListBox x:Name="itemGrid" 
-                                ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}" 
-                                SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                                Style="{StaticResource HUI_AppearanceIconGridStyle}">
-                            <b:Interaction.Triggers>
-                                <b:PropertyChangedTrigger Binding="{Binding ElementName=itemGrid, Path=SelectedItem}">
-                                    <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                </b:PropertyChangedTrigger>
-                            </b:Interaction.Triggers>
-                        </ListBox>
 
-                        <!-- Collapse Grid Input Binding -->
-                        <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=gridScrollViewer, Path=IsVisible}">
-                            <b:Interaction.Triggers>
-                                <b:EventTrigger EventName="LSInputBindingPressed">
-                                    <b:ChangePropertyAction TargetName="gridScrollViewer" PropertyName="Visibility" Value="Collapsed"/>
-                                    <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=carouselDisplay}"/>
-                                    <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                </b:EventTrigger>
-                            </b:Interaction.Triggers>
-                        </ls:LSInputBinding>
-                    </StackPanel>
-                </ScrollViewer>
             </DockPanel>
         </Grid>
 
         <ControlTemplate.Triggers>
+
             <!-- Dynamic random binding based on ItemsSource count -->
             <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource Self}}" Value="2">
                 <Setter TargetName="randomFloatHolder" Property="Text" Value="{Binding ElementName=random2, Path=Text}"/>
@@ -3868,6 +3846,44 @@
                 <Setter TargetName="randomFloatHolder" Property="Text" Value="{Binding ElementName=random500, Path=Text}"/>
             </DataTrigger>
         </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- HUI Separate Expanded Grid Template - Independent from HUI_CarouselHeaderDecorator -->
+    <ControlTemplate x:Key="HUI_CarouselExpandedGrid" TargetType="ListBox">
+        <Grid>
+            <!-- Grid Selection View - full screen without height constraints -->
+            <ScrollViewer x:Name="expandedGridScrollViewer" 
+                          Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag, Converter={StaticResource StringToVisibilityConverter}}"
+                          Style="{StaticResource gameplayPanelScrollViewerStyle}"
+                          VerticalScrollBarVisibility="Auto" Height="Auto"
+                          ls:MoveFocus.Focusable="True" Focusable="True">
+                <StackPanel>
+                    <ListBox x:Name="expandedItemGrid" 
+                            ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
+                            SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
+                            Style="{StaticResource HUI_AppearanceIconGridStyle}">
+                        <b:Interaction.Triggers>
+                            <b:PropertyChangedTrigger Binding="{Binding ElementName=expandedItemGrid, Path=SelectedItem}">
+                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                            </b:PropertyChangedTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+
+                    <!-- Collapse Grid Input Binding -->
+                    <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=expandedGridScrollViewer, Path=IsVisible}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="LSInputBindingPressed">
+                                <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Tag" Value=""/>
+                                <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Visibility" Value="Collapsed"/>
+                                <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSInputBinding>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </ControlTemplate>
 
     <!-- Custom Carousel Button Template for Color Selection -->
@@ -6725,8 +6741,8 @@
 
                 <!-- Color Grid Selection View - hidden by default, sized for 10 rows -->
                 <StackPanel x:Name="colorGridContainer" DockPanel.Dock="Top" Margin="0,20,0,0" Visibility="Collapsed">
-                    <!-- All Colors Checkbox - using proper ColorOptionsStyle -->
-                    <ItemsControl ItemsSource="{Binding SkinColorOptions}" 
+                    <!-- All Colors Checkbox - dynamically bound based on tag -->
+                    <ItemsControl x:Name="colorOptionsControl"
                                   Style="{StaticResource ColorOptionsStyle}" 
                                   HorizontalAlignment="Center" 
                                   Margin="0,10,0,20"/>
@@ -6763,6 +6779,29 @@
         </Grid>
 
         <ControlTemplate.Triggers>
+            <!-- Dynamic binding based on Tag - defaults to SkinColorOptions -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="eyeColors">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding EyeColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="makeupColors">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding AppearanceMakeup.ColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="LipColour">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding AppearanceLipsMakeup.ColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="hairColors">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding AppearanceHairHighlights.ColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="tattooColors">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding AppearanceTattoos.ColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="SkinColour">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SkinColorOptions}"/>
+            </DataTrigger>
+            <!-- Default fallback for unspecified tags -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SkinColorOptions}"/>
+            </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
@@ -6810,12 +6849,12 @@
         </ControlTemplate.Resources>
         <StackPanel ls:MoveFocus.Focusable="True" Focusable="True" 
                    Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Center">
-            <b:Interaction.Triggers>
-                <b:PropertyChangedTrigger Binding="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}">
-                    <ls:LSPlaySound Sound="UI_HUD_SplitItem_Step"/>
-                    <b:InvokeCommandAction Command="{Binding DataContext.AppearanceValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"/>
-                </b:PropertyChangedTrigger>
-            </b:Interaction.Triggers>
+                <b:Interaction.Triggers>
+                    <b:PropertyChangedTrigger Binding="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}">
+                        <ls:LSPlaySound Sound="UI_HUD_SplitItem_Step"/>
+                        <b:InvokeCommandAction Command="{Binding DataContext.AppearanceValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"/>
+                    </b:PropertyChangedTrigger>
+                </b:Interaction.Triggers>
             
             <!-- Header with subheader and value -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
@@ -6833,50 +6872,57 @@
                           HorizontalAlignment="Right" TextAlignment="Left"/>
             </StackPanel>
             
-            <!-- Main slider area uses full width -->
-            <Grid x:Name="sliderContainer" HorizontalAlignment="Stretch" Height="140" 
-                  Width="{StaticResource gameplayPanelWidth}">
-                
-                <!-- Focus effect background -->
-                <Rectangle x:Name="focusedFill" Fill="{StaticResource focusedFillGradiant}" 
-                          Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                
-                <ls:LSNineSliceImage x:Name="bg" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
-                                    ImageSource="{StaticResource SliderBackground}" 
-                                    Height="140" Slices="106,20"/>
+                <!-- Main slider area uses full width -->
+                <Grid x:Name="sliderContainer" HorizontalAlignment="Stretch" Height="105" 
+                      Width="{StaticResource gameplayPanelWidth}">
+                    
+                    <!-- Focus effect background -->
+                    <Rectangle x:Name="focusedFill" Fill="{StaticResource focusedFillGradiant}" 
+                              Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    
+                    <ls:LSNineSliceImage x:Name="bg" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                                        ImageSource="{StaticResource SliderBackground}" 
+                                        Height="105" Slices="106,20"/>
 
                 <!-- Left and right buttons overlapping frame edges -->
                 <ls:LSRepeatButton x:Name="PART_DecreaseRepeatButton" HorizontalAlignment="Left" 
                                   Style="{StaticResource SliderRepeatButtonLeftStyle}" 
-                                  Width="140" Height="140" Margin="-20,0,0,0"
+                                  Width="105" Height="105" Margin="-15,0,0,0"
                                   BoundEvent="UILeft" Command="Slider.DecreaseSmall"
                                   IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource TemplatedParent}}" />
                 <ls:LSRepeatButton x:Name="PART_IncreaseRepeatButton" HorizontalAlignment="Right" 
                                   Style="{StaticResource SliderRepeatButtonRightStyle}"
-                                  Width="140" Height="140" Margin="0,0,-20,0"
+                                  Width="105" Height="105" Margin="0,0,-15,0"
                                   BoundEvent="UIRight" Command="Slider.IncreaseSmall"
                                   IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource TemplatedParent}}" />
 
                 <!-- Track with proper spacing for thumb positioning -->
                 <Track Name="PART_Track" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
-                       Margin="140,0,140,0" Height="140">
+                       Margin="105,0,105,0" Height="105">
                     <Track.DecreaseRepeatButton>
                         <RepeatButton Opacity="0" IsHitTestVisible="False" Command="Slider.DecreaseSmall"/>
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
                         <ls:LSThumb x:Name="HighlightTrack" Style="{StaticResource OptionSliderThumbStyle}" 
-                                   Width="144" Height="140" VerticalAlignment="Center"/>
+                                   Width="108" Height="105" VerticalAlignment="Center"/>
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
                         <RepeatButton Opacity="0" IsHitTestVisible="False" Command="Slider.IncreaseSmall"/>
                     </Track.IncreaseRepeatButton>
                 </Track>
-            </Grid>
-        </StackPanel>
+                </Grid>
+            </StackPanel>
         <ControlTemplate.Triggers>
             <!-- Focus effect trigger -->
             <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
                 <Setter TargetName="focusedFill" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            
+            <!-- Disabled appearance when not focused - dim buttons but keep thumb opaque -->
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter TargetName="PART_DecreaseRepeatButton" Property="Opacity" Value="0.4"/>
+                <Setter TargetName="PART_IncreaseRepeatButton" Property="Opacity" Value="0.4"/>
+                <Setter TargetName="PART_Track" Property="IsEnabled" Value="False"/>
             </DataTrigger>
             
             <DataTrigger Binding="{Binding Enabled}" Value="False">

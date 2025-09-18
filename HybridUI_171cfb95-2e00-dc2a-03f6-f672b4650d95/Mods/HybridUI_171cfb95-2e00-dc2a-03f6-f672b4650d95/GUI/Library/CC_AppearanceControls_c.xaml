@@ -234,6 +234,14 @@
                       <ListBoxItem x:Name="maleStrong" Content="4"/>
                   </ListBox>
               </StackPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Hide strong body types for races that don't support additional body shapes -->
+                  <DataTrigger Binding="{Binding SelectedRace.HasAdditionalBodyShapes}" Value="False">
+                      <Setter TargetName="femaleStrong" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="maleStrong" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Identity Selection -->
@@ -381,26 +389,44 @@
             </ControlTemplate>
             
             <!-- Face Tab Components -->
-            <!-- Face  Component -->
+            <!-- Face Carousel Component -->
             <ControlTemplate x:Key="HUI_FaceBoxComponent">
-                <DockPanel>
-                    <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                        <!-- Face Carousel with Grid and Shuffle -->
-                        <ListBox x:Name="faceCarousel" Tag="faces" 
+                <!-- Face Carousel with Header Decorator -->
+                <ContentControl x:Name="faceCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <ListBox x:Name="faceCarousel" Tag="faces" 
                           ItemsSource="{Binding SelectableHeads}"
                           SelectedItem="{Binding SelectedHead}"
                           Template="{StaticResource HUI_CarouselGridTemplate}"
                           Visibility="{Binding SelectableHeads.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                            <b:Interaction.Triggers>
-                                <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                    <ls:BringIntoViewAction TargetName="faceCarousel"/>
-                                </b:DataTrigger>
-                            </b:Interaction.Triggers>
-                        </ListBox>
-                    </StackPanel>
+                    </ListBox>
+                </ContentControl>
+            </ControlTemplate>
 
-
-                </DockPanel>
+            <!-- Face Grid Component -->
+            <ControlTemplate x:Key="HUI_FaceGridComponent">
+                <ListBox x:Name="faceGrid" 
+                         Template="{StaticResource HUI_CarouselExpandedGrid}"
+                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}"
+                         ItemsSource="{Binding SelectableHeads}"
+                         SelectedItem="{Binding SelectedHead}"
+                         Visibility="Collapsed">
+                    <b:Interaction.Triggers>
+                        <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
+                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
+                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value="Visible"/>
+                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
+                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
+                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=faceGrid}"/>
+                        </b:DataTrigger>
+                        
+                        <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
+                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
+                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
+                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
+                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
+                </ListBox>
             </ControlTemplate>
 
             <!-- Skin Colour -->
@@ -427,32 +453,70 @@
                 </StackPanel>
             </ControlTemplate>
 
+            <!-- Maturity/Age Slider -->
             <ControlTemplate x:Key="HUI_MaturityBoxComponent">
-              
+                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                    <Slider x:Name="huiLipColorIntensity" 
+                            DataContext="{Binding ApperanceScalarAge}" 
+                            Style="{StaticResource HUI_CCSliderStyle}"
+                            Tag="{Binding Source='hfcbe9131g86b0g46d7ga4afg5c3301c070bf', Converter={StaticResource TranslatedStringConverter}}"
+                            ls:MoveFocus.Focusable="True"
+                            Focusable="True"
+                            Margin="0,0,0,20"/>
+                </StackPanel>              
             </ControlTemplate>
           
+            <!-- Freckle Quantity Slider -->
             <ControlTemplate x:Key="HUI_FreckleQuantityBoxComponent">
+                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                    <Slider x:Name="huiLipColorIntensity" 
+                            DataContext="{Binding ApperanceScalarFreckles}" 
+                            Style="{StaticResource HUI_CCSliderStyle}"
+                            Tag="{Binding Source='h6a8fb398g7b1ag443egb45eg53c46ebbe9a3', Converter={StaticResource TranslatedStringConverter}}"
+                            ls:MoveFocus.Focusable="True"
+                            Focusable="True"
+                            Margin="0,0,0,20"/>
+                </StackPanel>
             </ControlTemplate>
 
+            <!-- Freckle Intensity Slider -->
             <ControlTemplate x:Key="HUI_FreckleIntensityBoxComponent">
+                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                    <Slider x:Name="huiLipColorIntensity" 
+                            DataContext="{Binding ApperanceScalarFrecklesIntensity}" 
+                            Style="{StaticResource HUI_CCSliderStyle}"
+                            Tag="{Binding Source='h63c9cb05g65f3g439dgb85bg9eb69a2cc894', Converter={StaticResource TranslatedStringConverter}}"
+                            ls:MoveFocus.Focusable="True"
+                            Focusable="True"
+                            Margin="0,0,0,20"/>
+                </StackPanel>
             </ControlTemplate>
 
             <!-- Vitiligo -->
             <ControlTemplate x:Key="HUI_VitiligoBoxComponent">
+                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                    <Slider x:Name="huiLipColorIntensity" 
+                            DataContext="{Binding ApperanceScalarVitiligo}" 
+                            Style="{StaticResource HUI_CCSliderStyle}"
+                            Tag="{Binding Source='h8f8d1cc6g57adg486agbb58gcba376102c37', Converter={StaticResource TranslatedStringConverter}}"
+                            ls:MoveFocus.Focusable="True"
+                            Focusable="True"
+                            Margin="0,0,0,20"/>
+                </StackPanel>
             </ControlTemplate>
 
-            <!-- Lip Options -->
+            <!-- Lip Color -->
             <ControlTemplate x:Key="HUI_LipTintBoxComponent">
-                <StackPanel x:Name="SkinColourContainer">
-                    <ContentControl x:Name="skinColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                <StackPanel x:Name="LipTintContainer">
+                    <ContentControl x:Name="lipTintSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
                         <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='ha96c9b3bg5d8dg4ebbgb7a8gbefe66c7b781', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
                     </ContentControl>
 
-                    <ListBox x:Name="skinColourCarousel" ItemsSource="{Binding SelectableLipsMakeupColours}" SelectedItem="{Binding SelectedLipsMakeupColour}" 
+                    <ListBox x:Name="lipTintCarousel" ItemsSource="{Binding SelectableLipsMakeupColours}" SelectedItem="{Binding SelectedLipsMakeupColour}" 
                              Tag="LipColour" Template="{StaticResource HUI_CarouselColourTemplate}">
                         <b:Interaction.Triggers>
                             <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                <ls:BringIntoViewAction TargetName="lipColourSubheader"/>
+                                <ls:BringIntoViewAction TargetName="lipTintSubheader"/>
                             </b:DataTrigger>
                         </b:Interaction.Triggers>
 
@@ -468,7 +532,6 @@
             <!-- Lip Intensity -->
           <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
             <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
-                <!-- Lip Color Intensity using HUI_SliderTemplate -->
                 <Slider x:Name="huiLipColorIntensity" 
                         DataContext="{Binding AppearanceLipsMakeup.ColorOptions[0]}" 
                         Style="{StaticResource HUI_CCSliderStyle}"
@@ -482,7 +545,6 @@
             <!-- Lip Metallic Finish -->
             <ControlTemplate x:Key="HUI_LipMetallicBoxComponent">
                 <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
-                    <!-- Metallic Intensity using HUI_SliderTemplate -->
                     <Slider x:Name="huiMetallicIntensity" 
                         Tag="{Binding Source='hcdc5c4b6g12d8g4e3bga7a5gccbc0b640e14', Converter={StaticResource TranslatedStringConverter}}"
                             ls:AttachedProperties.InheritedTag="metallicIntensity" 
@@ -497,8 +559,6 @@
             <!-- Lip Glossy Finish -->
             <ControlTemplate x:Key="HUI_LipGlossyBoxComponent">
                 <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
-
-                    <!-- Glossy Intensity using HUI_SliderTemplate -->
                     <Slider x:Name="huiGlossyIntensity" 
                             Tag="{Binding Source='h3f60bd19gd12bg47d9g8f1dg710885f13edc', Converter={StaticResource TranslatedStringConverter}}"
                             ls:AttachedProperties.InheritedTag="glossyIntensity" 
@@ -510,11 +570,53 @@
                 </StackPanel>
             </ControlTemplate>
 
+            <!-- Hair Tab -->
+             
+            <!-- Hair Carousel Component -->
+            <ControlTemplate x:Key="HUI_HairBoxComponent">
+                <!-- Hair Carousel with Header Decorator -->
+                <ContentControl x:Name="hairCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <ListBox x:Name="hairCarousel" Tag="hairs" 
+                          ItemsSource="{Binding SelectableHair}"
+                          SelectedItem="{Binding SelectedHair}"
+                          Template="{StaticResource HUI_CarouselGridTemplate}"
+                          Visibility="{Binding SelectableHair.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                    </ListBox>
+                </ContentControl>
+            </ControlTemplate>
+
+            <!-- Hair Grid Component -->
+            <ControlTemplate x:Key="HUI_HairGridComponent">
+                <ListBox x:Name="hairGrid" 
+                         Template="{StaticResource HUI_CarouselExpandedGrid}"
+                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}"
+                         ItemsSource="{Binding SelectableHair}"
+                         SelectedItem="{Binding SelectedHair}"
+                         Visibility="Collapsed">
+                    <b:Interaction.Triggers>
+                        <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
+                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
+                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value="Visible"/>
+                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Visible"/>
+                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
+                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=hairGrid}"/>
+                        </b:DataTrigger>
+                        
+                        <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
+                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
+                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
+                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
+                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
+                </ListBox>
+            </ControlTemplate>
+
             <!-- Appearance Tab Containers -->
              
 
           <!-- General Appearance Template -->
-           <!-- Name, Randomize, Random Carousel, Body Type, Identity, Voice, Skin Colour, Genitals -->
+           <!-- Name, Randomize, Random Carousel, Body Type, Identity, Voice, Genitals -->
           <ControlTemplate x:Key="GeneralAppearanceTemplate">
               <DockPanel>
                   <Grid>
@@ -525,8 +627,8 @@
                       </Grid.RowDefinitions>
                       
 
-                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0">
-                          <TextBlock ls:TextBlockFormatter.SourceText="General Appearance" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
+                      <ContentControl x:Name="faceAppearanceHeader" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0">
+                          <TextBlock ls:TextBlockFormatter.SourceText="Face Appearance" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
                       </ContentControl>
                       
                       <ScrollViewer Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
@@ -558,6 +660,18 @@
                       </ScrollViewer>
                   </Grid>
               </DockPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Voice visibility - Hide if 1 or less are available -->
+                  <DataTrigger Binding="{Binding Voices.ComboItems.Count, Converter={StaticResource LessThanConverter}, ConverterParameter=2}" Value="True">
+                      <Setter TargetName="voice" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Random appearance visibility -->
+                  <DataTrigger Binding="{Binding HasNewRandomAppearance}" Value="True">
+                      <Setter TargetName="randomizeCharacter" Property="Visibility" Value="Visible"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Face Appearance Template -->
@@ -570,13 +684,16 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                       </Grid.RowDefinitions>
-                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0">
-                          <Control x:Name="faceVisual" Template="{StaticResource HUI_FaceBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                      </ContentControl>
-                      <ScrollViewer x:Name="faceAppearanceScroller" Grid.Row="1" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
-                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1600" Visibility="Visible">
+                      
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <Control x:Name="faceVisual" Template="{StaticResource HUI_FaceBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
-                          <StackPanel Width="{StaticResource gameplayPanelWidth}">
+                      <ScrollViewer x:Name="faceAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
+
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+
+                              <Control x:Name="faceGrid" Template="{StaticResource HUI_FaceGridComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
                               <Control x:Name="skinColour" Template="{StaticResource HUI_SkinColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="maturity" Template="{StaticResource HUI_MaturityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
@@ -594,30 +711,67 @@
               </DockPanel>
               
               <ControlTemplate.Triggers>
-                  <!-- Show integrated face grid when the separate grid is visible -->
-                  <DataTrigger Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Visible">
-                      <Setter TargetName="faceGridContainer" Property="Visibility" Value="Visible"/>
+                  <!-- Dragonborn restrictions -->
+                  <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                      <Setter TargetName="lipMetallic" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="lipGlossy" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="maturity" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="freckleQuantity" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="freckleIntensity" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="vitiligo" Property="Visibility" Value="Collapsed"/>
                   </DataTrigger>
-                  
-                  <!-- Hide integrated face grid when the separate grid is collapsed -->
-                  <DataTrigger Binding="{Binding ElementName=faceGridScrollViewer, Path=Visibility}" Value="Collapsed">
-                      <Setter TargetName="faceGridContainer" Property="Visibility" Value="Collapsed"/>
-                  </DataTrigger>
+
               </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Hair Appearance Template -->
            <!-- Hair, Facial Hair, Hair Colour, Highlights + Intensity, Greying + Intensity -->
           <ControlTemplate x:Key="HairAppearanceTemplate">
-            <Grid Background="Transparent">
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
-                    <TextBlock Text="Hair" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
-                    <TextBlock Text="Hairstyles, hair colors, and facial hair." Foreground="White" Margin="0,0,0,20"/>
-                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
-                        <TextBlock Text="Hair appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-                    </Border>
-                </StackPanel>
-            </Grid>
+              <DockPanel>
+                  <Grid>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                      </Grid.RowDefinitions>
+                      
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <Control x:Name="hairVisual" Template="{StaticResource HUI_HairBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                      <ScrollViewer x:Name="hairAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
+
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+
+                              <Control x:Name="hairGrid" Template="{StaticResource HUI_HairGridComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                              <!-- <Control x:Name="skinColour" Template="{StaticResource HUI_SkinColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="maturity" Template="{StaticResource HUI_MaturityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="freckleQuantity" Template="{StaticResource HUI_FreckleQuantityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="freckleIntensity" Template="{StaticResource HUI_FreckleIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="vitiligo" Template="{StaticResource HUI_VitiligoBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipTint" Template="{StaticResource HUI_LipTintBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipIntensity" Template="{StaticResource HUI_LipIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipMetallic" Template="{StaticResource HUI_LipMetallicBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="lipGlossy" Template="{StaticResource HUI_LipGlossyBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/> -->
+
+                          </StackPanel>
+                      </ScrollViewer>
+                  </Grid>
+              </DockPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Dragonborn restrictions -->
+                  <!-- <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                      <Setter TargetName="lipMetallic" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="lipGlossy" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="maturity" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="freckleQuantity" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="freckleIntensity" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="vitiligo" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger> -->
+
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Eyes Appearance Template -->
