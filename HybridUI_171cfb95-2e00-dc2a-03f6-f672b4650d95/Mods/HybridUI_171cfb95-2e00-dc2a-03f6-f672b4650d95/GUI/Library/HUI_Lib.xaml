@@ -8,6 +8,12 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Images_k.xaml"/>
+        <ResourceDictionary Source="Buttons.xaml"/>
+        <ResourceDictionary Source="OptionTemplates.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <BitmapImage x:Key="WideDivider" UriSource="pack://application:,,,/Core;component/Assets/CC/divider_levelUp.png"/>
 
     <!-- Resources for Face icon sizing -->
@@ -31,6 +37,76 @@
         <Setter Property="Margin" Value="0,20,0,20"/>
     </Style>
     <!-- End CCLib_c direct ports -->
+    <!-- Ported from CCLib_k directly for the sake of HUI_SliderTemplate -->
+    
+    <!-- Large Scalable Repeat Button Template for HUI Sliders -->
+    <ControlTemplate x:Key="HUI_LargeRepeatButtonTemplate" TargetType="ls:LSRepeatButton">
+        <Grid>
+            <Image x:Name="bg" Source="{StaticResource BtnSmallRound}" Stretch="Uniform" Width="72"/>
+            <Image x:Name="img" Source="{DynamicResource ButtonNormal}" Stretch="Uniform" Width="72" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Source" Value="{DynamicResource ButtonDisabled}" TargetName="img"/>
+                <Setter Property="Source" Value="pack://application:,,,/Core;component/Assets/Buttons/btn_small_round_disabled.png" TargetName="bg"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="SliderRepeatButtonLeftStyle" TargetType="ls:LSRepeatButton">
+        <Style.Resources>
+            <BitmapImage x:Key="ButtonNormal" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowL_d.png"/>
+            <BitmapImage x:Key="ButtonHighlight" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowL_h.png"/>
+            <BitmapImage x:Key="ButtonPressed" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowL_h.png"/>
+            <BitmapImage x:Key="ButtonDisabled" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowL_d.png"/>
+        </Style.Resources>
+        <Setter Property="Template" Value="{StaticResource HUI_LargeRepeatButtonTemplate}"/>
+        <Setter Property="SoundID" Value="UI_HUD_Shared_Slider_LeftButton"/>
+    </Style>
+
+    <Style x:Key="SliderRepeatButtonRightStyle" TargetType="ls:LSRepeatButton">
+        <Style.Resources>
+            <BitmapImage x:Key="ButtonNormal" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowR_d.png"/>
+            <BitmapImage x:Key="ButtonHighlight" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowR_h.png"/>
+            <BitmapImage x:Key="ButtonPressed" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowR_h.png"/>
+            <BitmapImage x:Key="ButtonDisabled" UriSource="pack://application:,,,/Core;component/Assets/Options/input_slider_arrowR_d.png"/>
+        </Style.Resources>
+        <Setter Property="Template" Value="{StaticResource HUI_LargeRepeatButtonTemplate}"/>
+        <Setter Property="SoundID" Value="UI_HUD_Shared_Slider_RightButton"/>
+    </Style>
+
+    <Style x:Key="OptionSliderThumbStyle" TargetType="ls:LSThumb">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="SoundID" Value="UI_HUD_Shared_Slider_Thumb"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Grid Width="144" Height="140" ClipToBounds="False">
+                        <Image x:Name="img" Source="pack://application:,,,/Core;component/Assets/Buttons/btn_hudNav_d.png" 
+                               Stretch="Uniform" Width="144" Height="140" VerticalAlignment="Center" />
+                        <Image x:Name="ico" Source="pack://application:,,,/Core;component/Assets/Options/ico_scrubber_d.png" 
+                               Stretch="Uniform" Width="48" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Source" Value="pack://application:,,,/Core;component/Assets/Buttons/btn_hudNav_disabled.png" TargetName="img"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DefaultSliderValueStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="0,0,-38,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="Text" Value="{Binding Value, Converter={StaticResource RoundDownConverter}}"/>
+        <Setter Property="Visibility" Value="{Binding ShowValue, Converter={StaticResource BoolToVisibleConverter}}"/>
+        <Setter Property="FontSize" Value="{StaticResource ScaledDefaultFontSize}"/>
+    </Style>
+    <!-- End CCLib_k direct ports -->
 
     <!-- Decorator for Panel Headers -->
     <!-- Useage:
@@ -6726,5 +6802,131 @@
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <!-- HUI_SliderTemplate - Hybrid Desktop/Controller Style slider -->
+    <ControlTemplate x:Key="HUI_SliderTemplate" TargetType="Slider">
+        <ControlTemplate.Resources>
+            <BitmapImage x:Key="SliderBackground" UriSource="pack://application:,,,/Core;component/Assets/Options/sliderBox_wide_d.png"/>
+        </ControlTemplate.Resources>
+        <StackPanel ls:MoveFocus.Focusable="True" Focusable="True" 
+                   Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Center">
+            <b:Interaction.Triggers>
+                <b:PropertyChangedTrigger Binding="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}">
+                    <ls:LSPlaySound Sound="UI_HUD_SplitItem_Step"/>
+                    <b:InvokeCommandAction Command="{Binding DataContext.AppearanceValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"/>
+                </b:PropertyChangedTrigger>
+            </b:Interaction.Triggers>
+            
+            <!-- Header with subheader and value -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <ContentControl x:Name="PART_SubHeader" Template="{StaticResource HUI_Decorated_Subheader}">
+                    <TextBlock x:Name="PART_SubHeaderText" 
+                              Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                              Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+                
+                <TextBlock x:Name="PART_ValueLabel" 
+                          Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource RoundDownConverter}}"
+                          Foreground="{StaticResource LS_accent100TxtColor}" 
+                          FontSize="{StaticResource ScaledMediumFontSize}"
+                          Margin="40,0,0,0" VerticalAlignment="Center"
+                          HorizontalAlignment="Right" TextAlignment="Left"/>
+            </StackPanel>
+            
+            <!-- Main slider area uses full width -->
+            <Grid x:Name="sliderContainer" HorizontalAlignment="Stretch" Height="140" 
+                  Width="{StaticResource gameplayPanelWidth}">
+                
+                <!-- Focus effect background -->
+                <Rectangle x:Name="focusedFill" Fill="{StaticResource focusedFillGradiant}" 
+                          Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                
+                <ls:LSNineSliceImage x:Name="bg" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                                    ImageSource="{StaticResource SliderBackground}" 
+                                    Height="140" Slices="106,20"/>
+
+                <!-- Left and right buttons overlapping frame edges -->
+                <ls:LSRepeatButton x:Name="PART_DecreaseRepeatButton" HorizontalAlignment="Left" 
+                                  Style="{StaticResource SliderRepeatButtonLeftStyle}" 
+                                  Width="140" Height="140" Margin="-20,0,0,0"
+                                  BoundEvent="UILeft" Command="Slider.DecreaseSmall"
+                                  IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource TemplatedParent}}" />
+                <ls:LSRepeatButton x:Name="PART_IncreaseRepeatButton" HorizontalAlignment="Right" 
+                                  Style="{StaticResource SliderRepeatButtonRightStyle}"
+                                  Width="140" Height="140" Margin="0,0,-20,0"
+                                  BoundEvent="UIRight" Command="Slider.IncreaseSmall"
+                                  IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource TemplatedParent}}" />
+
+                <!-- Track with proper spacing for thumb positioning -->
+                <Track Name="PART_Track" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                       Margin="140,0,140,0" Height="140">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Opacity="0" IsHitTestVisible="False" Command="Slider.DecreaseSmall"/>
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <ls:LSThumb x:Name="HighlightTrack" Style="{StaticResource OptionSliderThumbStyle}" 
+                                   Width="144" Height="140" VerticalAlignment="Center"/>
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Opacity="0" IsHitTestVisible="False" Command="Slider.IncreaseSmall"/>
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </StackPanel>
+        <ControlTemplate.Triggers>
+            <!-- Focus effect trigger -->
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter TargetName="focusedFill" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+            
+            <DataTrigger Binding="{Binding Enabled}" Value="False">
+                <Setter Property="Opacity" Value="{StaticResource DisabledOpacity}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding OptionType}" Value="POINT_AND_CLICK_FREQUENCY">
+                <Setter Property="Style" Value="{StaticResource PointNClickSliderValueStyle}" TargetName="PART_ValueLabel"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding OptionType}" Value="DIALOG_FONT_SIZE">
+                <Setter Property="Style" Value="{StaticResource FontSizeSliderValueStyle}" TargetName="PART_ValueLabel"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding OptionType}" Value="OVERHEAD_FONT_SIZE">
+                <Setter Property="Style" Value="{StaticResource FontSizeSliderValueStyle}" TargetName="PART_ValueLabel"/>
+            </DataTrigger>            
+            <DataTrigger Binding="{Binding OptionType}" Value="BOOK_FONT_SIZE">
+                <Setter Property="Style" Value="{StaticResource FontSizeSliderValueStyle}" TargetName="PART_ValueLabel"/>
+                <Setter Property="Text" TargetName="PART_ValueLabel">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource ParameterizedTranslatedStringConverter}">
+                            <Binding Source="h1169e44bg06ddg4592g8016gfaa0943514c6"/>
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" Converter="{StaticResource AddConverter}" ConverterParameter="{StaticResource IntermediateFontSize}"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding OptionType}" Value="PANNING_SPEED">
+                <Setter Property="Style" Value="{StaticResource CameraPanningSpeedSliderValueStyle}" TargetName="PART_ValueLabel"/>
+            </DataTrigger>
+            
+            <DataTrigger Binding="{Binding OptionType}" Value="UIScaling">
+                <Setter Property="Style" Value="{StaticResource FontSizeSliderValueStyle}" TargetName="PART_ValueLabel"/>
+                <Setter Property="Text" Value="{Binding Value, Converter={StaticResource EnumTranslatedStringConverter}, ConverterParameter='h2e12e1f7g7318g4704ga3efgf4121ab0027a'}" TargetName="PART_ValueLabel"/>
+            </DataTrigger>
+
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bg" Property="ImageSource" Value="pack://application:,,,/Core;component/Assets/Options/sliderBox_wide_h.png"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="HUI_CCSliderStyle" TargetType="{x:Type Slider}">
+        <Setter Property="Template" Value="{StaticResource HUI_SliderTemplate}"/>
+        <Setter Property="Value" Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Setter Property="Minimum" Value="{Binding Min}"/>
+        <Setter Property="Maximum" Value="{Binding Max}"/>
+        <Setter Property="IsSnapToTickEnabled" Value="False"/>
+        <Setter Property="SmallChange" Value="1"/>
+        <Setter Property="LargeChange" Value="1"/>
+        <Setter Property="IsEnabled" Value="{Binding Enabled}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
 
 </ResourceDictionary>

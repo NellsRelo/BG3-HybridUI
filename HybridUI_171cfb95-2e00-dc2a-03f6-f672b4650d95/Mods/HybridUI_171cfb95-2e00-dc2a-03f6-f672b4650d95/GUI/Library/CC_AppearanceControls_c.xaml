@@ -466,15 +466,48 @@
             </ControlTemplate>
 
             <!-- Lip Intensity -->
-            <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
-            </ControlTemplate>
+          <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
+            <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                <!-- Lip Color Intensity using HUI_SliderTemplate -->
+                <Slider x:Name="huiLipColorIntensity" 
+                        DataContext="{Binding AppearanceLipsMakeup.ColorOptions[0]}" 
+                        Style="{StaticResource HUI_CCSliderStyle}"
+                        Tag="{Binding Source='hc93c40a6gf955g459bg835eg11152b6f0683', Converter={StaticResource TranslatedStringConverter}}"
+                        ls:MoveFocus.Focusable="True"
+                        Focusable="True"
+                        Margin="0,0,0,20"/>
+            </StackPanel>
+          </ControlTemplate>
 
             <!-- Lip Metallic Finish -->
             <ControlTemplate x:Key="HUI_LipMetallicBoxComponent">
+                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                    <!-- Metallic Intensity using HUI_SliderTemplate -->
+                    <Slider x:Name="huiMetallicIntensity" 
+                        Tag="{Binding Source='hcdc5c4b6g12d8g4e3bga7a5gccbc0b640e14', Converter={StaticResource TranslatedStringConverter}}"
+                            ls:AttachedProperties.InheritedTag="metallicIntensity" 
+                            DataContext="{Binding AppearanceLipsMakeup.ColorOptions[1]}" 
+                            Style="{StaticResource HUI_CCSliderStyle}"
+                            ls:MoveFocus.Focusable="True"
+                            Focusable="True"
+                            Margin="0,0,0,20"/>
+                </StackPanel>
             </ControlTemplate>
 
             <!-- Lip Glossy Finish -->
             <ControlTemplate x:Key="HUI_LipGlossyBoxComponent">
+                <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+
+                    <!-- Glossy Intensity using HUI_SliderTemplate -->
+                    <Slider x:Name="huiGlossyIntensity" 
+                            Tag="{Binding Source='h3f60bd19gd12bg47d9g8f1dg710885f13edc', Converter={StaticResource TranslatedStringConverter}}"
+                            ls:AttachedProperties.InheritedTag="glossyIntensity" 
+                            DataContext="{Binding AppearanceLipsMakeup.ColorOptions[2]}" 
+                            Style="{StaticResource HUI_CCSliderStyle}"
+                            ls:MoveFocus.Focusable="True"
+                            Focusable="True"
+                            Margin="0,0,0,20"/>
+                </StackPanel>
             </ControlTemplate>
 
             <!-- Appearance Tab Containers -->
