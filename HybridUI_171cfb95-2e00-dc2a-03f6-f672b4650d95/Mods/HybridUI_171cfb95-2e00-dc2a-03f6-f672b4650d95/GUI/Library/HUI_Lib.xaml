@@ -3856,27 +3856,33 @@
                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag, Converter={StaticResource StringToVisibilityConverter}}"
                           Style="{StaticResource gameplayPanelScrollViewerStyle}"
                           VerticalScrollBarVisibility="Auto" Height="Auto"
-                          ls:MoveFocus.Focusable="True" Focusable="True">
-                <StackPanel>
+                          Focusable="False">
+                <StackPanel Focusable="False">
                     <ListBox x:Name="expandedItemGrid" 
                             ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
                             SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                            Style="{StaticResource HUI_AppearanceIconGridStyle}">
+                            Style="{StaticResource HUI_AppearanceIconGridStyle}"
+                            IsSynchronizedWithCurrentItem="True"
+                            KeyboardNavigation.DirectionalNavigation="Continue"
+                            IsTabStop="True">
                         <b:Interaction.Triggers>
                             <b:PropertyChangedTrigger Binding="{Binding ElementName=expandedItemGrid, Path=SelectedItem}">
                                 <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                             </b:PropertyChangedTrigger>
+                            <!-- Focus this grid when it becomes visible -->
+                            <b:PropertyChangedTrigger Binding="{Binding ElementName=expandedGridScrollViewer, Path=Visibility}">
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding RelativeSource={RelativeSource Self}}"/>
+                            </b:PropertyChangedTrigger>
                         </b:Interaction.Triggers>
                     </ListBox>
 
-                    <!-- Collapse Grid Input Binding -->
+                    <!-- Collapse Grid Input Binding - Focus will be handled by appearance templates -->
                     <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=expandedGridScrollViewer, Path=IsVisible}">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="LSInputBindingPressed">
                                 <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Tag" Value=""/>
                                 <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Visibility" Value="Collapsed"/>
                                 <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
-                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
                                 <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                             </b:EventTrigger>
                         </b:Interaction.Triggers>

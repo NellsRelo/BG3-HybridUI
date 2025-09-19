@@ -402,33 +402,6 @@
                 </ContentControl>
             </ControlTemplate>
 
-            <!-- Face Grid Component -->
-            <ControlTemplate x:Key="HUI_FaceGridComponent">
-                <ListBox x:Name="faceGrid" 
-                         Template="{StaticResource HUI_CarouselExpandedGrid}"
-                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}"
-                         ItemsSource="{Binding SelectableHeads}"
-                         SelectedItem="{Binding SelectedHead}"
-                         Visibility="Collapsed">
-                    <b:Interaction.Triggers>
-                        <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
-                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
-                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value="Visible"/>
-                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
-                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
-                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=faceGrid}"/>
-                        </b:DataTrigger>
-                        
-                        <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
-                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
-                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
-                            <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
-                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
-                        </b:DataTrigger>
-                    </b:Interaction.Triggers>
-                </ListBox>
-            </ControlTemplate>
-
             <!-- Skin Colour -->
             <ControlTemplate x:Key="HUI_SkinColourBoxComponent">
                 <StackPanel x:Name="SkinColourContainer">
@@ -585,33 +558,6 @@
                 </ContentControl>
             </ControlTemplate>
 
-            <!-- Hair Grid Component -->
-            <ControlTemplate x:Key="HUI_HairGridComponent">
-                <ListBox x:Name="hairGrid" 
-                         Template="{StaticResource HUI_CarouselExpandedGrid}"
-                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}"
-                         ItemsSource="{Binding SelectableHair}"
-                         SelectedItem="{Binding SelectedHair}"
-                         Visibility="Collapsed">
-                    <b:Interaction.Triggers>
-                        <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
-                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
-                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value="Visible"/>
-                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Visible"/>
-                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
-                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=hairGrid}"/>
-                        </b:DataTrigger>
-                        
-                        <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
-                        <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
-                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
-                            <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
-                            <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
-                        </b:DataTrigger>
-                    </b:Interaction.Triggers>
-                </ListBox>
-            </ControlTemplate>
-
             <!-- Appearance Tab Containers -->
              
 
@@ -626,6 +572,12 @@
                         <RowDefinition Height="*" />
                       </Grid.RowDefinitions>
                       
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
 
                       <ContentControl x:Name="faceAppearanceHeader" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0">
                           <TextBlock ls:TextBlockFormatter.SourceText="Face Appearance" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
@@ -685,6 +637,13 @@
                         <RowDefinition Height="*" />
                       </Grid.RowDefinitions>
                       
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                      
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
                       <Control x:Name="faceVisual" Template="{StaticResource HUI_FaceBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
@@ -693,7 +652,32 @@
 
                           <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
 
-                              <Control x:Name="faceGrid" Template="{StaticResource HUI_FaceGridComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <ListBox x:Name="faceGrid" 
+                                       Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                       ItemsSource="{Binding SelectableHeads}"
+                                       SelectedItem="{Binding SelectedHead}"
+                                       Visibility="Collapsed"
+                                       HorizontalAlignment="Center" 
+                                       Margin="0,0,0,0">
+                                  <b:Interaction.Triggers>
+                                      <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
+                                          <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
+                                          <ls:BringIntoViewAction TargetObject="{Binding ElementName=faceGrid}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
+                                          <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the face carousel when grid closes -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceVisual}"/>
+                                      </b:DataTrigger>
+                                  </b:Interaction.Triggers>
+                              </ListBox>
 
                               <Control x:Name="skinColour" Template="{StaticResource HUI_SkinColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="maturity" Template="{StaticResource HUI_MaturityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
@@ -735,6 +719,13 @@
                         <RowDefinition Height="*" />
                       </Grid.RowDefinitions>
                       
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                      
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
                       <Control x:Name="hairVisual" Template="{StaticResource HUI_HairBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
@@ -743,7 +734,32 @@
 
                           <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
 
-                              <Control x:Name="hairGrid" Template="{StaticResource HUI_HairGridComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <ListBox x:Name="hairGrid" 
+                                       Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                       ItemsSource="{Binding SelectableHair}"
+                                       SelectedItem="{Binding SelectedHair}"
+                                       Visibility="Collapsed"
+                                       HorizontalAlignment="Center" 
+                                       Margin="0,0,0,0">
+                                  <b:Interaction.Triggers>
+                                      <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
+                                          <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
+                                          <ls:BringIntoViewAction TargetObject="{Binding ElementName=hairGrid}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
+                                          <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the hair carousel when grid closes -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
+                                      </b:DataTrigger>
+                                  </b:Interaction.Triggers>
+                              </ListBox>
 
                               <!-- <Control x:Name="skinColour" Template="{StaticResource HUI_SkinColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="maturity" Template="{StaticResource HUI_MaturityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
