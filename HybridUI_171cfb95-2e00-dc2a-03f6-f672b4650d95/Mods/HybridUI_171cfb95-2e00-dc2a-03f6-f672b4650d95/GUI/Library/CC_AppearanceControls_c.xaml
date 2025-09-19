@@ -640,7 +640,7 @@
                       <b:Interaction.Triggers>
                           <!-- Auto-close any open grids when this template loads -->
                           <b:EventTrigger EventName="Loaded">
-                              <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                              <b:ChangePropertyAction TargetName="faceVisual" PropertyName="Tag" Value=""/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
                       
@@ -660,19 +660,28 @@
                                        HorizontalAlignment="Center" 
                                        Margin="0,0,0,0">
                                   <b:Interaction.Triggers>
-                                      <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
+                                      <!-- Show grid when scroller Tag is "ShowFaceGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=faceAppearanceScroller, Path=Tag}" Value="ShowFaceGrid">
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value="Visible"/>
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
-                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
+                                          <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value="FaceGridOpen"/>
                                           <ls:BringIntoViewAction TargetObject="{Binding ElementName=faceGrid}"/>
                                       </b:DataTrigger>
                                       
-                                      <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
+                                      <!-- Hide grid when scroller Tag is "HideFaceGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=faceAppearanceScroller, Path=Tag}" Value="HideFaceGrid">
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
-                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the face carousel when grid closes -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceVisual}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                      <b:DataTrigger Binding="{Binding ElementName=faceGrid, Path=Tag}" Value="GridClosed">
+                                          <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value=""/>
                                           <!-- Set focus back to the face carousel when grid closes -->
                                           <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceVisual}"/>
                                       </b:DataTrigger>
@@ -722,7 +731,7 @@
                       <b:Interaction.Triggers>
                           <!-- Auto-close any open grids when this template loads -->
                           <b:EventTrigger EventName="Loaded">
-                              <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                              <b:ChangePropertyAction TargetName="hairVisual" PropertyName="Tag" Value=""/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
                       
@@ -742,19 +751,28 @@
                                        HorizontalAlignment="Center" 
                                        Margin="0,0,0,0">
                                   <b:Interaction.Triggers>
-                                      <!-- Show grid when CharacterCreation_c Tag is "ShowExpandedGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="ShowExpandedGrid">
+                                      <!-- Show grid when scroller Tag is "ShowHairGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=hairAppearanceScroller, Path=Tag}" Value="ShowHairGrid">
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value="Visible"/>
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Visible"/>
-                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="GridOpen"/>
+                                          <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="HairGridOpen"/>
                                           <ls:BringIntoViewAction TargetObject="{Binding ElementName=hairGrid}"/>
                                       </b:DataTrigger>
                                       
-                                      <!-- Hide grid when CharacterCreation_c Tag is "HideExpandedGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="HideExpandedGrid">
+                                      <!-- Hide grid when scroller Tag is "HideHairGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=hairAppearanceScroller, Path=Tag}" Value="HideHairGrid">
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
-                                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the hair carousel when grid closes -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                      <b:DataTrigger Binding="{Binding ElementName=hairGrid, Path=Tag}" Value="GridClosed">
+                                          <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
                                           <!-- Set focus back to the hair carousel when grid closes -->
                                           <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
                                       </b:DataTrigger>

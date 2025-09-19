@@ -2229,22 +2229,25 @@
                                 <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
                                 <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
                             </StackPanel>
-                                            <!-- Expand Grid Input Binding - Show separate expanded grid -->
+                                            <!-- Expand Grid Input Binding - Use shared scroller element -->
                                             <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <!-- Set a tag on the root element that the faceGrid can bind to -->
-                                                        <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="ShowExpandedGrid"/>
+                                                        <!-- Set Tag on shared scroller element that both carousel and grid can access -->
+                                                        <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value="ShowFaceGrid"/>
+                                                        <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="ShowHairGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
-                                            <!-- Collapse Grid Input Binding - Hide expanded grid from carousel -->
+                                            <!-- Collapse Grid Input Binding - Use shared scroller element -->
                                             <ls:LSInputBinding x:Name="collapseInput" BoundEvent="UICancel" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingPressed">
-                                                        <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                                                        <!-- Set Tag on shared scroller element to close grids -->
+                                                        <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value="HideFaceGrid"/>
+                                                        <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="HideHairGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
@@ -2299,8 +2302,15 @@
                                             <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
                                         </DataTrigger>
                                         
-                                        <!-- Show collapse button when grid is open -->
-                                        <DataTrigger Binding="{Binding ElementName=CharacterCreation_c, Path=Tag}" Value="GridOpen">
+                                        <!-- Show collapse button when face grid is open -->
+                                        <DataTrigger Binding="{Binding ElementName=faceAppearanceScroller, Path=Tag}" Value="FaceGridOpen">
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
+                                        </DataTrigger>
+                                        
+                                        <!-- Show collapse button when hair grid is open -->
+                                        <DataTrigger Binding="{Binding ElementName=hairAppearanceScroller, Path=Tag}" Value="HairGridOpen">
                                             <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
                                             <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
                                             <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
@@ -3848,10 +3858,10 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!-- HUI Separate Expanded Grid Template - Independent from HUI_CarouselHeaderDecorator -->
+    <!-- HUI Separate Expanded Grid Template -->
     <ControlTemplate x:Key="HUI_CarouselExpandedGrid" TargetType="ListBox">
         <Grid>
-            <!-- Grid Selection View - full screen without height constraints -->
+            <!-- Grid Selection View -->
             <ScrollViewer x:Name="expandedGridScrollViewer" 
                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag, Converter={StaticResource StringToVisibilityConverter}}"
                           Style="{StaticResource gameplayPanelScrollViewerStyle}"
@@ -3869,20 +3879,15 @@
                             <b:PropertyChangedTrigger Binding="{Binding ElementName=expandedItemGrid, Path=SelectedItem}">
                                 <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                             </b:PropertyChangedTrigger>
-                            <!-- Focus this grid when it becomes visible -->
-                            <b:PropertyChangedTrigger Binding="{Binding ElementName=expandedGridScrollViewer, Path=Visibility}">
-                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding RelativeSource={RelativeSource Self}}"/>
-                            </b:PropertyChangedTrigger>
                         </b:Interaction.Triggers>
                     </ListBox>
 
-                    <!-- Collapse Grid Input Binding - Focus will be handled by appearance templates -->
+                    <!-- Collapse Grid Input Binding - Set grid to closed state -->
                     <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=expandedGridScrollViewer, Path=IsVisible}">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="LSInputBindingPressed">
-                                <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Tag" Value=""/>
+                                <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Tag" Value="GridClosed"/>
                                 <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Visibility" Value="Collapsed"/>
-                                <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
                                 <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
