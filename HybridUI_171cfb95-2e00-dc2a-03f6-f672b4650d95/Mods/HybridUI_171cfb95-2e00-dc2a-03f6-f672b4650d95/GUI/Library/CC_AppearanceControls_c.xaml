@@ -398,6 +398,12 @@
                           SelectedItem="{Binding SelectedHead}"
                           Template="{StaticResource HUI_CarouselGridTemplate}"
                           Visibility="{Binding SelectableHeads.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                        <b:Interaction.Triggers>
+                            <!-- Focus this carousel when it becomes visible -->
+                            <b:DataTrigger Binding="{Binding Path=Visibility, RelativeSource={RelativeSource Self}}" Value="Visible">
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceCarousel}"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
                     </ListBox>
                 </ContentControl>
             </ControlTemplate>
@@ -576,6 +582,8 @@
                           <!-- Auto-close any open grids when this template loads -->
                           <b:EventTrigger EventName="Loaded">
                               <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                              <!-- Set initial focus to the name input -->
+                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=nameInput}"/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
 
@@ -732,6 +740,8 @@
                           <!-- Auto-close any open grids when this template loads -->
                           <b:EventTrigger EventName="Loaded">
                               <b:ChangePropertyAction TargetName="hairVisual" PropertyName="Tag" Value=""/>
+                              <!-- Set initial focus to the hair carousel -->
+                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
                       
