@@ -448,7 +448,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
-                    <Border x:Name="gridContainer" ls:MoveFocus.Focusable="True" Focusable="True">
+                    <Border x:Name="gridContainer" Focusable="False">
                         <ScrollViewer VerticalScrollBarVisibility="Visible"
                                       HorizontalScrollBarVisibility="Disabled"
                                       Width="{StaticResource gameplayPanelWidth}"
