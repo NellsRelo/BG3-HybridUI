@@ -110,7 +110,7 @@
 
           <!-- Appearance Components -->
 
-          <!-- General Tab Components -->
+        <!-- Input Components -->
           <!-- Name Input -->
           <ControlTemplate x:Key="HUI_NamingBoxComponent">
               <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20">
@@ -199,6 +199,7 @@
                 </ControlTemplate.Triggers>
           </ControlTemplate>
 
+        <!-- Hardcoded Carousels -->
           <!-- Body Type Selection -->
           <ControlTemplate x:Key="HUI_BodyTypeBoxComponent">
               <StackPanel d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}">
@@ -279,6 +280,7 @@
               </StackPanel>
           </ControlTemplate>
 
+        <!-- Dynamic Carousels -->
           <!-- Genitals Selection -->
           <ControlTemplate x:Key="HUI_GenitaliaBoxComponent">
               <StackPanel x:Name="GenitaliaContainer" Visibility="{Binding CanShowGenitalia, Converter={StaticResource BoolToVisibleConverter}}">
@@ -388,7 +390,7 @@
                 </StackPanel>
             </ControlTemplate>
             
-            <!-- Face Tab Components -->
+          <!-- Grid Carousels -->
             <!-- Face Carousel Component -->
             <ControlTemplate x:Key="HUI_FaceBoxComponent">
                 <!-- Face Carousel with Header Decorator -->
@@ -407,7 +409,32 @@
                     </ListBox>
                 </ContentControl>
             </ControlTemplate>
+             
+            <!-- Hair Carousel Component -->
+            <ControlTemplate x:Key="HUI_HairBoxComponent">
+                <!-- Hair Carousel with Header Decorator -->
+                <ContentControl x:Name="hairCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <ListBox x:Name="hairCarousel" Tag="hairs" 
+                          ItemsSource="{Binding SelectableHair}"
+                          SelectedItem="{Binding SelectedHair}"
+                          Template="{StaticResource HUI_CarouselGridTemplate}"
+                          Visibility="{Binding SelectableHair.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                    </ListBox>
+                </ContentControl>
+            </ControlTemplate>
 
+            <!-- Facial Hair Carousel Component -->
+            <ControlTemplate x:Key="HUI_FacialHairBoxComponent">
+                <!-- Facial Hair Carousel with Header Decorator -->
+                    <ListBox x:Name="facialHairCarousel" Tag="facialHairs" 
+                          ItemsSource="{Binding SelectableBeards}"
+                          SelectedItem="{Binding SelectedBeard}"
+                          Template="{StaticResource HUI_CarouselGridTemplate}"
+                          Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                    </ListBox>
+            </ControlTemplate>
+
+          <!-- Colour Carousels -->
             <!-- Skin Colour -->
             <ControlTemplate x:Key="HUI_SkinColourBoxComponent">
                 <StackPanel x:Name="SkinColourContainer">
@@ -432,6 +459,103 @@
                 </StackPanel>
             </ControlTemplate>
 
+            <!-- Lip Color -->
+            <ControlTemplate x:Key="HUI_LipTintBoxComponent">
+                <StackPanel x:Name="LipTintContainer">
+                    <ContentControl x:Name="lipTintSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='ha96c9b3bg5d8dg4ebbgb7a8gbefe66c7b781', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="lipTintCarousel" ItemsSource="{Binding SelectableLipsMakeupColours}" SelectedItem="{Binding SelectedLipsMakeupColour}" 
+                             Tag="LipColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="lipTintSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableLipsMakeupColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+            <!-- Hair Colour -->
+            <ControlTemplate x:Key="HUI_HairColourBoxComponent">
+                <StackPanel x:Name="HairColourContainer">
+                    <ContentControl x:Name="hairColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h6ed36c54g1a3dg4c46g9987gd5882613ae05', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="hairColourCarousel" ItemsSource="{Binding SelectableHairColours}" SelectedItem="{Binding SelectedHairColour}" 
+                             Tag="HairColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="hairColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+            <!-- Hair Greying Colour -->
+            <ControlTemplate x:Key="HUI_HairGreyingColourBoxComponent">
+                <StackPanel x:Name="HairGreyingColourContainer">
+                    <ContentControl x:Name="hairGreyingColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hb85e6761gd73bg4fc1g8ff3g4081ff97694a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="hairGreyingColourCarousel" ItemsSource="{Binding SelectableGrayingColours}" SelectedItem="{Binding SelectedGrayingColour}" 
+                             Tag="HairGreyingColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="hairGreyingColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+            <!-- Hair Highlight Colour -->
+            <ControlTemplate x:Key="HUI_HairHighlightColourBoxComponent">
+                <StackPanel x:Name="HairHighlightColourContainer">
+                    <ContentControl x:Name="hairHighlightColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hb85e6761gd73bg4fc1g8ff3g4081ff97694a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="hairHighlightColourCarousel" ItemsSource="{Binding SelectableHighlightColours}" SelectedItem="{Binding SelectedHighlightColour}" 
+                             Tag="HairHighlightColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="hairHighlightColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+          <!-- Sliders -->
             <!-- Maturity/Age Slider -->
             <ControlTemplate x:Key="HUI_MaturityBoxComponent">
                 <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
@@ -484,30 +608,6 @@
                 </StackPanel>
             </ControlTemplate>
 
-            <!-- Lip Color -->
-            <ControlTemplate x:Key="HUI_LipTintBoxComponent">
-                <StackPanel x:Name="LipTintContainer">
-                    <ContentControl x:Name="lipTintSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='ha96c9b3bg5d8dg4ebbgb7a8gbefe66c7b781', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
-                    </ContentControl>
-
-                    <ListBox x:Name="lipTintCarousel" ItemsSource="{Binding SelectableLipsMakeupColours}" SelectedItem="{Binding SelectedLipsMakeupColour}" 
-                             Tag="LipColour" Template="{StaticResource HUI_CarouselColourTemplate}">
-                        <b:Interaction.Triggers>
-                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                <ls:BringIntoViewAction TargetName="lipTintSubheader"/>
-                            </b:DataTrigger>
-                        </b:Interaction.Triggers>
-
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="SelectionChanged">
-                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableLipsMakeupColours}"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                    </ListBox>
-                </StackPanel>
-            </ControlTemplate>
-
             <!-- Lip Intensity -->
           <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
             <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
@@ -549,78 +649,6 @@
                 </StackPanel>
             </ControlTemplate>
 
-            <!-- Hair Tab -->
-             
-            <!-- Hair Carousel Component -->
-            <ControlTemplate x:Key="HUI_HairBoxComponent">
-                <!-- Hair Carousel with Header Decorator -->
-                <ContentControl x:Name="hairCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                    <ListBox x:Name="hairCarousel" Tag="hairs" 
-                          ItemsSource="{Binding SelectableHair}"
-                          SelectedItem="{Binding SelectedHair}"
-                          Template="{StaticResource HUI_CarouselGridTemplate}"
-                          Visibility="{Binding SelectableHair.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                    </ListBox>
-                </ContentControl>
-            </ControlTemplate>
-            <ControlTemplate x:Key="HUI_FacialHairBoxComponent">
-                <!-- Facial Hair Carousel with Header Decorator -->
-                    <ListBox x:Name="facialHairCarousel" Tag="facialHairs" 
-                          ItemsSource="{Binding SelectableBeards}"
-                          SelectedItem="{Binding SelectedBeard}"
-                          Template="{StaticResource HUI_CarouselGridTemplate}"
-                          Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                    </ListBox>
-            </ControlTemplate>
-
-            <!-- Hair Colour -->
-            <ControlTemplate x:Key="HUI_HairColourBoxComponent">
-                <StackPanel x:Name="HairColourContainer">
-                    <ContentControl x:Name="hairColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h6ed36c54g1a3dg4c46g9987gd5882613ae05', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
-                    </ContentControl>
-
-                    <ListBox x:Name="hairColourCarousel" ItemsSource="{Binding SelectableHairColours}" SelectedItem="{Binding SelectedHairColour}" 
-                             Tag="HairColour" Template="{StaticResource HUI_CarouselColourTemplate}">
-                        <b:Interaction.Triggers>
-                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                <ls:BringIntoViewAction TargetName="hairColourSubheader"/>
-                            </b:DataTrigger>
-                        </b:Interaction.Triggers>
-
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="SelectionChanged">
-                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                    </ListBox>
-                </StackPanel>
-            </ControlTemplate>
-
-            <!-- Hair Greying Colour -->
-            <ControlTemplate x:Key="HUI_HairGreyingColourBoxComponent">
-                <StackPanel x:Name="HairGreyingColourContainer">
-                    <ContentControl x:Name="hairGreyingColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hb85e6761gd73bg4fc1g8ff3g4081ff97694a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
-                    </ContentControl>
-
-                    <ListBox x:Name="hairGreyingColourCarousel" ItemsSource="{Binding SelectableGrayingColours}" SelectedItem="{Binding SelectedGrayingColour}" 
-                             Tag="HairGreyingColour" Template="{StaticResource HUI_CarouselColourTemplate}">
-                        <b:Interaction.Triggers>
-                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                <ls:BringIntoViewAction TargetName="hairGreyingColourSubheader"/>
-                            </b:DataTrigger>
-                        </b:Interaction.Triggers>
-
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="SelectionChanged">
-                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                    </ListBox>
-                </StackPanel>
-            </ControlTemplate>
-
             <!-- Hair Greying Slider -->
             <ControlTemplate x:Key="HUI_HairGreyingIntensityBoxComponent">
                 <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
@@ -632,30 +660,6 @@
                             Focusable="True"
                             Margin="0,0,0,20"/>
                 </StackPanel>              
-            </ControlTemplate>
-
-            <!-- Hair Highlight Colour -->
-            <ControlTemplate x:Key="HUI_HairHighlightColourBoxComponent">
-                <StackPanel x:Name="HairHighlightColourContainer">
-                    <ContentControl x:Name="hairHighlightColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hb85e6761gd73bg4fc1g8ff3g4081ff97694a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
-                    </ContentControl>
-
-                    <ListBox x:Name="hairHighlightColourCarousel" ItemsSource="{Binding SelectableHighlightColours}" SelectedItem="{Binding SelectedHighlightColour}" 
-                             Tag="HairHighlightColour" Template="{StaticResource HUI_CarouselColourTemplate}">
-                        <b:Interaction.Triggers>
-                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                <ls:BringIntoViewAction TargetName="hairHighlightColourSubheader"/>
-                            </b:DataTrigger>
-                        </b:Interaction.Triggers>
-
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="SelectionChanged">
-                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
-                    </ListBox>
-                </StackPanel>
             </ControlTemplate>
 
             <!-- Hair Highlight Slider -->
@@ -811,10 +815,6 @@
                               <Control x:Name="freckleQuantity" Template="{StaticResource HUI_FreckleQuantityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="freckleIntensity" Template="{StaticResource HUI_FreckleIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="vitiligo" Template="{StaticResource HUI_VitiligoBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                              <!-- <Control x:Name="lipTint" Template="{StaticResource HUI_LipTintBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                              <Control x:Name="lipIntensity" Template="{StaticResource HUI_LipIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                              <Control x:Name="lipMetallic" Template="{StaticResource HUI_LipMetallicBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                              <Control x:Name="lipGlossy" Template="{StaticResource HUI_LipGlossyBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/> -->
 
                           </StackPanel>
                       </ScrollViewer>
