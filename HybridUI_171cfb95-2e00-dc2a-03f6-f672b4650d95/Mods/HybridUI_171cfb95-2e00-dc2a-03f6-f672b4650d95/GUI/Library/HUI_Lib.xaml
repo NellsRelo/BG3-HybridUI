@@ -631,6 +631,30 @@
                                   CommandParameter="{Binding DataContext.Voices, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"
                                   SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed"/>
 
+                <!-- Heterochromia Toggle Buttons (collapsed by default) -->
+                <ls:LSRepeatButton x:Name="heterochromiaLeftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed">
+                    <ls:LSRepeatButton.RenderTransform>
+                        <ScaleTransform ScaleX="-1" CenterX="32"/>
+                    </ls:LSRepeatButton.RenderTransform>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:ChangePropertyAction TargetObject="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" PropertyName="HeterochromiaEnabled" Value="False"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSRepeatButton>
+                
+                <ls:LSRepeatButton x:Name="heterochromiaRightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" 
+                                  SoundID="{DynamicResource CarouselButtonSoundEvent}" Visibility="Collapsed">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:ChangePropertyAction TargetObject="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" PropertyName="HeterochromiaEnabled" Value="True"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSRepeatButton>
+
                 <!-- Randomize Buttons: Use RandomCharacter command with prev/next parameters -->
                 <ls:LSRepeatButton x:Name="randomizeLeftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" 
                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" 
@@ -838,6 +862,15 @@
                 <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="bodyTypeLeftBtn" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="bodyTypeRightBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="cTxt" Property="Text" Value="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
+            </DataTrigger>
+
+            <!-- Heterochromia Tag: Show Heterochromia buttons, hide default buttons, use Content for text -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Heterochromia">
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="heterochromiaLeftBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="heterochromiaRightBtn" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="cTxt" Property="Text" Value="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
             </DataTrigger>
             
@@ -3936,51 +3969,6 @@
         </Border>
     </ControlTemplate>
 
-    <!-- Custom Carousel Button Template for Color Selection -->
-    <!-- Extends CarouselButtonTemplate with subtle rounded corners for pill-like appearance -->
-    <ControlTemplate x:Key="HUI_CarouselColourButtonTemplate" TargetType="ContentControl">
-        <Grid Width="1180" MinHeight="125" Margin="{StaticResource CClistPadding}">
-            <!-- Rounded background container with subtle ornate styling -->
-            <Border CornerRadius="48" BorderBrush="#30808080" BorderThickness="1">
-                <Border.Background>
-                    <ImageBrush x:Name="backgroundBrush" ImageSource="{StaticResource CarouselButtonBG}" Stretch="Fill"/>
-                </Border.Background>
-                <Border.Effect>
-                    <DropShadowEffect ShadowDepth="3" Direction="315" Color="#60000000" 
-                                    Opacity="0.4" BlurRadius="6"/>
-                </Border.Effect>
-            </Border>
-            
-            <!-- Subtle inner bevel for crafted appearance -->
-            <Border CornerRadius="44" BorderThickness="1" BorderBrush="#15FFFFFF" 
-                    Margin="1" IsHitTestVisible="False"/>
-            
-            <!-- Very subtle outer glow for mystique -->
-            <Border CornerRadius="49" BorderThickness="1" BorderBrush="#20D4AF37" 
-                    Margin="-1" IsHitTestVisible="False"/>
-            
-            <!-- Focus elements identical to regular carousel -->
-            <Rectangle x:Name="focusedFill" Fill="{StaticResource focusedFillGradiant}" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Control x:Name="Frame" Visibility="Collapsed" Style="{StaticResource FocusableBorderCarouselStyle}" />
-
-            <ContentPresenter x:Name="content" IsEnabled="True"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding Tag, ElementName=base}" Value="notEnabled">
-                <Setter TargetName="content" Property="IsEnabled" Value="False"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
-                <Setter TargetName="content" Property="IsEnabled" Value="True"/>
-                <Setter TargetName="Frame" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="focusedFill" Property="Visibility" Value="Visible"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding DataContext.LevelUpStep, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Value="Started">
-                <Setter TargetName="backgroundBrush" Property="ImageSource" Value="{StaticResource ListButtonBg}"/>
-                <Setter TargetName="Frame" Property="Visibility" Value="Hidden"/>
-            </DataTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
     <!-- HUI Color Carousel Template -->
     <!-- A carousel with color preview using custom rounded button template -->
     <ControlTemplate x:Key="HUI_CarouselColourTemplate" TargetType="ListBox">
@@ -4001,7 +3989,7 @@
                             </b:Interaction.Triggers>
                             <ListBox.Template>
                                 <ControlTemplate>
-                                    <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource HUI_CarouselColourButtonTemplate}">
+                                    <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource CarouselButtonTemplate}">
                                         <Grid Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Center">
                                             <!-- Random number generators (hidden) -->
                                             <StackPanel Visibility="Collapsed">
