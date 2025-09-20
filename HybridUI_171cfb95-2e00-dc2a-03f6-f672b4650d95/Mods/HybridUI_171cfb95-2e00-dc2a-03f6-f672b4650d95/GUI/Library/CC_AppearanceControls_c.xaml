@@ -762,6 +762,9 @@
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
                       <Control x:Name="faceVisual" Template="{StaticResource HUI_FaceBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
+                      <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
+                      <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
+                      
                       <ScrollViewer x:Name="faceAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
                                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
 
@@ -788,8 +791,8 @@
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
                                           <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value=""/>
-                                          <!-- Set focus back to the face carousel when grid closes -->
-                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceVisual}"/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
                                       
                                       <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
@@ -797,8 +800,8 @@
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
                                           <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value=""/>
-                                          <!-- Set focus back to the face carousel when grid closes -->
-                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=faceVisual}"/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
                                   </b:Interaction.Triggers>
                               </ListBox>
@@ -847,14 +850,16 @@
                           <!-- Auto-close any open grids when this template loads -->
                           <b:EventTrigger EventName="Loaded">
                               <b:ChangePropertyAction TargetName="hairVisual" PropertyName="Tag" Value=""/>
-                              <!-- Set initial focus to the hair carousel -->
-                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
+                              <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
                       
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
                       <Control x:Name="hairVisual" Template="{StaticResource HUI_HairBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
+                      <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
+                      <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
+                      
                       <ScrollViewer x:Name="hairAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
                                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
 
@@ -881,8 +886,8 @@
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
                                           <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
-                                          <!-- Set focus back to the hair carousel when grid closes -->
-                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
                                       
                                       <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
@@ -890,8 +895,8 @@
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
                                           <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
-                                          <!-- Set focus back to the hair carousel when grid closes -->
-                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=hairVisual}"/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
                                   </b:Interaction.Triggers>
                               </ListBox>
@@ -904,7 +909,7 @@
                                        SelectedItem="{Binding SelectedBeard}"
                                        Visibility="Collapsed"
                                        HorizontalAlignment="Center" 
-                                       Margin="0,0,0,0">
+                                       Margin="0,20,0,20">
                                   <b:Interaction.Triggers>
                                       <!-- Show grid when scroller Tag is "ShowHairGrid" -->
                                       <b:DataTrigger Binding="{Binding ElementName=hairAppearanceScroller, Path=Tag}" Value="ShowFacialHairGrid">
@@ -919,8 +924,8 @@
                                           <b:ChangePropertyAction TargetName="facialHairGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="facialHairGrid" PropertyName="Visibility" Value="Collapsed"/>
                                           <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
-                                          <!-- Set focus back to the hair carousel when grid closes -->
-                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=facialHairVisual}"/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
                                       
                                       <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
@@ -928,8 +933,8 @@
                                           <b:ChangePropertyAction TargetName="facialHairGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="facialHairGrid" PropertyName="Visibility" Value="Collapsed"/>
                                           <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value=""/>
-                                          <!-- Set focus back to the hair carousel when grid closes -->
-                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=facialHairVisual}"/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
                                   </b:Interaction.Triggers>
                               </ListBox>
