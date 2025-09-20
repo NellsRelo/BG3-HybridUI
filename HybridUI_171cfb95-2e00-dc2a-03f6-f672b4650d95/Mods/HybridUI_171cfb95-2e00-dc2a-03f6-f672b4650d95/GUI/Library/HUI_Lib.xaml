@@ -2188,7 +2188,7 @@
                         Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                             <ListBox.Template>
                                 <ControlTemplate>
-                                    <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
+                                    <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True">
                                         <Grid>
                                             <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" SoundID="{DynamicResource CarouselButtonSoundEvent}">
                                                 <ls:LSRepeatButton.RenderTransform>
@@ -2234,8 +2234,8 @@
                                             <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <!-- Store this carousel as the focused one for later restoration -->
-                                                        <b:ChangePropertyAction TargetName="focusedCarouselStorage" PropertyName="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                        <!-- Store carousel tag instead of name to identify specific carousel -->
+                                                        <b:ChangePropertyAction TargetName="focusedCarouselStorage" PropertyName="Tag" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/>
                                                         <!-- Set Tag on shared scroller element that both carousel and grid can access -->
                                                         <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value="ShowFaceGrid"/>
                                                         <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="ShowHairGrid"/>
@@ -2248,8 +2248,8 @@
                                             <ls:LSInputBinding x:Name="facialHairExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <!-- Store this carousel as the focused one for later restoration -->
-                                                        <b:ChangePropertyAction TargetName="focusedCarouselStorage" PropertyName="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                        <!-- Store carousel tag instead of name to identify specific carousel -->
+                                                        <b:ChangePropertyAction TargetName="focusedCarouselStorage" PropertyName="Tag" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/>
                                                         <!-- Set Tag to show facial hair grid -->
                                                         <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="ShowFacialHairGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
@@ -2392,6 +2392,18 @@
                                             <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
                                             <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
+
+                                        <!-- Conditional Template Assignment based on carousel Name -->
+                                        <!-- Face carousel uses ListButtonTemplate -->
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="faceCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource ListButtonTemplate}"/>
+                                        </DataTrigger>
+                                        
+
+                                        <!-- Default template for all other carousels (including facialHairCarousel) -->
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </ListBox.Template>
