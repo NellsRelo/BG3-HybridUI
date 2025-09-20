@@ -2347,6 +2347,12 @@
                                             <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                         
+                                        <!-- Disable carousel and buttons when grid is visible AND carousel is not focused -->
+                                        <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="False">
+                                            <Setter TargetName="leftBtn" Property="IsEnabled" Value="False"/>
+                                            <Setter TargetName="rightBtn" Property="IsEnabled" Value="False"/>
+                                        </DataTrigger>
+
                                         <!-- Show expand button when focused and grid is not open -->
                                         <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
                                             <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
@@ -2425,6 +2431,18 @@
                                             <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
                                             <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
+
+                                        <!-- Conditional Template Assignment based on carousel Name -->
+                                        <!-- Face carousel uses ListButtonTemplate -->
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="faceCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource ListButtonTemplate}"/>
+                                        </DataTrigger>
+                                        
+
+                                        <!-- Default template for all other carousels (including facialHairCarousel) -->
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </ListBox.Template>
