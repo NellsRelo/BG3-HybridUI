@@ -2263,45 +2263,59 @@
                                 <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
                                 <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
                             </StackPanel>
-                                            <!-- Expand Grid Input Binding - Use shared scroller element -->
-                                            <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}">
+                                            <!-- Expand Grid Input Binding - Show external grid via messaging -->
+                                            <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <!-- Store this carousel as the focused one for later restoration -->
-                                                        <b:ChangePropertyAction TargetName="focusedCarouselStorage" PropertyName="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                                                        <!-- Set Tag on shared scroller element that both carousel and grid can access -->
-                                                        <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value="ShowFaceGrid"/>
-                                                        <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="ShowHairGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
-                                            <!-- Facial Hair specific expand input - shows facial hair grid -->
+                                            <!-- Face carousel specific expand input -->
+                                            <ls:LSInputBinding x:Name="faceExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="faceGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Hair carousel specific expand input -->
+                                            <ls:LSInputBinding x:Name="hairExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="hairGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Facial Hair specific expand input -->
                                             <ls:LSInputBinding x:Name="facialHairExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <!-- Store this carousel as the focused one for later restoration -->
-                                                        <b:ChangePropertyAction TargetName="focusedCarouselStorage" PropertyName="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                                                        <!-- Set Tag to show facial hair grid -->
-                                                        <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="ShowFacialHairGrid"/>
+                                                        <b:ChangePropertyAction TargetName="facialHairGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="facialHairGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
-                                            <!-- Collapse Grid Input Binding - Use shared scroller element -->
-                                            <ls:LSInputBinding x:Name="collapseInput" BoundEvent="UICancel" IsEnabled="False">
+                                            <!-- Makeup carousel specific expand input -->
+                                            <ls:LSInputBinding x:Name="makeupExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="LSInputBindingPressed">
-                                                        <!-- Set Tag on shared scroller element to close grids -->
-                                                        <b:ChangePropertyAction TargetName="faceAppearanceScroller" PropertyName="Tag" Value="HideFaceGrid"/>
-                                                        <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="HideHairGrid"/>
-                                                        <b:ChangePropertyAction TargetName="hairAppearanceScroller" PropertyName="Tag" Value="HideFacialHairGrid"/>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="makeupGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="makeupGrid"/>
                                                         <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
+
 
                                             
                                             <!-- Shuffle Input Binding for ItemsSource-based carousels -->
@@ -2309,7 +2323,6 @@
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingPressed">
                                                         <!-- Force RandomConverter re-evaluation by temporarily changing SelectedIndex -->
-                                                        <!-- This triggers the binding since RandomConverter source is now SelectedIndex -->
                                                         <b:ChangePropertyAction PropertyName="SelectedIndex" 
                                                                                TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                                                                Value="-1"/>
@@ -2358,27 +2371,7 @@
                                             <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
                                         </DataTrigger>
                                         
-                                        <!-- Show collapse button when face grid is open (only for face carousels) -->
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding ElementName=faceAppearanceScroller, Path=Tag}" Value="FaceGridOpen"/>
-                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="faces"/>
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
-                                            <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
-                                        </MultiDataTrigger>
-                                        
-                                        <!-- Show collapse button when hair grid is open (only for hair carousels) -->
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding ElementName=hairAppearanceScroller, Path=Tag}" Value="HairGridOpen"/>
-                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="hairs"/>
-                                            </MultiDataTrigger.Conditions>
-                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
-                                            <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
-                                        </MultiDataTrigger>
+
 
                                         <!-- Show shuffle action when focused and has multiple items available -->
                                         <MultiDataTrigger>
@@ -2411,35 +2404,47 @@
                                             <Setter TargetName="shuffleInput" Property="IsEnabled" Value="False"/>
                                         </DataTrigger>
 
-                                        <!-- Enable facial hair expand input for facial hair carousels -->
+
+
+                                        <!-- Enable expand input for face carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="faces"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="faceExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+                                        
+                                        <!-- Enable expand input for hair carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="hairs"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="hairExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+                                        
+                                        <!-- Enable expand input for facial hair carousels -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairs"/>
                                                 <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="facialHairExpandInput" Property="IsEnabled" Value="True"/>
-                                            <Setter TargetName="expandInput" Property="IsEnabled" Value="False"/>
                                         </MultiDataTrigger>
                                         
-                                        <!-- Show collapse button when facial hair grid is open (only for facial hair carousels) -->
+                                        <!-- Enable expand input for makeup carousels -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding ElementName=hairAppearanceScroller, Path=Tag}" Value="FacialHairGridOpen"/>
-                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairs"/>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="makeup"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
                                             </MultiDataTrigger.Conditions>
-                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
-                                            <Setter TargetName="collapseInput" Property="IsEnabled" Value="True"/>
+                                            <Setter TargetName="makeupExpandInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
-
-                                        <!-- Conditional Template Assignment based on carousel Name -->
-                                        <!-- Face carousel uses ListButtonTemplate -->
-                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="faceCarousel">
-                                            <Setter TargetName="base" Property="Template" Value="{StaticResource ListButtonTemplate}"/>
-                                        </DataTrigger>
                                         
 
-                                        <!-- Default template for all other carousels (including facialHairCarousel) -->
+
+                                        <!-- Facial Hair Carousel needs CarouselButton Appearance -->
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
                                         </DataTrigger>
@@ -2447,7 +2452,6 @@
                                 </ControlTemplate>
                             </ListBox.Template>
                         </ListBox>
-
 
             </DockPanel>
         </Grid>
@@ -3961,7 +3965,7 @@
             <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch" Focusable="False" >
                         <ListBox x:Name="expandedItemGrid" 
                                 ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
-                                SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
+                                SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem, Mode=TwoWay}"
                                 Style="{StaticResource HUI_AppearanceIconGridStyle}"
                                 IsSynchronizedWithCurrentItem="True"
                                 KeyboardNavigation.DirectionalNavigation="Continue"

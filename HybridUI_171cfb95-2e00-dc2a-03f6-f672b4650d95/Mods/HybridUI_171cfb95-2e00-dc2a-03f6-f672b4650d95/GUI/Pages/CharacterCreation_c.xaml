@@ -667,7 +667,7 @@
                                                     <ListBoxItem x:Name="generalTab" Tag="general" Content="{Binding Source=h4c12a52dgcd71g43b9ga266gf506b54b0c55, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="faceTab" Tag="face" Content="{Binding Source=h1cb3665cgbe61g4230g8861g9bbfa408442b, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="hairTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="eyesTab" Tag="eyes" Content="{Binding Source=h0a5735bfg27d4g4761gb6a8ga5605f9d4afa, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="makeupTab" Tag="makeup" Content="{Binding Source=hbbddf3e9g352fg461fg8761gbb5256ebd9c4, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="accessoriesTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="featuresTab" Tag="features" Content="{Binding Source=h97cb756egd22dg488aga292g7cd93aeaaa6e, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="passiveFeaturesTab" Tag="passivefeatures" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}"/>
@@ -1471,8 +1471,8 @@
                                     <Setter TargetName="appearanceContentsPanel" Property="Template" Value="{StaticResource HairAppearanceTemplate}"/>
                                 </DataTrigger>
 
-                                <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="eyes">
-                                    <Setter TargetName="appearanceContentsPanel" Property="Template" Value="{StaticResource EyesAppearanceTemplate}"/>
+                                <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="makeup">
+                                    <Setter TargetName="appearanceContentsPanel" Property="Template" Value="{StaticResource MakeupAppearanceTemplate}"/>
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="accessories">
