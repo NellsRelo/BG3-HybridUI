@@ -134,14 +134,42 @@
                   </ContentControl>
 
                   <ListBox x:Name="showAncestryCarousel" Margin="0,12,0,0" 
-                           Tag="ShowAncestry" Template="{StaticResource HUI_CarouselTemplate}"
-                           SelectedIndex="{Binding AppearancePassive.EmptyMaterialSelected, Mode=TwoWay, Converter={StaticResource InvertBoolToIntConverter}, FallbackValue=0}">
+                           Tag="ShowAncestry" Template="{StaticResource HUI_CarouselTemplate}" 
+                           SelectedIndex="0">
                       <b:Interaction.Triggers>
                           <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
                               <ls:BringIntoViewAction TargetName="showAncestrySubheader"/>
                           </b:DataTrigger>
                           
+                          <!-- Set SelectedIndex based on EmptyMaterialSelected -->
+                          <b:DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
+                              <b:ChangePropertyAction PropertyName="SelectedIndex" Value="0"/>
+                          </b:DataTrigger>
+                          <b:DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="False">
+                              <b:ChangePropertyAction PropertyName="SelectedIndex" Value="1"/>
+                          </b:DataTrigger>
+                          
                           <b:EventTrigger EventName="SelectionChanged">
+                              <b:Interaction.Behaviors>
+                                  <b:ConditionBehavior>
+                                      <b:ConditionalExpression>
+                                          <b:ComparisonCondition LeftOperand="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=ListBox}}" Operator="Equal" RightOperand="0"/>
+                                      </b:ConditionalExpression>
+                                  </b:ConditionBehavior>
+                              </b:Interaction.Behaviors>
+                              <b:ChangePropertyAction TargetObject="{Binding AppearancePassive}" PropertyName="EmptyMaterialSelected" Value="True"/>
+                              <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
+                          </b:EventTrigger>
+                          
+                          <b:EventTrigger EventName="SelectionChanged">
+                              <b:Interaction.Behaviors>
+                                  <b:ConditionBehavior>
+                                      <b:ConditionalExpression>
+                                          <b:ComparisonCondition LeftOperand="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=ListBox}}" Operator="Equal" RightOperand="1"/>
+                                      </b:ConditionalExpression>
+                                  </b:ConditionBehavior>
+                              </b:Interaction.Behaviors>
+                              <b:ChangePropertyAction TargetObject="{Binding AppearancePassive}" PropertyName="EmptyMaterialSelected" Value="False"/>
                               <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
