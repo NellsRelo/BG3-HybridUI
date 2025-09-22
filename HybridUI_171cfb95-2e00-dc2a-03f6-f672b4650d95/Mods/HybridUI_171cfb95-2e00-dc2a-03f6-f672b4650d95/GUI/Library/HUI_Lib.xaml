@@ -481,20 +481,13 @@
         <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
         <!-- Configure ListBox navigation to allow individual item focus -->
         <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Continue"/>
-        <!-- Configure virtualization for better scrolling behavior -->
-        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
-        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
-        <Setter Property="VirtualizingPanel.CacheLength" Value="20,10"/>
-        <Setter Property="VirtualizingPanel.CacheLengthUnit" Value="Item"/>
-        <!-- Template with ScrollViewer for proper scrolling -->
+        <!-- Configure virtualization for better scrolling behavior - disabled for main ScrollViewer integration -->
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="False"/>
+        <!-- Template without ScrollViewer - relies on parent ScrollViewer -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                                  HorizontalScrollBarVisibility="Disabled"
-                                  CanContentScroll="True">
-                        <ItemsPresenter />
-                    </ScrollViewer>
+                    <ItemsPresenter />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -4005,9 +3998,9 @@
                                 SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
                                 Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource.Count, Converter={StaticResource CountToVisibilityConverter}}">
                             <b:Interaction.Triggers>
-                                <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                    <ls:BringIntoViewAction TargetName="carouselDisplay"/>
-                                </b:DataTrigger>
+                                <b:EventTrigger EventName="GotFocus">
+                                    <ls:BringIntoViewAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/>
+                                </b:EventTrigger>
                             </b:Interaction.Triggers>
                             <ListBox.Template>
                                 <ControlTemplate>
@@ -6806,22 +6799,20 @@
                                   HorizontalAlignment="Center" 
                                   Margin="0,10,0,20"/>
                     
-                    <Grid x:Name="colorGridScrollViewer" MaxHeight="860" Height="Auto">                        
-                        <ListBox x:Name="colorGrid" 
-                                ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}" 
-                                SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                                Style="{StaticResource HUI_ColorGridStyle}"
-                                >
-                            <b:Interaction.Triggers>
-                                <b:EventTrigger EventName="Loaded">
-                                    <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
-                                </b:EventTrigger>
-                                <b:PropertyChangedTrigger Binding="{Binding ElementName=colorGrid, Path=SelectedItem}">
-                                    <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                </b:PropertyChangedTrigger>
-                            </b:Interaction.Triggers>
-                        </ListBox>
-                    </Grid>
+                    <ListBox x:Name="colorGrid" 
+                            ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}" 
+                            SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
+                            Style="{StaticResource HUI_ColorGridStyle}"
+                            >
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Loaded">
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
+                            </b:EventTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding ElementName=colorGrid, Path=SelectedItem}">
+                                <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                            </b:PropertyChangedTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
 
                     <!-- Collapse Grid Input Binding -->
                     <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=colorGridContainer, Path=IsVisible}">

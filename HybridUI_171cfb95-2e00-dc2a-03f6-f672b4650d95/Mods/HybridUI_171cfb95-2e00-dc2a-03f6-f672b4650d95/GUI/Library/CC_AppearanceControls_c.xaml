@@ -371,13 +371,24 @@
 
             <!-- Facial Hair Carousel Component -->
             <ControlTemplate x:Key="HUI_FacialHairBoxComponent">
+              <StackPanel>
+                
+                <ContentControl x:Name="facialHairSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h5060d1edg2799g4388g9203gc42e380c68f8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
                 <!-- Facial Hair Carousel with Header Decorator -->
-                    <ListBox x:Name="facialHairCarousel" Tag="facialHairs" 
-                          ItemsSource="{Binding SelectableBeards}"
-                          SelectedItem="{Binding SelectedBeard}"
-                          Template="{StaticResource HUI_CarouselGridTemplate}"
-                          Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                    </ListBox>
+                <ListBox x:Name="facialHairCarousel" Tag="facialHairs" 
+                      ItemsSource="{Binding SelectableBeards}"
+                      SelectedItem="{Binding SelectedBeard}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}"
+                      Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="facialHairSubheader"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
             </ControlTemplate>
 
             <!-- Makeup Carousel Component -->
@@ -408,13 +419,7 @@
                     </ContentControl>
 
                     <ListBox x:Name="skinColourCarousel" ItemsSource="{Binding SelectableSkinColours}" SelectedItem="{Binding SelectedSkinColour}" 
-                             Tag="SkinColour" Template="{StaticResource HUI_CarouselColourTemplate}">
-                        <b:Interaction.Triggers>
-                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                                <ls:BringIntoViewAction TargetName="skinColourSubheader"/>
-                            </b:DataTrigger>
-                        </b:Interaction.Triggers>
-
+                             Tag="{Binding ElementName=skinColourSubheader}" Template="{StaticResource HUI_CarouselColourTemplate}">
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
                                 <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableSkinColours}"/>
@@ -434,9 +439,9 @@
                     <ListBox x:Name="lipTintCarousel" ItemsSource="{Binding SelectableLipsMakeupColours}" SelectedItem="{Binding SelectedLipsMakeupColour}" 
                              Tag="LipColour" Template="{StaticResource HUI_CarouselColourTemplate}">
                         <b:Interaction.Triggers>
-                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                            <b:EventTrigger EventName="GotFocus">
                                 <ls:BringIntoViewAction TargetName="lipTintSubheader"/>
-                            </b:DataTrigger>
+                            </b:EventTrigger>
                         </b:Interaction.Triggers>
 
                         <b:Interaction.Triggers>
@@ -500,7 +505,7 @@
             <ControlTemplate x:Key="HUI_HairHighlightColourBoxComponent">
                 <StackPanel x:Name="HairHighlightColourContainer">
                     <ContentControl x:Name="hairHighlightColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hb85e6761gd73bg4fc1g8ff3g4081ff97694a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h9d4a4e08g81cdg4259g8bd1g80b47dbda3f3', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
                     </ContentControl>
 
                     <ListBox x:Name="hairHighlightColourCarousel" ItemsSource="{Binding SelectableHighlightColours}" SelectedItem="{Binding SelectedHighlightColour}" 
@@ -758,12 +763,13 @@
                     <Slider x:Name="huiHairHighlightIntensity" 
                             DataContext="{Binding AppearanceHairHighlights.ColorOptions[0]}" 
                             Style="{StaticResource HUI_CCSliderStyle}"
-                            Tag="{Binding Source='h9d4a4e08g81cdg4259g8bd1g80b47dbda3f3', Converter={StaticResource TranslatedStringConverter}}"
+                            Tag="{Binding Source='h086c2fd7ge3d3g458egbc81g1986b837cb3f', Converter={StaticResource TranslatedStringConverter}}"
                             ls:MoveFocus.Focusable="True"
                             Focusable="True"
                             Margin="0,0,0,20"/>
                 </StackPanel>              
             </ControlTemplate>
+
 
             <!-- Appearance Tab Containers -->
              
@@ -794,9 +800,9 @@
                       </ContentControl>
                       
                       <ScrollViewer Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
-                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1600" Visibility="Visible">
+                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1300" Visibility="Visible">
 
-                          <StackPanel Width="{StaticResource gameplayPanelWidth}">
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
                               <Control x:Name="nameInput" Template="{StaticResource HUI_NamingBoxComponent}" />
 
                               <StackPanel x:Name="randomizeCharacter" HorizontalAlignment="Center" Margin="0,0,0,0">
