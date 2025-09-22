@@ -3999,7 +3999,7 @@
                                 Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource.Count, Converter={StaticResource CountToVisibilityConverter}}">
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="GotFocus">
-                                    <ls:BringIntoViewAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/>
+                                    <ls:BringIntoViewAction TargetName="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}"/>
                                 </b:EventTrigger>
                             </b:Interaction.Triggers>
                             <ListBox.Template>
