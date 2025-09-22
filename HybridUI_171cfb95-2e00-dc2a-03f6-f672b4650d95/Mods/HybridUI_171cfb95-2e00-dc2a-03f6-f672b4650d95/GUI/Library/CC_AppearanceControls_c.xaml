@@ -12,15 +12,12 @@
         <ControlTemplate x:Key="draconicAppearanceTemplate">
             <DockPanel>
                 <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                    <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h7572d825gd782g43a5g90aag7f5d814a5f1a', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
-                    </ContentControl>
-                    
+                   
                     <!-- Tab Carousel for Scales/Colors -->
                     <ContentControl x:Name="draconicTabsCarousel" Template="{StaticResource HUI_CarouselHeaderDecorator}">
                         <ListBox x:Name="draconicTabs" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0">
                             <ListBox.Items>
-                                <ListBoxItem Tag="scales" Content="{Binding Source='h24787db3gf28dg4d79g8c0age428d4067710', Converter={StaticResource TranslatedStringConverter}}"/>
+                                <ListBoxItem Tag="scales" Content="{Binding Source='h7572d825gd782g43a5g90aag7f5d814a5f1a', Converter={StaticResource TranslatedStringConverter}}"/>
                                 <ListBoxItem Tag="colors" Content="{Binding Source='h9a8b7a34g0b55g47dbg9bd3ga7cd487fe423', Converter={StaticResource TranslatedStringConverter}}"/>
                             </ListBox.Items>
                         </ListBox>
@@ -75,16 +72,12 @@
           <!-- Appearance Selector for Dragonborn Draconic Bloodline Sorcerers -->
         <ControlTemplate x:Key="draconicAppearanceTemplateDragonBorn">
             <DockPanel>
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                    <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h0e1fded7g681ag4e5fgb0a2gc5928ab399a1', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" />
-                    </ContentControl>
-                </StackPanel>
-                <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" Margin="0,50,0,50">
+
+                <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" HorizontalAlignment="Left" DockPanel.Dock="Top">
 
                     <!-- Decorator for Header - using this for consistency, but normally it would just be used in Carousels -->
                     <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                      <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h861a433dgcc20g452bg9b1agde89d14c85c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,0,0,0" />
+                      <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h861a433dgcc20g452bg9b1agde89d14c85c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10" />
                     </ContentControl>
 
                     <ls:LSToggleButton x:Name="draconicDragonbornToggle" Template="{StaticResource DraconicDragonbornTickBoxTemplate}" HorizontalAlignment="Center" ls:MoveFocus.Focusable="True" IsChecked="{Binding AppearancePassive.EmptyMaterialSelected, Mode=TwoWay, Converter={StaticResource InvertBoolConverter}}" Command="{Binding DragonbornDraconicLinesToggleCommand}"/>
@@ -371,7 +364,8 @@
 
             <!-- Facial Hair Carousel Component -->
             <ControlTemplate x:Key="HUI_FacialHairBoxComponent">
-              <StackPanel>
+              <StackPanel Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}">
+
                 
                 <ContentControl x:Name="facialHairSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h5060d1edg2799g4388g9203gc42e380c68f8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
@@ -380,8 +374,7 @@
                 <ListBox x:Name="facialHairCarousel" Tag="facialHairs" 
                       ItemsSource="{Binding SelectableBeards}"
                       SelectedItem="{Binding SelectedBeard}"
-                      Template="{StaticResource HUI_CarouselGridTemplate}"
-                      Visibility="{Binding SelectableBeards.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                      Template="{StaticResource HUI_CarouselGridTemplate}">
                       <b:Interaction.Triggers>
                           <b:EventTrigger EventName="GotFocus">
                               <ls:BringIntoViewAction TargetName="facialHairSubheader"/>
@@ -410,9 +403,9 @@
                 </ContentControl>
             </ControlTemplate>
 
-            <!-- Makeup Carousel Component -->
+            <!-- Tattoo Carousel Component -->
             <ControlTemplate x:Key="HUI_TattooBoxComponent">
-                <!-- Makeup Carousel with Header Decorator -->
+                <!-- Tattoo Carousel with Header Decorator -->
                 <ContentControl x:Name="tattooCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
                     <ListBox x:Name="tattooCarousel" Tag="tattoos" 
                           ItemsSource="{Binding SelectableTattoos}"
@@ -429,14 +422,14 @@
                 </ContentControl>
             </ControlTemplate>
 
-            <!-- Facial Hair Carousel Component -->
+            <!-- Piercings Carousel Component -->
             <ControlTemplate x:Key="HUI_PiercingsBoxComponent">
               <StackPanel>
 
                 <ContentControl x:Name="piercingsSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h5458d095gcdb9g414bgacfdgdbd144fc2bd0', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
                 </ContentControl>
-                <!-- Facial Hair Carousel with Header Decorator -->
+                <!-- Piercings Carousel with Header Decorator -->
                 <ListBox x:Name="piercingCarousel" Tag="piercings" 
                       ItemsSource="{Binding SelectablePiercings}"
                       SelectedItem="{Binding SelectedPiercing}"
@@ -455,6 +448,221 @@
                           <!-- Hide close button when piercing list is closed -->
                           <b:DataTrigger Binding="{Binding ElementName=piercingGrid, Path=Visibility}" Value="Collapsed">
                               <b:ChangePropertyAction TargetName="piercingCarousel" PropertyName="Tag" Value="piercings"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- Scar Carousel Component -->
+            <ControlTemplate x:Key="HUI_ScarsBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="scarsSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h408d8f2bgca7eg4d20gb0bag4d4a3318f1c5', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+                <!-- Scar Carousel with Header Decorator -->
+                <ListBox x:Name="scarCarousel" Tag="scars" 
+                      ItemsSource="{Binding SelectableScars}"
+                      SelectedItem="{Binding SelectedScar}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}"
+                      Visibility="{Binding SelectableScars.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="scarsSubheader"/>
+                          </b:EventTrigger>
+
+                          <!-- Show close button when scar list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=scarGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="scarCarousel" PropertyName="Tag" Value="scars_listOpen"/>
+                          </b:DataTrigger>
+
+                          <!-- Hide close button when scar list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=scarGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="scarCarousel" PropertyName="Tag" Value="scars"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- Horn Carousel Component -->
+            <ControlTemplate x:Key="HUI_HornsBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="tattooCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <ListBox x:Name="hornCarousel" Tag="horns" 
+                          ItemsSource="{Binding SelectableHorns}"
+                          SelectedItem="{Binding SelectedHorn}"
+                          Template="{StaticResource HUI_CarouselGridTemplate}"
+                          Visibility="{Binding SelectableHorns.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                          <b:Interaction.Triggers>
+                              <b:EventTrigger EventName="GotFocus">
+                                  <ls:BringIntoViewAction TargetName="hornsSubheader"/>
+                              </b:EventTrigger>
+
+                              <!-- Show close button when horn list is open -->
+                              <b:DataTrigger Binding="{Binding ElementName=hornsGrid, Path=Visibility}" Value="Visible">
+                                  <b:ChangePropertyAction TargetName="hornCarousel" PropertyName="Tag" Value="horns_listOpen"/>
+                              </b:DataTrigger>
+
+                              <!-- Hide close button when horn list is closed -->
+                              <b:DataTrigger Binding="{Binding ElementName=hornsGrid, Path=Visibility}" Value="Collapsed">
+                                  <b:ChangePropertyAction TargetName="hornCarousel" PropertyName="Tag" Value="horns"/>
+                              </b:DataTrigger>
+                          </b:Interaction.Triggers>
+                    </ListBox>
+                </ContentControl>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- Scales Carousel Component -->
+            <ControlTemplate x:Key="HUI_ScalesBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="scalesSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h381a6c0bg214fg4968gae5cg9e5b8a8ffc20', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+
+                <ListBox x:Name="scalesCarousel" Tag="scales" 
+                      ItemsSource="{Binding SelectableScales}"
+                      SelectedItem="{Binding SelectedScales}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}"
+                      Visibility="{Binding SelectableScales.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="scalesSubheader"/>
+                          </b:EventTrigger>
+
+                          <!-- Show close button when scale list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=scalesGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="scalesCarousel" PropertyName="Tag" Value="scales_listOpen"/>
+                          </b:DataTrigger>
+
+                          <!-- Hide close button when scale list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=scalesGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="scalesCarousel" PropertyName="Tag" Value="scales"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- Tails Carousel Component -->
+            <ControlTemplate x:Key="HUI_TailsBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="tailsSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hbb75a111g99e6g45afga2a6gaf73b748faa8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+                <ListBox x:Name="tailsCarousel" Tag="tails" 
+                      ItemsSource="{Binding SelectableTail}"
+                      SelectedItem="{Binding SelectedTail}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}"
+                      Visibility="{Binding SelectableTail.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="tailsSubheader"/>
+                          </b:EventTrigger>
+
+                          <!-- Show close button when tail list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=tailsGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="tailsCarousel" PropertyName="Tag" Value="tails_listOpen"/>
+                          </b:DataTrigger>
+
+                          <!-- Hide close button when tail list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=tailsGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="tailsCarousel" PropertyName="Tag" Value="tails"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- TopOfHead Carousel Component -->
+            <ControlTemplate x:Key="HUI_TopOfHeadBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="topOfHeadSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h8a18511cgc2a5g47c8gac71g4f7111d9c0c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+                <ListBox x:Name="topOfHeadCarousel" Tag="topOfHead" 
+                      ItemsSource="{Binding SelectableTopOfHead}"
+                      SelectedItem="{Binding SelectedTopOfHead}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="topOfHeadSubheader"/>
+                          </b:EventTrigger>
+
+                          <!-- Show close button when topOfHead list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=topOfHeadGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="topOfHeadCarousel" PropertyName="Tag" Value="topOfHead_listOpen"/>
+                          </b:DataTrigger>
+
+                          <!-- Hide close button when topOfHead list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=topOfHeadGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="topOfHeadCarousel" PropertyName="Tag" Value="topOfHead"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- Chin Carousel Component -->
+            <ControlTemplate x:Key="HUI_ChinBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="chinSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h51990b5dg8d36g4ef5gb5aegb8854eb585a2', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+                <ListBox x:Name="chinCarousel" Tag="chin" 
+                      ItemsSource="{Binding SelectableChin}"
+                      SelectedItem="{Binding SelectedChin}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="chinSubheader"/>
+                          </b:EventTrigger>
+
+                          <!-- Show close button when chin list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=chinGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="chinCarousel" PropertyName="Tag" Value="chin_listOpen"/>
+                          </b:DataTrigger>
+
+                          <!-- Hide close button when chin list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=chinGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="chinCarousel" PropertyName="Tag" Value="chin"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </StackPanel>
+            </ControlTemplate>
+
+            <!-- Jaw Carousel Component -->
+            <ControlTemplate x:Key="HUI_JawBoxComponent">
+              <StackPanel>
+
+                <ContentControl x:Name="jawSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h735cf0ecg1ab8g46cag889aga32fdbd82da3', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                </ContentControl>
+                <ListBox x:Name="jawCarousel" Tag="jaw" 
+                      ItemsSource="{Binding SelectableJaw}"
+                      SelectedItem="{Binding SelectedJaw}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="jawSubheader"/>
+                          </b:EventTrigger>
+
+                          <!-- Show close button when jaw list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=jawGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="jawCarousel" PropertyName="Tag" Value="jaw_listOpen"/>
+                          </b:DataTrigger>
+
+                          <!-- Hide close button when jaw list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=jawGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="jawCarousel" PropertyName="Tag" Value="jaw"/>
                           </b:DataTrigger>
                       </b:Interaction.Triggers>
                 </ListBox>
@@ -682,7 +890,54 @@
                     </ListBox>
                 </StackPanel>
             </ControlTemplate>
-             
+
+            <!-- Horn Colour -->
+            <ControlTemplate x:Key="HUI_HornColourBoxComponent">
+                <StackPanel x:Name="HornColourContainer">
+                    <ContentControl x:Name="hornColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h8f9581e8g4440g4cf5g8752g220535346a50', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="hornColourCarousel" ItemsSource="{Binding SelectableHornColours}" SelectedItem="{Binding SelectedHornColour}" 
+                             Tag="HornColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="hornColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableHornColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+            <!-- Horn Tip Colour -->
+            <ControlTemplate x:Key="HUI_HornTipColourBoxComponent">
+                <StackPanel x:Name="HornTipColourContainer">
+                    <ContentControl x:Name="hornTipColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h8f9581e8g4440g4cf5g8752g220535346a50', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="hornTipColourCarousel" ItemsSource="{Binding SelectableHornTipColours}" SelectedItem="{Binding SelectedHornTipColour}" 
+                             Tag="HornColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="hornTipColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableHornTipColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
 
           <!-- Sliders -->
             <!-- Maturity/Age Slider -->
@@ -882,13 +1137,13 @@
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
 
-                      <ContentControl x:Name="faceAppearanceHeader" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
-                      <ContentControl x:Name="generalAppearanceSubheader" Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                      <ContentControl x:Name="generalAppearanceOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <ContentControl x:Name="generalAppearanceHeader" Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
                           <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h4c12a52dgcd71g43b9ga266gf506b54b0c55', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
                       </ContentControl>
                       
                       <ScrollViewer Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
-                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1300" Visibility="Visible">
+                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1400" Visibility="Visible">
 
                           <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
                               <Control x:Name="nameInput" Template="{StaticResource HUI_NamingBoxComponent}" />
@@ -996,7 +1251,6 @@
                               </ListBox>
 
                               <Control x:Name="skinColour" Template="{StaticResource HUI_SkinColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                              
 
                               <Control x:Name="heterochromia" Template="{StaticResource HUI_HeterochromiaBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               <Control x:Name="eyeColour" Template="{StaticResource HUI_EyeColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0">
@@ -1041,8 +1295,6 @@
               <ControlTemplate.Triggers>
                   <!-- Dragonborn restrictions -->
                   <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
-                      <Setter TargetName="lipMetallic" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="lipGlossy" Property="Visibility" Value="Collapsed"/>
                       <Setter TargetName="maturity" Property="Visibility" Value="Collapsed"/>
                       <Setter TargetName="freckleQuantity" Property="Visibility" Value="Collapsed"/>
                       <Setter TargetName="freckleIntensity" Property="Visibility" Value="Collapsed"/>
@@ -1167,15 +1419,6 @@
               </DockPanel>
               
               <ControlTemplate.Triggers>
-                  <!-- Dragonborn restrictions -->
-                  <!-- <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
-                      <Setter TargetName="lipMetallic" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="lipGlossy" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="maturity" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="freckleQuantity" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="freckleIntensity" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="vitiligo" Property="Visibility" Value="Collapsed"/>
-                  </DataTrigger> -->
 
               </ControlTemplate.Triggers>
           </ControlTemplate>
@@ -1262,10 +1505,19 @@
                       </ScrollViewer>
                   </Grid>
               </DockPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Dragonborn restrictions -->
+                  <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                      <Setter TargetName="lipMakeupMetallic" Property="Visibility" Value="Collapsed"/>
+                      <Setter TargetName="lipMakeupGlossy" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Accessories Appearance Template -->
-           <!-- Tattoo Style + Intensity, Piercings -->
+           <!-- Tattoo Style + Intensity, Scars, Piercings -->
           <ControlTemplate x:Key="AccessoriesAppearanceTemplate">
               <DockPanel>
                   <Grid>
@@ -1288,7 +1540,7 @@
                       <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
                       <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
                       
-                      <ScrollViewer x:Name="featureAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                      <ScrollViewer x:Name="accessoriesAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
                                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
 
                           <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
@@ -1301,18 +1553,18 @@
                                        Margin="0,0,0,0">
                                   <b:Interaction.Triggers>
                                       <!-- Show grid when scroller Tag is "ShowTattooGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=featureAppearanceScroller, Path=Tag}" Value="ShowTattooGrid">
+                                      <b:DataTrigger Binding="{Binding ElementName=accessoriesAppearanceScroller, Path=Tag}" Value="ShowTattooGrid">
                                           <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Tag" Value="Visible"/>
                                           <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Visibility" Value="Visible"/>
-                                          <b:ChangePropertyAction TargetName="featureAppearanceScroller" PropertyName="Tag" Value="TattooGridOpen"/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value="TattooGridOpen"/>
                                           <ls:BringIntoViewAction TargetObject="{Binding ElementName=tattooGrid}"/>
                                       </b:DataTrigger>
 
                                       <!-- Hide grid when scroller Tag is "HideTattooGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=featureAppearanceScroller, Path=Tag}" Value="HideTattooGrid">
+                                      <b:DataTrigger Binding="{Binding ElementName=accessoriesAppearanceScroller, Path=Tag}" Value="HideTattooGrid">
                                           <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Visibility" Value="Collapsed"/>
-                                          <b:ChangePropertyAction TargetName="featureAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value=""/>
                                           <!-- Set focus back to the stored carousel reference -->
                                           <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
@@ -1321,7 +1573,7 @@
                                       <b:DataTrigger Binding="{Binding ElementName=tattooGrid, Path=Tag}" Value="GridClosed">
                                           <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Visibility" Value="Collapsed"/>
-                                          <b:ChangePropertyAction TargetName="featureAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value=""/>
                                           <!-- Set focus back to the stored carousel reference -->
                                           <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
@@ -1336,6 +1588,53 @@
                                  Visibility="{Binding AppearanceTattoos.EmptyMaterialSelected, Converter={StaticResource BoolToCollapsedConverter}}"/>
                               <Control x:Name="tattooIntensity" Template="{StaticResource HUI_TattooIntensityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"
                                  Visibility="{Binding AppearanceTattoos.EmptyMaterialSelected, Converter={StaticResource BoolToCollapsedConverter}}"/>
+                              <Control x:Name="scars" Template="{StaticResource HUI_ScarsBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              
+                              
+                              <ListBox x:Name="scarGrid" 
+                                       Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                       ItemsSource="{Binding SelectableScars}"
+                                       SelectedItem="{Binding SelectedScar}"
+                                       IsSynchronizedWithCurrentItem="True"
+                                       KeyboardNavigation.DirectionalNavigation="Continue"
+                                       IsTabStop="True"
+                                       Visibility="Collapsed"
+                                       HorizontalAlignment="Center" 
+                                       Margin="0,20,0,20">
+                                  <b:Interaction.Triggers>
+                                      <!-- Selection change sound effect -->
+                                      <b:PropertyChangedTrigger Binding="{Binding ElementName=scarGrid, Path=SelectedItem}">
+                                          <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                      </b:PropertyChangedTrigger>
+                                      
+                                      <!-- Show grid when scroller Tag is "ShowScarGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=accessoriesAppearanceScroller, Path=Tag}" Value="ShowScarGrid">
+                                          <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Tag" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Visibility" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value="ScarGridOpen"/>
+                                          <ls:BringIntoViewAction TargetObject="{Binding ElementName=scarGrid}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Hide grid when scroller Tag is "HideScarGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=accessoriesAppearanceScroller, Path=Tag}" Value="HideScarGrid">
+                                          <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                      <b:DataTrigger Binding="{Binding ElementName=scarGrid, Path=Tag}" Value="GridClosed">
+                                          <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                      </b:DataTrigger>
+                                  </b:Interaction.Triggers>
+                              </ListBox>
+                              
                               <Control x:Name="piercings" Template="{StaticResource HUI_PiercingsBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                               
                               
@@ -1357,18 +1656,18 @@
                                       </b:PropertyChangedTrigger>
                                       
                                       <!-- Show grid when scroller Tag is "ShowPiercingGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=featureAppearanceScroller, Path=Tag}" Value="ShowPiercingGrid">
+                                      <b:DataTrigger Binding="{Binding ElementName=accessoriesAppearanceScroller, Path=Tag}" Value="ShowPiercingGrid">
                                           <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Tag" Value="Visible"/>
                                           <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Visible"/>
-                                          <b:ChangePropertyAction TargetName="featureAppearanceScroller" PropertyName="Tag" Value="PiercingGridOpen"/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value="PiercingGridOpen"/>
                                           <ls:BringIntoViewAction TargetObject="{Binding ElementName=piercingGrid}"/>
                                       </b:DataTrigger>
                                       
                                       <!-- Hide grid when scroller Tag is "HidepiercingGrid" -->
-                                      <b:DataTrigger Binding="{Binding ElementName=featureAppearanceScroller, Path=Tag}" Value="HidePiercingGrid">
+                                      <b:DataTrigger Binding="{Binding ElementName=accessoriesAppearanceScroller, Path=Tag}" Value="HidePiercingGrid">
                                           <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Collapsed"/>
-                                          <b:ChangePropertyAction TargetName="featureAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value=""/>
                                           <!-- Set focus back to the stored carousel reference -->
                                           <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
@@ -1377,7 +1676,7 @@
                                       <b:DataTrigger Binding="{Binding ElementName=piercingGrid, Path=Tag}" Value="GridClosed">
                                           <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Tag" Value=""/>
                                           <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Collapsed"/>
-                                          <b:ChangePropertyAction TargetName="featureAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="accessoriesAppearanceScroller" PropertyName="Tag" Value=""/>
                                           <!-- Set focus back to the stored carousel reference -->
                                           <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
                                       </b:DataTrigger>
@@ -1391,26 +1690,327 @@
           </ControlTemplate>
 
           <!-- Features Appearance Template -->
-           <!-- Scarring, Horn Type, Horn Colour, Top of Head, Chin, Jaw, Tail Style -->
+            <!-- Tail, Top of Head, Chin, Jaw-->
           <ControlTemplate x:Key="FeaturesAppearanceTemplate">
-            <Grid Background="Transparent">
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
-                    <TextBlock Text="Features" Style="{StaticResource PanelHeaderText}" Margin="0,0,0,30"/>
-                    <TextBlock Text="Special features like horns, tails, etc." Foreground="White" Margin="0,0,0,20"/>
-                    <Border Background="#33FFFFFF" Height="400" CornerRadius="5">
-                        <TextBlock Text="Features appearance controls placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-                    </Border>
-                </StackPanel>
-            </Grid>
+              <DockPanel>
+                  <Grid>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                      </Grid.RowDefinitions>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="makeupVisual" PropertyName="Tag" Value=""/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <ContentControl x:Name="featuresAppearanceHeader" Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                          <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h97cb756egd22dg488aga292g7cd93aeaaa6e', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
+                      </ContentControl>
+                      <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
+                      <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
+                      
+                      <ScrollViewer x:Name="featuresAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
+
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+
+                              <Control x:Name="tails" Template="{StaticResource HUI_TailsBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="{Binding SelectableTail.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                                <ListBox x:Name="tailsGrid" 
+                                        Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                        ItemsSource="{Binding SelectableTail}"
+                                        SelectedItem="{Binding SelectedTail}"
+                                        IsSynchronizedWithCurrentItem="True"
+                                        KeyboardNavigation.DirectionalNavigation="Continue"
+                                        IsTabStop="True"
+                                        Visibility="Collapsed"
+                                        HorizontalAlignment="Center" 
+                                        Margin="0,20,0,20">
+                                    <b:Interaction.Triggers>
+                                        <!-- Selection change sound effect -->
+                                        <b:PropertyChangedTrigger Binding="{Binding ElementName=tailsGrid, Path=SelectedItem}">
+                                            <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                        </b:PropertyChangedTrigger>
+
+                                        <!-- Show grid when scroller Tag is "ShowTailGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="ShowTailGrid">
+                                            <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Tag" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Visibility" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value="TailGridOpen"/>
+                                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=tailsGrid}"/>
+                                        </b:DataTrigger>
+
+                                        <!-- Hide grid when scroller Tag is "HideTailGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="HideTailGrid">
+                                            <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                        
+                                        <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                        <b:DataTrigger Binding="{Binding ElementName=tailsGrid, Path=Tag}" Value="GridClosed">
+                                            <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                    </b:Interaction.Triggers>
+                                </ListBox>
+
+                              <Control x:Name="topOfHeads" Template="{StaticResource HUI_TopOfHeadBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                                <ListBox x:Name="topOfHeadGrid" 
+                                        Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                        ItemsSource="{Binding SelectableTopOfHead}"
+                                        SelectedItem="{Binding SelectedTopOfHead}"
+                                        IsSynchronizedWithCurrentItem="True"
+                                        KeyboardNavigation.DirectionalNavigation="Continue"
+                                        IsTabStop="True"
+                                        Visibility="Collapsed"
+                                        HorizontalAlignment="Center" 
+                                        Margin="0,20,0,20">
+                                    <b:Interaction.Triggers>
+                                        <!-- Selection change sound effect -->
+                                        <b:PropertyChangedTrigger Binding="{Binding ElementName=topOfHeadGrid, Path=SelectedItem}">
+                                            <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                        </b:PropertyChangedTrigger>
+
+                                        <!-- Show grid when scroller Tag is "ShowTopOfHeadGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="ShowTopOfHeadGrid">
+                                            <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Tag" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Visibility" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value="TopOfHeadGridOpen"/>
+                                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=topOfHeadGrid}"/>
+                                        </b:DataTrigger>
+
+                                        <!-- Hide grid when scroller Tag is "HideTopOfHeadGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="HideTopOfHeadGrid">
+                                            <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                        
+                                        <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                        <b:DataTrigger Binding="{Binding ElementName=topOfHeadGrid, Path=Tag}" Value="GridClosed">
+                                            <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                    </b:Interaction.Triggers>
+                                </ListBox>
+
+                              <Control x:Name="chins" Template="{StaticResource HUI_ChinBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                                <ListBox x:Name="chinGrid" 
+                                        Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                        ItemsSource="{Binding SelectableChin}"
+                                        SelectedItem="{Binding SelectedChin}"
+                                        IsSynchronizedWithCurrentItem="True"
+                                        KeyboardNavigation.DirectionalNavigation="Continue"
+                                        IsTabStop="True"
+                                        Visibility="Collapsed"
+                                        HorizontalAlignment="Center" 
+                                        Margin="0,20,0,20">
+                                    <b:Interaction.Triggers>
+                                        <!-- Selection change sound effect -->
+                                        <b:PropertyChangedTrigger Binding="{Binding ElementName=chinGrid, Path=SelectedItem}">
+                                            <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                        </b:PropertyChangedTrigger>
+
+                                        <!-- Show grid when scroller Tag is "ShowChinGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="ShowChinGrid">
+                                            <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Tag" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Visibility" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value="ChinGridOpen"/>
+                                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=chinGrid}"/>
+                                        </b:DataTrigger>
+
+                                        <!-- Hide grid when scroller Tag is "HideChinGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="HideChinGrid">
+                                            <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                        
+                                        <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                        <b:DataTrigger Binding="{Binding ElementName=chinGrid, Path=Tag}" Value="GridClosed">
+                                            <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                    </b:Interaction.Triggers>
+                                </ListBox>
+
+                              <Control x:Name="jaws" Template="{StaticResource HUI_JawBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                                <ListBox x:Name="jawGrid" 
+                                        Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                        ItemsSource="{Binding SelectableJaw}"
+                                        SelectedItem="{Binding SelectedJaw}"
+                                        IsSynchronizedWithCurrentItem="True"
+                                        KeyboardNavigation.DirectionalNavigation="Continue"
+                                        IsTabStop="True"
+                                        Visibility="Collapsed"
+                                        HorizontalAlignment="Center" 
+                                        Margin="0,20,0,20">
+                                    <b:Interaction.Triggers>
+                                        <!-- Selection change sound effect -->
+                                        <b:PropertyChangedTrigger Binding="{Binding ElementName=jawGrid, Path=SelectedItem}">
+                                            <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                        </b:PropertyChangedTrigger>
+
+                                        <!-- Show grid when scroller Tag is "ShowJawGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="ShowJawGrid">
+                                            <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Tag" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Visibility" Value="Visible"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value="JawGridOpen"/>
+                                            <ls:BringIntoViewAction TargetObject="{Binding ElementName=jawGrid}"/>
+                                        </b:DataTrigger>
+
+                                        <!-- Hide grid when scroller Tag is "HideJawGrid" -->
+                                        <b:DataTrigger Binding="{Binding ElementName=featuresAppearanceScroller, Path=Tag}" Value="HideJawGrid">
+                                            <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                        
+                                        <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                        <b:DataTrigger Binding="{Binding ElementName=jawGrid, Path=Tag}" Value="GridClosed">
+                                            <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Tag" Value=""/>
+                                            <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                            <b:ChangePropertyAction TargetName="featuresAppearanceScroller" PropertyName="Tag" Value=""/>
+                                            <!-- Set focus back to the stored carousel reference -->
+                                            <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                        </b:DataTrigger>
+                                    </b:Interaction.Triggers>
+                                </ListBox>
+                              
+                          </StackPanel>
+                      </ScrollViewer>
+                  </Grid>
+              </DockPanel>
           </ControlTemplate>
+
+          <!-- Horns Appearance Template -->
+           <!-- Horn Type, Horn Colour, Horn Tip Colour, Tails -->
+          <ControlTemplate x:Key="HornsAppearanceTemplate">
+              <DockPanel>
+                  <Grid>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                      </Grid.RowDefinitions>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="makeupVisual" PropertyName="Tag" Value=""/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <Control x:Name="hornVisual" Template="{StaticResource HUI_HornsBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                      <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
+                      <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
+                      
+                      <ScrollViewer x:Name="hornAppearanceScroller" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                        VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,0" Visibility="Visible">
+
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+                              <ListBox x:Name="hornsGrid" 
+                                       Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                       ItemsSource="{Binding SelectableHorns}"
+                                       SelectedItem="{Binding SelectedHorn}"
+                                       Visibility="Collapsed"
+                                       HorizontalAlignment="Center" 
+                                       Margin="0,0,0,0">
+                                  <b:Interaction.Triggers>
+                                      <!-- Show grid when scroller Tag is "ShowhornsGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=hornAppearanceScroller, Path=Tag}" Value="ShowhornsGrid">
+                                          <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Tag" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Visibility" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="hornAppearanceScroller" PropertyName="Tag" Value="hornsGridOpen"/>
+                                          <ls:BringIntoViewAction TargetObject="{Binding ElementName=hornsGrid}"/>
+                                      </b:DataTrigger>
+
+                                      <!-- Hide grid when scroller Tag is "HidehornsGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=hornAppearanceScroller, Path=Tag}" Value="HidehornsGrid">
+                                          <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="hornAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                      <b:DataTrigger Binding="{Binding ElementName=hornsGrid, Path=Tag}" Value="GridClosed">
+                                          <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="hornAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Keep ValueChanged trigger for game mechanics -->
+                                      <b:EventTrigger EventName="SelectionChanged">
+                                          <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableTattoos}"/>
+                                      </b:EventTrigger>
+                                  </b:Interaction.Triggers>
+                              </ListBox>
+                              <Control x:Name="hornColour" Template="{StaticResource HUI_HornColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="hornTipColour" Template="{StaticResource HUI_HornTipColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                          </StackPanel>
+                      </ScrollViewer>
+                  </Grid>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- Top of Head, Chin, Jaw, Tail Style -->
 
           <!-- Passive Features Appearance Template -->
           <ControlTemplate x:Key="PassiveFeaturesAppearanceTemplate">
-            <Grid Background="Transparent">
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Margin="50,50,0,0">
-                    <ContentControl x:Name="PassiveFeaturesContent" Template="{StaticResource draconicAppearanceTemplate}"/>
-                </StackPanel>
-            </Grid>
+              <DockPanel>
+                  <Grid>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                      </Grid.RowDefinitions>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="makeupVisual" PropertyName="Tag" Value=""/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <StackPanel Width="{StaticResource gameplayPanelWidth}" Grid.Row="1">
+                          <ContentControl x:Name="PassiveFeaturesContent" Template="{StaticResource draconicAppearanceTemplate}"/>
+                      </StackPanel>
+
+                  </Grid>
+              </DockPanel>
             <ControlTemplate.Triggers>
                 <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
                     <Setter TargetName="PassiveFeaturesContent" Property="Template" Value="{StaticResource draconicAppearanceTemplateDragonBorn}"/>

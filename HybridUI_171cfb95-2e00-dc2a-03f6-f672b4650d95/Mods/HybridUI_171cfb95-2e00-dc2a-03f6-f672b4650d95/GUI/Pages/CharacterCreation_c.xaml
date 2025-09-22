@@ -666,10 +666,11 @@
 
                                                     <ListBoxItem x:Name="generalTab" Tag="general" Content="{Binding Source=h4c12a52dgcd71g43b9ga266gf506b54b0c55, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="faceTab" Tag="face" Content="{Binding Source=h1cb3665cgbe61g4230g8861g9bbfa408442b, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="hairTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="hairTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}" Visibility="{Binding SelectableHair.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                                    <ListBoxItem x:Name="featuresTab" Tag="features" Content="{Binding Source=h97cb756egd22dg488aga292g7cd93aeaaa6e, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="hornsTab" Tag="horns" Content="{Binding Source=h1e2fea14g1a4fg4567ga286g8c4162b78d6e_14, Converter={StaticResource TranslatedStringConverter}}" Visibility="{Binding SelectableHorns.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
                                                     <ListBoxItem x:Name="makeupTab" Tag="makeup" Content="{Binding Source=hbbddf3e9g352fg461fg8761gbb5256ebd9c4, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="accessoriesTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="featuresTab" Tag="features" Content="{Binding Source=h97cb756egd22dg488aga292g7cd93aeaaa6e, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="passiveFeaturesTab" Tag="passivefeatures" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <b:Interaction.Triggers>
                                                         <b:EventTrigger EventName="SelectionChanged">
@@ -1477,6 +1478,10 @@
 
                                 <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="accessories">
                                     <Setter TargetName="appearanceContentsPanel" Property="Template" Value="{StaticResource AccessoriesAppearanceTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="horns">
+                                    <Setter TargetName="appearanceContentsPanel" Property="Template" Value="{StaticResource HornsAppearanceTemplate}"/>
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="features">

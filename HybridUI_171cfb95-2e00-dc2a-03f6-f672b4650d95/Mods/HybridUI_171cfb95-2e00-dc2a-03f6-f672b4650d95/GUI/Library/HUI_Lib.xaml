@@ -2210,7 +2210,6 @@
                 <ListBox x:Name="carouselDisplay" 
                         ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
                         SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                        Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource.Count, Converter={StaticResource CountToVisibilityConverter}}"
                         Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
                             <ListBox.Template>
                                 <ControlTemplate>
@@ -2231,7 +2230,8 @@
                                                                MaxWidth="400" 
                                                                TextTrimming="CharacterEllipsis"
                                                                HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"/>
+                                                               VerticalAlignment="Center"
+                                                               />
 
                                             <!-- Left Action Area (Shuffle hint area) -->
                                             <StackPanel x:Name="leftActionArea" Orientation="Horizontal" HorizontalAlignment="Left" 
@@ -2318,6 +2318,72 @@
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
+                                            <!-- Scars specific expand input -->
+                                            <ls:LSInputBinding x:Name="scarsExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="scarGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- TopOfHead specific expand input -->
+                                            <ls:LSInputBinding x:Name="topOfHeadExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="topOfHeadGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Chin specific expand input -->
+                                            <ls:LSInputBinding x:Name="chinExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="chinGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Jaw specific expand input -->
+                                            <ls:LSInputBinding x:Name="jawExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="jawGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Tails specific expand input -->
+                                            <ls:LSInputBinding x:Name="tailsExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="tailsGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Horns specific expand input -->
+                                            <ls:LSInputBinding x:Name="hornsExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="hornsGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
                                             <!-- Makeup carousel specific expand input -->
                                             <ls:LSInputBinding x:Name="makeupExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
@@ -2345,6 +2411,18 @@
                                                         <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Visibility" Value="Collapsed"/>
                                                         <!-- Close piercing grid -->
                                                         <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close scars grid -->
+                                                        <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close topOfHead grid -->
+                                                        <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close chin grid -->
+                                                        <b:ChangePropertyAction TargetName="chinGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close jaw grid -->
+                                                        <b:ChangePropertyAction TargetName="jawGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close tails grid -->
+                                                        <b:ChangePropertyAction TargetName="tailsGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close horns grid -->
+                                                        <b:ChangePropertyAction TargetName="hornsGrid" PropertyName="Visibility" Value="Collapsed"/>
                                                         <!-- Close makeup grid -->
                                                         <b:ChangePropertyAction TargetName="makeupGrid" PropertyName="Visibility" Value="Collapsed"/>
                                                         <!-- Return focus to carousel -->
@@ -2394,6 +2472,11 @@
                                         <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Value="1">
                                             <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
                                             <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+
+                                        <!-- Set fallback text when no items are available -->
+                                        <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Value="0">
+                                            <Setter TargetName="cTxt" Property="Text" Value="{Binding Source='h2e3ceaecge717g4d2dg97fag7b4546d6de57', Converter={StaticResource TranslatedStringConverter}}"/>
                                         </DataTrigger>
                                         
                                         <!-- Disable carousel and buttons when grid is visible AND carousel is not focused -->
@@ -2454,6 +2537,66 @@
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="piercings_listOpen"/>
                                                 <Condition Binding="{Binding ElementName=piercingGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Scars carousel - show collapse when scars grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scars_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=scarGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- TopOfHead carousel - show collapse when topOfHead grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="topOfHead_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=topOfHeadGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Chin carousel - show collapse when chin grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="chin_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=chinGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Jaw carousel - show collapse when jaw grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="jaw_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=jawGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- tails carousel - show collapse when tails grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="tails_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=tailsGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Horns carousel - show collapse when horns grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="horns_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=hornsGrid, Path=Visibility}" Value="Visible"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
                                             <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
@@ -2539,6 +2682,60 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="tattooExpandInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
+
+                                        <!-- Enable expand input for scars carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scars"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="scarsExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Enable expand input for topOfHead carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="topOfHead"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="topOfHeadExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Enable expand input for chin carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="chin"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="chinExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Enable expand input for jaw carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="jaw"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="jawExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Enable expand input for tails carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="tails"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="tailsExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Enable expand input for horns carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="horns"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="hornsExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
                                         
                                         <!-- Enable expand input for piercing carousels -->
                                         <MultiDataTrigger>
@@ -2607,6 +2804,60 @@
                                             <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
 
+                                        <!-- Scar carousel - enable collapse when scar grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scars_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=scarGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- TopOfHead carousel - enable collapse when topOfHead grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="topOfHead_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=topOfHeadGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Chin carousel - enable collapse when chin grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="chin_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=chinGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Jaw carousel - enable collapse when jaw grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="jaw_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=jawGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- tails carousel - enable collapse when tails grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="tails_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=tailsGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Horns carousel - enable collapse when horns grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="horns_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=hornsGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
                                         <!-- Makeup carousel - enable collapse when makeup grid is visible -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
@@ -2616,11 +2867,26 @@
                                             <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
 
-                                        <!-- Facial Hair and Piercing Carousel needs CarouselButton Appearance -->
+                                        <!-- Facial Hair, Piercing, Scar, tails, top of head, chin, and jaw Carousel needs CarouselButton Appearance -->
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="piercingCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="scarCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="tailsCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="topOfHeadCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="chinCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="jawCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
                                         </DataTrigger>
                                     </ControlTemplate.Triggers>
@@ -7148,6 +7414,12 @@
             </DataTrigger>
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="SkinColour">
                 <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SkinColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="hornColours">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SelectableHornColours}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="hornTipColours">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SelectableHornTipColours}"/>
             </DataTrigger>
             <!-- Default fallback for unspecified tags -->
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
