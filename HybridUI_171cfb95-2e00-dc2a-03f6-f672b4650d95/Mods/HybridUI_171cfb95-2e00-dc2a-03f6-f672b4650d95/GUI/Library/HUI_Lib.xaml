@@ -2265,18 +2265,16 @@
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
-                                            <!-- Face carousel specific expand input -->
-                                            <ls:LSInputBinding x:Name="faceExpandInput" BoundEvent="UIAccept" IsEnabled="False">
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
-                                                        <ls:BringIntoViewAction TargetName="faceGrid"/>
-                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                                    </b:EventTrigger>
-                                                </b:Interaction.Triggers>
-                                            </ls:LSInputBinding>
-                                            
-                                            <!-- Hair carousel specific expand input -->
+                            <!-- Face carousel specific expand input -->
+                            <ls:LSInputBinding x:Name="faceExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                        <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
+                                        <ls:BringIntoViewAction TargetName="faceGrid"/>
+                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </ls:LSInputBinding>                                            <!-- Hair carousel specific expand input -->
                                             <ls:LSInputBinding x:Name="hairExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
@@ -2298,6 +2296,28 @@
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
+                                            <!-- Tattoo specific expand input -->
+                                            <ls:LSInputBinding x:Name="tattooExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="tattooGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
+                                            <!-- Piercings specific expand input -->
+                                            <ls:LSInputBinding x:Name="piercingExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="piercingGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
                                             <!-- Makeup carousel specific expand input -->
                                             <ls:LSInputBinding x:Name="makeupExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
@@ -2311,6 +2331,29 @@
 
 
                                             
+                                            <!-- Collapse Grid Input Binding - Closes visible grids and returns focus -->
+                                            <ls:LSInputBinding x:Name="collapseGridInput" BoundEvent="UICancel" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <!-- Close face grid -->
+                                                        <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close hair grid -->
+                                                        <b:ChangePropertyAction TargetName="hairGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close facial hair grid -->
+                                                        <b:ChangePropertyAction TargetName="facialHairGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close tattoo grid -->
+                                                        <b:ChangePropertyAction TargetName="tattooGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close piercing grid -->
+                                                        <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close makeup grid -->
+                                                        <b:ChangePropertyAction TargetName="makeupGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Return focus to carousel -->
+                                                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=base}"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+
                                             <!-- Shuffle Input Binding for ItemsSource-based carousels -->
                                             <ls:LSInputBinding x:Name="shuffleInput" BoundEvent="UIShowInfo" IsEnabled="False">
                                                 <b:Interaction.Triggers>
@@ -2363,6 +2406,68 @@
                                         <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
                                             <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
                                         </DataTrigger>
+
+                                        <!-- Hide expand button and show collapse button when this carousel's corresponding grid is visible -->
+                                        
+                                        <!-- Face carousel - show collapse when face grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="faces"/>
+                                                <Condition Binding="{Binding ElementName=faceGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Hair carousel - show collapse when hair grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="hairs"/>
+                                                <Condition Binding="{Binding ElementName=hairGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Facial hair carousel - show collapse when facial hair grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairs"/>
+                                                <Condition Binding="{Binding ElementName=facialHairGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Tattoo carousel - show collapse when tattoo grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="tattoos"/>
+                                                <Condition Binding="{Binding ElementName=tattooGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Piercing carousel - show collapse when piercing grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="piercings_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=piercingGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Makeup carousel - show collapse when makeup grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="makeup"/>
+                                                <Condition Binding="{Binding ElementName=makeupGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
                                         
 
 
@@ -2426,6 +2531,26 @@
                                             <Setter TargetName="facialHairExpandInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
                                         
+                                        <!-- Enable expand input for tattoo carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="tattoos"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="tattooExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+                                        
+                                        <!-- Enable expand input for piercing carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="piercings"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="piercingExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+                                        
+
+                                        
                                         <!-- Enable expand input for makeup carousels -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
@@ -2434,11 +2559,68 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="makeupExpandInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
+
+                                        <!-- Enable collapse input only for this carousel's corresponding grid -->
                                         
+                                        <!-- Face carousel - enable collapse when face grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="faces"/>
+                                                <Condition Binding="{Binding ElementName=faceGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
 
+                                        <!-- Hair carousel - enable collapse when hair grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="hairs"/>
+                                                <Condition Binding="{Binding ElementName=hairGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
 
-                                        <!-- Facial Hair Carousel needs CarouselButton Appearance -->
+                                        <!-- Facial hair carousel - enable collapse when facial hair grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairs"/>
+                                                <Condition Binding="{Binding ElementName=facialHairGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Tattoo carousel - enable collapse when tattoo grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="tattoos"/>
+                                                <Condition Binding="{Binding ElementName=tattooGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Piercing carousel - enable collapse when piercing grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="piercings_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=piercingGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Makeup carousel - enable collapse when makeup grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="makeup"/>
+                                                <Condition Binding="{Binding ElementName=makeupGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Facial Hair and Piercing Carousel needs CarouselButton Appearance -->
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairCarousel">
+                                            <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="piercingCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
                                         </DataTrigger>
                                     </ControlTemplate.Triggers>
@@ -3981,6 +4163,125 @@
                         </b:Interaction.Triggers>
                     </ls:LSInputBinding>
                 </StackPanel>
+        </Border>
+    </ControlTemplate>
+
+    <!-- HUI List Style for Expanded List Template -->
+    <Style x:Key="HUI_AppearanceListStyle" TargetType="ListBox">
+        <!-- Configure navigation like other list styles -->
+        <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Continue"/>
+        <Setter Property="IsSynchronizedWithCurrentItem" Value="True"/>
+        <Setter Property="IsTabStop" Value="True"/>
+        
+        <!-- Simple template without ScrollViewer (handled by parent template) -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <ItemsPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <!-- Vertical StackPanel for list layout -->
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <!-- Use ItemTemplate instead of ItemContainerStyle -->
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="{x:Type ls:VMSelectable}">
+                    <StackPanel>
+                        <ContentControl Template="{StaticResource InteractiveListButtonTemplate}" 
+                                       x:Name="base" 
+                                       ls:MoveFocus.Focusable="True" 
+                                       Focusable="True">
+                            <Grid>
+                                <!-- Selection Background -->
+                                <Rectangle x:Name="selectionBackground" 
+                                          Fill="#4000FF00" 
+                                          Visibility="Collapsed" 
+                                          Stretch="Fill"/>
+                                
+                                <!-- Icon Section -->
+                                <Grid Style="{StaticResource FeatureListItemIconHolder}">
+                                    <Rectangle x:Name="itemIcon" 
+                                              Fill="{Binding Icon}" 
+                                              Width="96" 
+                                              Height="96" 
+                                              RadiusX="6" 
+                                              RadiusY="6"/>
+                                </Grid>
+                                
+                                <!-- Text Section -->
+                                <TextBlock x:Name="itemText" 
+                                          Text="{Binding Name}" 
+                                          Style="{StaticResource FeatureListItemName}"/>
+                                
+                                <!-- Selection Indicator -->
+                                <Image x:Name="selectionTick" 
+                                      Visibility="Collapsed" 
+                                      Source="{StaticResource IconTick}" 
+                                      Stretch="None" 
+                                      HorizontalAlignment="Right" 
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,20,0"/>
+                            </Grid>
+                        </ContentControl>
+                        
+                        <!-- UIAccept input binding to select this item (like the working grid template) -->
+                        <ls:LSInputBinding IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" BoundEvent="UIAccept">
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="LSInputBindingReleased">
+                                    <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" PropertyName="SelectedItem" Value="{Binding .}"/>
+                                    <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                        </ls:LSInputBinding>
+                    </StackPanel>
+                    
+                    <DataTemplate.Triggers>
+                        <!-- Show selection effects when this item is selected -->
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                            <Setter TargetName="selectionTick" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="selectionBackground" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- HUI Separate Expanded List Template -->
+    <!-- A list view alternative to the grid, similar to passive selectors -->
+    <ControlTemplate x:Key="HUI_CarouselExpandedList" TargetType="ListBox">
+        <Border MaxHeight="700" HorizontalAlignment="Center" VerticalAlignment="Top" Focusable="False" Margin="0,0,0,20" ClipToBounds="True">
+            <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch" Focusable="False">
+                <!-- Simple ListBox with custom style, just like HUI_CarouselExpandedGrid -->
+                <ScrollViewer VerticalScrollBarVisibility="Visible" 
+                              HorizontalScrollBarVisibility="Disabled"
+                              MaxHeight="650" 
+                              Width="{StaticResource gameplayPanelWidth}"
+                              CanContentScroll="False"
+                              IsDeferredScrollingEnabled="False">
+                    <ItemsPresenter/>
+                </ScrollViewer>
+                
+                <!-- Collapse List Input Binding - Set list to closed state (use same tag as grid) -->
+                <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsVisible}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="LSInputBindingPressed">
+                            <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Tag" Value="GridClosed"/>
+                            <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" PropertyName="Visibility" Value="Collapsed"/>
+                            <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSInputBinding>
+            </StackPanel>
         </Border>
     </ControlTemplate>
 
