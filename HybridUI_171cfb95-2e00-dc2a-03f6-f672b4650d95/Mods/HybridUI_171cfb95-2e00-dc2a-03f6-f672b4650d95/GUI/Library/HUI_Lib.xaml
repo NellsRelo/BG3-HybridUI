@@ -1131,6 +1131,11 @@
                     </Setter.Value>
                 </Setter>
             </DataTrigger>
+            
+            <!-- ShowAncestry Tag: Keep default buttons, use Content for text (mimics checkbox toggle functionality as carousel) -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="ShowAncestry">
+                <Setter TargetName="cTxt" Property="Text" Value="{Binding SelectedItem.Content, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
+            </DataTrigger>
 
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -2329,6 +2334,17 @@
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
+                                            <!-- Scales specific expand input -->
+                                            <ls:LSInputBinding x:Name="scalesExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="scalesGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+                                            
                                             <!-- TopOfHead specific expand input -->
                                             <ls:LSInputBinding x:Name="topOfHeadExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
@@ -2413,6 +2429,8 @@
                                                         <b:ChangePropertyAction TargetName="piercingGrid" PropertyName="Visibility" Value="Collapsed"/>
                                                         <!-- Close scars grid -->
                                                         <b:ChangePropertyAction TargetName="scarGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                                        <!-- Close scales grid -->
+                                                        <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Visibility" Value="Collapsed"/>
                                                         <!-- Close topOfHead grid -->
                                                         <b:ChangePropertyAction TargetName="topOfHeadGrid" PropertyName="Visibility" Value="Collapsed"/>
                                                         <!-- Close chin grid -->
@@ -2547,6 +2565,16 @@
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scars_listOpen"/>
                                                 <Condition Binding="{Binding ElementName=scarGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
+                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Scales carousel - show collapse when scales grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scales_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=scalesGrid, Path=Visibility}" Value="Visible"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
                                             <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
@@ -2692,6 +2720,15 @@
                                             <Setter TargetName="scarsExpandInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
 
+                                        <!-- Enable expand input for scales carousels -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scales"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="scalesExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
                                         <!-- Enable expand input for topOfHead carousels -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
@@ -2816,6 +2853,15 @@
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scars_listOpen"/>
                                                 <Condition Binding="{Binding ElementName=scarGrid, Path=Visibility}" Value="Visible"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
+
+                                        <!-- Scales carousel - enable collapse when scales grid is visible -->
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="scales_listOpen"/>
+                                                <Condition Binding="{Binding ElementName=scalesGrid, Path=Visibility}" Value="Visible"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
@@ -7422,6 +7468,19 @@
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="SkinColour">
                 <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SkinColorOptions}"/>
             </DataTrigger>
+            <!-- Additional tag matches for CC_AppearanceControls_c.xaml usage -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="skinColourSubheader">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SkinColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="EyeColour">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding EyeColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="HairHighlightColour">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding AppearanceHairHighlights.ColorOptions}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="ScalesColour">
+                <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding AppearancePassive.ColorOptions}"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="hornColours">
                 <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SelectableHornColours}"/>
             </DataTrigger>
@@ -7431,43 +7490,6 @@
             <!-- Default fallback for unspecified tags -->
             <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
                 <Setter TargetName="colorOptionsControl" Property="ItemsSource" Value="{Binding SkinColorOptions}"/>
-            </DataTrigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-    <!-- HUI Color Grid Bottom Buttons Template -->
-    <!-- Extends AppearanceItemSelectedBottomButtons with color options toggle -->
-    <ControlTemplate x:Key="HUI_ColorGridBottomButtons">
-        <StackPanel Orientation="Horizontal">
-            <!-- Standard appearance buttons -->
-            <ls:LSButton x:Name="selectButton" ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}" Tag="{Binding Source=hd0c08193ga7f2g4a7eg8225g63748c7b3096,Converter={StaticResource TranslatedStringConverter}}" OverwriteClickSound="UI_DefaultButton_Click"/>
-
-            <!-- Toggle tooltips -->
-            <ls:LSButton x:Name="ToggleTooltips"
-                         Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
-                         CommandParameter="{Binding FocusedElement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ls:UIWidget}}"
-                         BoundEvent="UIShowInfo"
-                         ContentTemplate="{StaticResource ControllerButtonHint}"
-                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIShowInfo, Converter={StaticResource FindInputEventConverter}}"
-                         Tag="{Binding Source='hf8dd4c2fg97e0g4ccdgac1ag3cd1fe5060ef', Converter={StaticResource TranslatedStringConverter}}" TapTime="{StaticResource DefaultButtonTapTime}"/>
-
-            <!-- All Colors Toggle Button - binds to the SkinColorOptions toggle -->
-            <ls:LSButton x:Name="colorToggleButton"
-                         BoundEvent="JumpToFromTab"
-                         ContentTemplate="{StaticResource ControllerButtonHint}"
-                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=JumpToFromTab, Converter={StaticResource FindInputEventConverter}}"
-                         Tag="{Binding Source='h4b7b0c9fg6a2fg4e1fg8b4fg123456789abc', Converter={StaticResource TranslatedStringConverter}, FallbackValue='All Colors'}"
-                         DataContext="{Binding SkinColorOptions[0]}"
-                         Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"
-                         CommandParameter="{Binding .}"
-                         OverwriteClickSound="UI_DefaultButton_Click"/>
-
-            <ls:LSButton x:Name="backButton" ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" OverwriteClickSound="UI_DefaultButton_Click"/>
-        </StackPanel>
-
-        <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding ShowUIElementTooltip, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Value="True">
-                <Setter TargetName="ToggleTooltips" Property="Tag" Value="{Binding Source='hb33ec471gd611g4ee3gbbffg699af8f79167', Converter={StaticResource TranslatedStringConverter}}"/>
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

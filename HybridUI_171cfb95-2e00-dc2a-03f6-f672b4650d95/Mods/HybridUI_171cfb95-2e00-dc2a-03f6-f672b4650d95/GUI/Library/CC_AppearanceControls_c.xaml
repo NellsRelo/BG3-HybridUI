@@ -8,99 +8,6 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
-        <!-- Appearance Selector for Non-Dragonborn Draconic Bloodline Sorcerers -->
-        <ControlTemplate x:Key="draconicAppearanceTemplate">
-            <DockPanel>
-                <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                   
-                    <!-- Tab Carousel for Scales/Colors -->
-                    <ContentControl x:Name="draconicTabsCarousel" Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                        <ListBox x:Name="draconicTabs" Template="{StaticResource HUI_HardcodedCarousel}" SelectedIndex="0">
-                            <ListBox.Items>
-                                <ListBoxItem Tag="scales" Content="{Binding Source='h7572d825gd782g43a5g90aag7f5d814a5f1a', Converter={StaticResource TranslatedStringConverter}}"/>
-                                <ListBoxItem Tag="colors" Content="{Binding Source='h9a8b7a34g0b55g47dbg9bd3ga7cd487fe423', Converter={StaticResource TranslatedStringConverter}}"/>
-                            </ListBox.Items>
-                        </ListBox>
-                    </ContentControl>
-
-                    <ContentControl x:Name="draconicTabsEmpty" Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                      <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h24787db3gf28dg4d79g8c0age428d4067710', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,0,0,0" />
-                    </ContentControl>
-                </StackPanel>
-
-                <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"  VerticalScrollBarVisibility="Auto"
-                          Grid.Row="1" Margin="0,50,0,0" Height="1200">
-                    <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" x:Name="draconicAppearanceOptions"  VerticalAlignment="Stretch" >
-
-                        <!-- Scales Content -->
-                        <StackPanel x:Name="scalesContent" Margin="0,50,0,50">
-                            <ListBox ItemsSource="{Binding SelectableScales}" SelectedItem="{Binding SelectedScales}" Style="{StaticResource appearanceIconGridStyle}" Margin="0,30,0,0"/>
-                        </StackPanel>
-
-                        <!-- Colors Content -->
-                        <StackPanel x:Name="colorsContent" Visibility="Collapsed" Margin="0,50,0,50">
-                            <ItemsControl Style="{StaticResource ColorOptionsStyle}" ItemsSource="{Binding AppearancePassive.ColorOptions}" Margin="0,0,0,30"/>
-                            <ListBox ItemsSource="{Binding SelectablePassiveColours}" SelectedItem="{Binding SelectedPassiveColour}" ItemTemplate="{StaticResource selectableColourTemplate}" Style="{StaticResource appearanceOverpanelListBoxStyle}"/>
-                        </StackPanel>
-
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
-          <ControlTemplate.Triggers>
-            
-            <!-- Tab Content Visibility -->
-            <DataTrigger Binding="{Binding ElementName=draconicTabs, Path=SelectedItem.Tag}" Value="scales">
-                <Setter TargetName="scalesContent" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="colorsContent" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
-            
-            <DataTrigger Binding="{Binding ElementName=draconicTabs, Path=SelectedItem.Tag}" Value="colors">
-                <Setter TargetName="scalesContent" Property="Visibility" Value="Collapsed"/>
-                <Setter TargetName="colorsContent" Property="Visibility" Value="Visible"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
-                <Setter TargetName="draconicTabsCarousel" Property="Visibility" Value="Collapsed"/>
-                <Setter TargetName="draconicTabsEmpty" Property="Visibility" Value="Visible"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="False">
-                <Setter TargetName="draconicTabsCarousel" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="draconicTabsEmpty" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
-          </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-          <!-- Appearance Selector for Dragonborn Draconic Bloodline Sorcerers -->
-        <ControlTemplate x:Key="draconicAppearanceTemplateDragonBorn">
-            <DockPanel>
-
-                <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-
-                    <!-- Decorator for Header - using this for consistency, but normally it would just be used in Carousels -->
-                    <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
-                      <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h861a433dgcc20g452bg9b1agde89d14c85c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10" />
-                    </ContentControl>
-
-                    <ls:LSToggleButton x:Name="draconicDragonbornToggle" Template="{StaticResource DraconicDragonbornTickBoxTemplate}" HorizontalAlignment="Center" ls:MoveFocus.Focusable="True" IsChecked="{Binding AppearancePassive.EmptyMaterialSelected, Mode=TwoWay, Converter={StaticResource InvertBoolConverter}}" Command="{Binding DragonbornDraconicLinesToggleCommand}"/>
-                    <ItemsControl x:Name="draconicDragonbornColourOptionList" Style="{StaticResource ColorOptionsStyle}" ItemsSource="{Binding AppearancePassive.ColorOptions}"/>
-
-                    <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"  VerticalScrollBarVisibility="Auto"
-                          Grid.Row="1" Margin="0,50,0,0" Height="1200">
-                        <ListBox x:Name="draconicDragonbornColourOptionGrid" ItemsSource="{Binding SelectablePassiveColours}" SelectedItem="{Binding SelectedPassiveColour}" ItemTemplate="{StaticResource selectableColourTemplate}" Style="{StaticResource appearanceOverpanelListBoxStyle}" Margin="0,50,0,0"/>
-                    </ScrollViewer>
-
-                </StackPanel>
-            </DockPanel>
-            <ControlTemplate.Triggers>
-                <DataTrigger Binding="{Binding ElementName=draconicDragonbornToggle, Path=(ls:MoveFocus.IsFocused)}" Value="True">
-                    <Setter TargetName="draconicDragonbornToggle" Property="BoundEvent" Value="UIAccept"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
-                    <Setter TargetName="draconicDragonbornColourOptionList" Property="Visibility" Value="Collapsed"/>
-                    <Setter TargetName="draconicDragonbornColourOptionGrid" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
           <!-- Appearance Components -->
 
         <!-- Input Components -->
@@ -209,6 +116,33 @@
                           
                           <b:EventTrigger EventName="SelectionChanged">
                               <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding .}"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <ListBoxItem x:Name="disabled" Content="{Binding Source='h468f21a6g00c2g41c3g81d3gbe5291d6ab4d', Converter={StaticResource TranslatedStringConverter}}"/>
+                      <ListBoxItem x:Name="enabled" Content="{Binding Source='h054025c0gd806g418agb58dg6b325823b7cd', Converter={StaticResource TranslatedStringConverter}}"/>
+                  </ListBox>
+
+              </StackPanel>
+          </ControlTemplate>
+
+          <!-- Show Ancestry Toggle -->
+          <ControlTemplate x:Key="HUI_ShowAncestryBoxComponent">
+              <StackPanel x:Name="ShowAncestryContainer">
+                  <ContentControl x:Name="showAncestrySubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                      <TextBlock Text="{Binding Source='h6ea184f4g802bg4712gac5cgdeaee9390e44', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                  </ContentControl>
+
+                  <ListBox x:Name="showAncestryCarousel" Margin="0,12,0,0" 
+                           Tag="ShowAncestry" Template="{StaticResource HUI_CarouselTemplate}"
+                           SelectedIndex="{Binding AppearancePassive.EmptyMaterialSelected, Mode=TwoWay, Converter={StaticResource InvertBoolToIntConverter}, FallbackValue=0}">
+                      <b:Interaction.Triggers>
+                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                              <ls:BringIntoViewAction TargetName="showAncestrySubheader"/>
+                          </b:DataTrigger>
+                          
+                          <b:EventTrigger EventName="SelectionChanged">
+                              <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
                       
@@ -581,11 +515,7 @@
 
             <!-- Scales Carousel Component -->
             <ControlTemplate x:Key="HUI_ScalesBoxComponent">
-              <StackPanel>
-
-                <ContentControl x:Name="scalesSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h381a6c0bg214fg4968gae5cg9e5b8a8ffc20', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
-                </ContentControl>
+              <ContentControl x:Name="tattooCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
 
                 <ListBox x:Name="scalesCarousel" Tag="scales" 
                       ItemsSource="{Binding SelectableScales}"
@@ -608,7 +538,7 @@
                           </b:DataTrigger>
                       </b:Interaction.Triggers>
                 </ListBox>
-              </StackPanel>
+              </ContentControl>
             </ControlTemplate>
 
             <!-- Tails Carousel Component -->
@@ -1010,6 +940,30 @@
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="SelectionChanged">
                                 <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectableHornTipColours}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
+
+            <!-- Scales Colour -->
+            <ControlTemplate x:Key="HUI_ScalesColourBoxComponent">
+                <StackPanel x:Name="ScalesColourContainer">
+                    <ContentControl x:Name="scalesColourSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h8f9581e8g4440g4cf5g8752g220535346a50', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
+                    </ContentControl>
+
+                    <ListBox x:Name="scalesColourCarousel" ItemsSource="{Binding SelectablePassiveColours}" SelectedItem="{Binding SelectedPassiveColour}" 
+                             Tag="ScalesColour" Template="{StaticResource HUI_CarouselColourTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="scalesColourSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding SelectablePassiveColours}"/>
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </ListBox>
@@ -2092,28 +2046,86 @@
                       <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                       </Grid.RowDefinitions>
                       
                       <b:Interaction.Triggers>
                           <!-- Auto-close any open grids when this template loads -->
                           <b:EventTrigger EventName="Loaded">
-                              <b:ChangePropertyAction TargetName="makeupVisual" PropertyName="Tag" Value=""/>
+                              <b:ChangePropertyAction TargetName="faceVisual" PropertyName="Tag" Value=""/>
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
-                      
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
-                      <StackPanel Width="{StaticResource gameplayPanelWidth}" Grid.Row="1">
-                          <ContentControl x:Name="PassiveFeaturesContent" Template="{StaticResource draconicAppearanceTemplate}"/>
-                      </StackPanel>
+                      <Control x:Name="scalesVisual" Template="{StaticResource HUI_ScalesBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                      <ContentControl x:Name="scalesHeaderDragonborn" Template="{StaticResource HUI_CarouselHeaderDecorator}" Visibility="Collapsed" Grid.Row="1" Margin="0,20,0,0">
+                          <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h861a433dgcc20g452bg9b1agde89d14c85c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10" />
+                      </ContentControl>
+                      <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
+                      <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
+                      <Control x:Name="showAncestry" Template="{StaticResource HUI_ShowAncestryBoxComponent}" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed" />
 
-                  </Grid>
-              </DockPanel>
-            <ControlTemplate.Triggers>
-                <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
-                    <Setter TargetName="PassiveFeaturesContent" Property="Template" Value="{StaticResource draconicAppearanceTemplateDragonBorn}"/>
-                </DataTrigger>
+                      <ScrollViewer x:Name="passiveAppearanceScroller" Style="{StaticResource gameplayPanelScrollViewerStyle}"  VerticalScrollBarVisibility="Auto"
+                                Margin="0,50,0,0" Height="1200" Grid.Row="2">
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+                              <ListBox x:Name="scalesGrid" 
+                                       Template="{StaticResource HUI_CarouselExpandedGrid}"
+                                       ItemsSource="{Binding SelectableScales}"
+                                       SelectedItem="{Binding SelectedScales}"
+                                       Visibility="Collapsed"
+                                       HorizontalAlignment="Center" 
+                                       Margin="0,0,0,0">
+                                  <b:Interaction.Triggers>
+                                      <!-- Show grid when scroller Tag is "ShowPassiveAppearanceGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=passiveAppearanceScroller, Path=Tag}" Value="ShowPassiveAppearanceGrid">
+                                          <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Tag" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Visibility" Value="Visible"/>
+                                          <b:ChangePropertyAction TargetName="passiveAppearanceScroller" PropertyName="Tag" Value="PassiveAppearanceGridOpen"/>
+                                          <ls:BringIntoViewAction TargetObject="{Binding ElementName=scalesGrid}"/>
+                                      </b:DataTrigger>
 
-            </ControlTemplate.Triggers>
+                                      <!-- Hide grid when scroller Tag is "HidePassiveAppearanceGrid" -->
+                                      <b:DataTrigger Binding="{Binding ElementName=passiveAppearanceScroller, Path=Tag}" Value="HidePassiveAppearanceGrid">
+                                          <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="passiveAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                      </b:DataTrigger>
+                                      
+                                      <!-- Watch for GridClosed tag from the grid itself (when user presses Cancel in grid) -->
+                                      <b:DataTrigger Binding="{Binding ElementName=scalesGrid, Path=Tag}" Value="GridClosed">
+                                          <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Tag" Value=""/>
+                                          <b:ChangePropertyAction TargetName="scalesGrid" PropertyName="Visibility" Value="Collapsed"/>
+                                          <b:ChangePropertyAction TargetName="passiveAppearanceScroller" PropertyName="Tag" Value=""/>
+                                          <!-- Set focus back to the stored carousel reference -->
+                                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=focusedCarouselStorage, Path=Content}"/>
+                                      </b:DataTrigger>
+                                  </b:Interaction.Triggers>
+                              </ListBox>
+
+                              <Control x:Name="scalesColour" Template="{StaticResource HUI_ScalesColourBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+
+                          </StackPanel>
+                      </ScrollViewer>
+                </Grid>
+            </DockPanel>
+          <ControlTemplate.Triggers>
+            
+            <!-- Tab Content Visibility -->
+            <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                <Setter TargetName="scalesVisual" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="scalesHeaderDragonborn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="showAncestry" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="passiveAppearanceScroller" Property="Grid.Row" Value="3"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
+                <Setter TargetName="scalesColour" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="False">
+                <Setter TargetName="scalesColour" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+          </ControlTemplate.Triggers>
           </ControlTemplate>
 </ResourceDictionary>
