@@ -559,8 +559,6 @@
                                                     <ListBoxItem x:Name="skillsTab" Tag="skills" IsEnabled="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                                     <ListBoxItem x:Name="expertiseTab" Tag="expertise" IsEnabled="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
 
-                                                    <ListBoxItem x:Name="draconicTab" Tag="draconic" IsEnabled="{Binding Path=HasAppearancePassive, FallbackValue=False}"/>
-
                                                 </ListBox>
 
                                                 <!-- New Appearance Tabs System -->
@@ -671,7 +669,7 @@
                                                     <ListBoxItem x:Name="hornsTab" Tag="horns" Content="{Binding Source=h1e2fea14g1a4fg4567ga286g8c4162b78d6e_14, Converter={StaticResource TranslatedStringConverter}}" Visibility="{Binding SelectableHorns.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
                                                     <ListBoxItem x:Name="makeupTab" Tag="makeup" Content="{Binding Source=hbbddf3e9g352fg461fg8761gbb5256ebd9c4, Converter={StaticResource TranslatedStringConverter}}"/>
                                                     <ListBoxItem x:Name="accessoriesTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                    <ListBoxItem x:Name="passiveFeaturesTab" Tag="passivefeatures" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                    <ListBoxItem x:Name="passiveFeaturesTab" Tag="passivefeatures" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}" Visibility="Collapsed" />
                                                     <b:Interaction.Triggers>
                                                         <b:EventTrigger EventName="SelectionChanged">
                                                             <b:Interaction.Behaviors>
@@ -1490,6 +1488,16 @@
 
                                 <DataTrigger Binding="{Binding ElementName=appearanceTabs, Path=SelectedItem.Tag}" Value="passivefeatures">
                                     <Setter TargetName="appearanceContentsPanel" Property="Template" Value="{StaticResource PassiveFeaturesAppearanceTemplate}"/>
+                                </DataTrigger>
+
+                                <!-- Show passiveFeaturesTab for Draconic Sorcerer -->
+                                <DataTrigger Binding="{Binding SelectedSubClass.IsDraconicSorcerer}" Value="True">
+                                    <Setter TargetName="passiveFeaturesTab" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                
+                                <!-- Show passiveFeaturesTab when SelectableScales.Count > 0 -->
+                                <DataTrigger Binding="{Binding SelectableScales.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
+                                    <Setter TargetName="passiveFeaturesTab" Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
 
                             </ControlTemplate.Triggers>

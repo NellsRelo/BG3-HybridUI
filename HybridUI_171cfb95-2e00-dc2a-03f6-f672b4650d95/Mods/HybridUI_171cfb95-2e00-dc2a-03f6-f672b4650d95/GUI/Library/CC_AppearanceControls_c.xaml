@@ -249,6 +249,18 @@
                       </b:Interaction.Triggers>
                   </ListBox>
               </StackPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Hide genitals when nudity is covered -->
+                  <DataTrigger Binding="{Binding CoverNudity}" Value="True">
+                      <Setter TargetName="GenitaliaContainer" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Hide genitals for companions (Daisy) - I got your back Swen -->
+                  <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                      <Setter TargetName="GenitaliaContainer" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
             <!-- Voice Selector Component -->
@@ -420,6 +432,13 @@
                         </b:Interaction.Triggers>
                     </ListBox>
                 </ContentControl>
+                
+                <ControlTemplate.Triggers>
+                    <!-- Hide tattoos for Dragonborn -->
+                    <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                        <Setter TargetName="tattooCarouselHeaderDecorator" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
             </ControlTemplate>
 
             <!-- Piercings Carousel Component -->
@@ -454,9 +473,36 @@
               </StackPanel>
             </ControlTemplate>
 
+            <!-- Piercings Carousel Component -->
+            <ControlTemplate x:Key="HUI_PiercingsSoloBoxComponent">
+              <ContentControl x:Name="piercingSoloCarouselHeaderDecorator" Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                <ListBox x:Name="piercingSoloCarousel" Tag="piercingsSolo" 
+                      ItemsSource="{Binding SelectablePiercings}"
+                      SelectedItem="{Binding SelectedPiercing}"
+                      Template="{StaticResource HUI_CarouselGridTemplate}"
+                      Visibility="{Binding SelectablePiercings.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="GotFocus">
+                              <ls:BringIntoViewAction TargetName="piercingsSubheader"/>
+                          </b:EventTrigger>
+                          
+                          <!-- Show close button when piercing list is open -->
+                          <b:DataTrigger Binding="{Binding ElementName=piercingGrid, Path=Visibility}" Value="Visible">
+                              <b:ChangePropertyAction TargetName="piercingSoloCarousel" PropertyName="Tag" Value="piercings_listOpen"/>
+                          </b:DataTrigger>
+                          
+                          <!-- Hide close button when piercing list is closed -->
+                          <b:DataTrigger Binding="{Binding ElementName=piercingGrid, Path=Visibility}" Value="Collapsed">
+                              <b:ChangePropertyAction TargetName="piercingSoloCarousel" PropertyName="Tag" Value="piercings"/>
+                          </b:DataTrigger>
+                      </b:Interaction.Triggers>
+                </ListBox>
+              </ContentControl>
+            </ControlTemplate>
+
             <!-- Scar Carousel Component -->
             <ControlTemplate x:Key="HUI_ScarsBoxComponent">
-              <StackPanel>
+              <StackPanel x:Name="scarsContainer">
 
                 <ContentControl x:Name="scarsSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h408d8f2bgca7eg4d20gb0bag4d4a3318f1c5', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}"/>
@@ -484,6 +530,23 @@
                       </b:Interaction.Triggers>
                 </ListBox>
               </StackPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Hide scars for Dragonborn -->
+                  <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                      <Setter TargetName="scarsContainer" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Hide scars for Half-Illithid -->
+                  <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.TadpoledState}" Value="HalfIllithid">
+                      <Setter TargetName="scarsContainer" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Hide scars for Full Illithid -->
+                  <DataTrigger Binding="{Binding CurrentPlayer.SelectedCharacter.PlayerCharacterProperties.TadpoledState}" Value="FullIllithid">
+                      <Setter TargetName="scarsContainer" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
             </ControlTemplate>
 
             <!-- Horn Carousel Component -->
@@ -865,6 +928,13 @@
                         </b:Interaction.Triggers>
                     </ListBox>
                 </StackPanel>
+                
+                <ControlTemplate.Triggers>
+                    <!-- Hide makeup colors when no makeup material is selected -->
+                    <DataTrigger Binding="{Binding AppearanceMakeup.EmptyMaterialSelected}" Value="True">
+                        <Setter TargetName="MakeupColourContainer" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
             </ControlTemplate>
 
             <!-- Tattoo Colour -->
@@ -889,6 +959,13 @@
                         </b:Interaction.Triggers>
                     </ListBox>
                 </StackPanel>
+                
+                <ControlTemplate.Triggers>
+                    <!-- Hide tattoo colors for Dragonborn -->
+                    <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                        <Setter TargetName="TattooColourContainer" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
             </ControlTemplate>
 
             <!-- Horn Colour -->
@@ -1536,6 +1613,7 @@
                       
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
                       <Control x:Name="tattooVisual" Template="{StaticResource HUI_TattooBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                      <Control x:Name="piercingsSoloVisual" Template="{StaticResource HUI_PiercingsSoloBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed"/>
 
                       <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
                       <ContentControl x:Name="focusedCarouselStorage" Visibility="Collapsed" Grid.Row="2"/>
@@ -1687,6 +1765,26 @@
                       </ScrollViewer>
                   </Grid>
               </DockPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Show piercingsSoloVisual and hide piercings for Dragonborn -->
+                  <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
+                      <Setter TargetName="piercingsSoloVisual" Property="Visibility" Value="Visible"/>
+                      <Setter TargetName="piercings" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Show piercingsSoloVisual and hide piercings for Half Illithid -->
+                  <DataTrigger Binding="{Binding TadpoledState}" Value="HalfIllithid">
+                      <Setter TargetName="piercingsSoloVisual" Property="Visibility" Value="Visible"/>
+                      <Setter TargetName="piercings" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Show piercingsSoloVisual and hide piercings for Full Illithid -->
+                  <DataTrigger Binding="{Binding TadpoledState}" Value="FullIllithid">
+                      <Setter TargetName="piercingsSoloVisual" Property="Visibility" Value="Visible"/>
+                      <Setter TargetName="piercings" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
           </ControlTemplate>
 
           <!-- Features Appearance Template -->

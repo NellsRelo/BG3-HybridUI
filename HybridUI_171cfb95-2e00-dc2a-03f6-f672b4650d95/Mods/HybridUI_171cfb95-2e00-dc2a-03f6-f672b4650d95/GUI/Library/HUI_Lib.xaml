@@ -2745,6 +2745,13 @@
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="piercingExpandInput" Property="IsEnabled" Value="True"/>
                                         </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" Value="piercingsSolo"/>
+                                                <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="piercingExpandInput" Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger>
                                         
 
                                         
