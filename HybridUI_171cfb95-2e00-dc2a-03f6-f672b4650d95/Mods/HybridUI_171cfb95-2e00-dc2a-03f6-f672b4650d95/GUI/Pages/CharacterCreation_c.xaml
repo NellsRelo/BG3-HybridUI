@@ -1690,6 +1690,9 @@
                                     <!-- Show back button in daisy mode -->
                                     <Setter TargetName="daisyBackButton" Property="Visibility" Value="Visible"/>
                                     
+                                    <!-- Hide toggle tooltips and nudity buttons during daisy mode -->
+                                    <Setter TargetName="bottomButtons" Property="Template" Value="{StaticResource StandardBottomButtonsTemplate2}"/>
+                                    
                                     <!-- Set the daisy contents panel template - default to Race when entering daisy mode -->
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource RaceDaisyTemplate}"/>
 
@@ -1933,14 +1936,14 @@
                                     <ControlTemplate x:Key="StandardBottomButtonsTemplate2">
                                         <StackPanel Orientation="Horizontal">
                                             <!-- Toggle tooltips -->
-                                            <ls:LSButton x:Name="ToggleTooltips"
+                                            <!-- <ls:LSButton x:Name="ToggleTooltips"
                                                          ContentTemplate="{StaticResource ControllerButtonHint}"
                                                          Tag="{Binding Source='hf8dd4c2fg97e0g4ccdgac1ag3cd1fe5060ef', Converter={StaticResource TranslatedStringConverter}}" 
                                                          TapTime="{StaticResource DefaultButtonTapTime}"
                                                          Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIShowInfo, Converter={StaticResource FindInputEventConverter}}"
                                                          Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
                                                          CommandParameter="{Binding FocusedElement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ls:UIWidget}}"
-                                                         BoundEvent="UIShowInfo"/>
+                                                         BoundEvent="UIShowInfo"/> -->
 
                                             <ls:LSButton x:Name="backFromDaisyButton"
                                             ContentTemplate="{StaticResource ControllerButtonHint}" 

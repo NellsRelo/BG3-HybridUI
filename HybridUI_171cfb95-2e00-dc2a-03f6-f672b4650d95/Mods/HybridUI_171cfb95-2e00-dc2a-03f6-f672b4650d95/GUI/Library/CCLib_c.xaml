@@ -4801,6 +4801,9 @@
                 <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="backFromAppearanceButton" Property="Visibility" Value="Collapsed"/>
+                <!-- Hide toggle tooltips and nudity buttons in daisy mode -->
+                <Setter TargetName="nudityToggleButtonContainer" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="ToggleTooltips" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="raceskills">
                 <Setter TargetName="selectButton" Property="Visibility" Value="Visible"/>
