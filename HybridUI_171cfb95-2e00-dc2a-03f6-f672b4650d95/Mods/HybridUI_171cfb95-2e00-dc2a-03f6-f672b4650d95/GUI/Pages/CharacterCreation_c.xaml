@@ -787,12 +787,12 @@
                                                 </ListBox.ItemContainerStyle>
 
                                                 <ListBoxItem x:Name="raceDaisyTab" Tag="race" Content="{Binding Source=hadf27237ge191g4922ga84cg055b984c9b1f, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                <ListBoxItem x:Name="generalDaisyTab" Tag="general" Content="{Binding Source=h4c12a52dgcd71g43b9ga266gf506b54b0c55, Converter={StaticResource TranslatedStringConverter}}"/>
                                                 <ListBoxItem x:Name="headDaisyTab" Tag="head" Content="{Binding Source=h1cb3665cgbe61g4230g8861g9bbfa408442b, Converter={StaticResource TranslatedStringConverter}}"/>
                                                 <ListBoxItem x:Name="hairDaisyTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                <ListBoxItem x:Name="featuresDaisyTab" Tag="features" Content="{Binding Source=h97cb756egd22dg488aga292g7cd93aeaaa6e, Converter={StaticResource TranslatedStringConverter}}"/>
                                                 <ListBoxItem x:Name="hornsDaisyTab" Tag="horns" Content="{Binding Source=h1e2fea14g1a4fg4567ga286g8c4162b78d6e_14, Converter={StaticResource TranslatedStringConverter}}" Visibility="{Binding SelectableHorns.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                                <ListBoxItem x:Name="makeupDaisyTab" Tag="makeup" Content="{Binding Source=hbbddf3e9g352fg461fg8761gbb5256ebd9c4, Converter={StaticResource TranslatedStringConverter}}"/>
                                                 <ListBoxItem x:Name="accessoriesDaisyTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
-                                                <ListBoxItem x:Name="passiveAppearanceDaisyTab" Tag="passiveappearance" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}" Visibility="Collapsed"/>
                                                 
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="SelectionChanged">
@@ -987,8 +987,8 @@
                                     <!-- Daisy mode back button -->
                                     <ls:LSButton x:Name="daisyBackButton" Visibility="Collapsed"
                                                  ContentTemplate="{StaticResource ControllerButtonHint}" 
-                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" 
-                                                 BoundEvent="UICancel" 
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICreate, Converter={StaticResource FindInputEventConverter}}" 
+                                                 BoundEvent="UICreate" 
                                                  Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" 
                                                  Margin="50,0,0,0">
                                         <b:Interaction.Triggers>
@@ -1700,10 +1700,6 @@
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource RaceDaisyTemplate}"/>
                                 </DataTrigger>
 
-                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="general">
-                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource GeneralDaisyTemplate}"/>
-                                </DataTrigger>
-
                                 <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="head">
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource HeadDaisyTemplate}"/>
                                 </DataTrigger>
@@ -1712,16 +1708,20 @@
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource HairDaisyTemplate}"/>
                                 </DataTrigger>
 
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="features">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource FeaturesDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="makeup">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource MakeupDaisyTemplate}"/>
+                                </DataTrigger>
+
                                 <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="horns">
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource HornsDaisyTemplate}"/>
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="accessories">
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource AccessoriesDaisyTemplate}"/>
-                                </DataTrigger>
-
-                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="passiveappearance">
-                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource PassiveAppearanceDaisyTemplate}"/>
                                 </DataTrigger>
 
                             </ControlTemplate.Triggers>

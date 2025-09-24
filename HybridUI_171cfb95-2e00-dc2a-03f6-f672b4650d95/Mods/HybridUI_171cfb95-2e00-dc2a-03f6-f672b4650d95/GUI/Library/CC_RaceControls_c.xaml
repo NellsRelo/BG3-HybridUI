@@ -8,142 +8,13 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
-      <ControlTemplate x:Key="RaceCarouselWithUIAccept" TargetType="ListBox">
-        <ControlTemplate.Resources>
-            <!-- Random number generators for different item counts -->
-            <Storyboard x:Key="randomTrigger" Storyboard.TargetName="randomFloatHolder" Storyboard.TargetProperty="Tag">
-                <DoubleAnimation To="1" Duration="0:0:0.001"/>
-            </Storyboard>
-        </ControlTemplate.Resources>
-          <Grid>
-          <!-- Main Grid Layout -->
-          <DockPanel>
-                <!-- Carousel Mode Display -->
-                <ListBox x:Name="carouselDisplay" 
-                        ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ItemsSource}"
-                        SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem}"
-                        Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                            <ListBox.Template>
-                                <ControlTemplate>
-                                    <ContentControl x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" Template="{StaticResource ListButtonTemplate}">
-                                        <Grid>
-                                            <ls:LSRepeatButton x:Name="leftBtn" BoundEvent="UILeft" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" SoundID="{DynamicResource CarouselButtonSoundEvent}">
-                                                <ls:LSRepeatButton.RenderTransform>
-                                                    <ScaleTransform ScaleX="-1" CenterX="32"/>
-                                                </ls:LSRepeatButton.RenderTransform>
-                                            </ls:LSRepeatButton>
-                                            <ls:LSRepeatButton x:Name="rightBtn" BoundEvent="UIRight" Style="{StaticResource IconCarouselRepeatButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0" SoundID="{DynamicResource CarouselButtonSoundEvent}"/>
-
-                                            <!-- Use IconCarouselTextTemplate for text display -->
-                                            <Control Template="{DynamicResource IconCarouselTextTemplate}"/>
-
-                                            <!-- Expand Grid Action Button - appears when focused -->
-                                            <StackPanel x:Name="expandButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                                <TextBlock x:Name="expandText" Text="{Binding Source='hdf0c5b51gb587g4f15g839bgecfe6bb1104b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
-                                                <Control x:Name="expandIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                                            </StackPanel>
-
-                                            <!-- Collapse Grid Hint - shows when grid is visible -->
-                                            <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
-                                                <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
-                                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
-                                            </StackPanel>
-
-                                            <!-- Expand Grid Input Binding - Show external grid via messaging -->
-                                            <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="False">
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                                    </b:EventTrigger>
-                                                </b:Interaction.Triggers>
-                                            </ls:LSInputBinding>
-                                            
-                                            <!-- Race carousel specific expand input -->
-                                            <ls:LSInputBinding x:Name="raceExpandInput" BoundEvent="UIAccept" IsEnabled="False">
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Collapsed"/>
-                                                        <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Visible"/>
-                                                        <ls:BringIntoViewAction TargetName="raceListBox"/>
-                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                                    </b:EventTrigger>
-                                                </b:Interaction.Triggers>
-                                            </ls:LSInputBinding>                                            <!-- Collapse Grid Input Binding - Closes visible grids and returns focus -->
-                                            <ls:LSInputBinding x:Name="collapseGridInput" BoundEvent="UICancel" IsEnabled="False">
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="LSInputBindingReleased">
-                                                        <!-- Close race grid -->
-                                                        <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
-                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                                    </b:EventTrigger>
-                                                </b:Interaction.Triggers>
-                                            </ls:LSInputBinding>
-                                        </Grid>
-                                        <b:Interaction.Triggers>
-                                            <b:EventTrigger SourceName="leftBtn" EventName="Click">
-                                                <ls:SelectNextListBoxItem Reversed="True" TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
-                                            </b:EventTrigger>
-                                            <b:EventTrigger SourceName="rightBtn" EventName="Click">
-                                                <ls:SelectNextListBoxItem TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" ForceSelect="True"/>
-                                            </b:EventTrigger>
-                                        </b:Interaction.Triggers>
-                                    </ContentControl>
-                                    <ControlTemplate.Triggers>
-                                        <!-- Show carousel buttons only if more than one item -->
-                                        <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Value="1">
-                                            <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
-                                            <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-
-                                        <!-- Set fallback text when no items are available -->
-                                        <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Value="0">
-                                            <!-- No text setter needed, using IconCarouselTextTemplate -->
-                                        </DataTrigger>
-                                        
-                                        <!-- Show expand button when focused and grid is not open -->
-                                        <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
-                                            <Setter TargetName="expandButton" Property="Opacity" Value="1"/>
-                                            <Setter TargetName="raceExpandInput" Property="IsEnabled" Value="True"/>
-                                        </DataTrigger>
-
-                                 
-                                        
-                                        <!-- Switch to collapse button when race grid is visible -->
-                                        <DataTrigger Binding="{Binding ElementName=raceListBox, Path=Visibility}" Value="Visible">
-                                            <Setter TargetName="expandButton" Property="Opacity" Value="0"/>
-                                            <Setter TargetName="collapseButton" Property="Opacity" Value="1"/>
-                                            <Setter TargetName="raceExpandInput" Property="IsEnabled" Value="False"/>
-                                            <Setter TargetName="collapseGridInput" Property="IsEnabled" Value="True"/>
-                                        </DataTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </ListBox.Template>
-                        </ListBox>
-          </DockPanel>
-        </Grid>
-          <ControlTemplate.Triggers>
-              <DataTrigger Binding="{Binding ItemsSource.Count, ElementName=dots}" Value="1">
-                  <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
-                  <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
-              </DataTrigger>
-
-              <MultiDataTrigger>
-                  <MultiDataTrigger.Conditions>
-                      <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
-                      <Condition Binding="{Binding ElementName=raceListBox, Path=Visibility}" Value="Collapsed"/>
-                  </MultiDataTrigger.Conditions>
-                  <Setter TargetName="ExpandGridInput" Property="Opacity" Value="1"/>
-              </MultiDataTrigger>
-
-          </ControlTemplate.Triggers>
-      </ControlTemplate>
-
       <ControlTemplate x:Key="raceSelectionTemplate">
           <DockPanel>
 
               <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                  <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                    <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                  <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0" />
+
+                  <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1" Margin="0,10,0,0">
                       <ListBox x:Name="RaceCarousel" Template="{StaticResource RaceCarouselWithUIAccept}" 
                               ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}">
                           <ListBox.Style>
@@ -157,11 +28,10 @@
                           </ListBox.Style>
                       </ListBox>
                     </ContentControl>
-                  </ContentControl>
               </StackPanel>
 
               <ScrollViewer x:Name="raceScrollViewer" Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                            VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"
+                            VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto" Grid.Row="2"
                             DockPanel.Dock="Top" Margin="0,20,0,0">
 
                 <StackPanel x:Name="listStackPanel">
