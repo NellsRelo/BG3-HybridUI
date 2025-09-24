@@ -2031,6 +2031,67 @@
         </Grid>
 
         <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+
+    </ControlTemplate>
+
+    <!-- Daisy tabs template - matches appearance tab structure exactly but targets daisyTabSelector -->
+    <ControlTemplate x:Key="daisyTabTemplate2" TargetType="ListBoxItem">
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,4">
+
+                <Grid x:Name="tabItem" Width="0">
+
+                    <TextBlock x:Name="label" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right"
+                               Text="{Binding Content, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
+                        
+                        <b:Interaction.Triggers>
+                            <!-- Set the tab underline asset width when selected -->
+                            <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="setSelectorWidth">
+                                            <DoubleAnimation Storyboard.TargetName="daisyTabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+
+                            <b:DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="tabAppear">
+                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+
+                            <b:DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="tabDisappear">
+                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                    </TextBlock>
+
+                </Grid>
+
+            </StackPanel>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
+            </Trigger>
         </ControlTemplate.Triggers>
 
     </ControlTemplate>
@@ -4732,6 +4793,14 @@
                 <Setter TargetName="backFromAppearanceButton" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="nudityToggleButtonContainer" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="ToggleTooltips" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            
+            <!-- Daisy mode - hide appearance buttons like appearance mode does -->
+            <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                <Setter TargetName="showSummary" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="backFromAppearanceButton" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="raceskills">
                 <Setter TargetName="selectButton" Property="Visibility" Value="Visible"/>

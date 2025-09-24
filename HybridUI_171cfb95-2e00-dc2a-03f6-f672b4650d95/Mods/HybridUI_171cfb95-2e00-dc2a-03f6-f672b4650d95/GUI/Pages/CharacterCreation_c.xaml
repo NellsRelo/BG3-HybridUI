@@ -199,8 +199,8 @@
 
                 <b:Interaction.Triggers>
                     <b:DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
-                        <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Visible" />
-                        <b:ChangePropertyAction TargetName="gamePlayPage" PropertyName="Visibility" Value="Hidden" />
+                        <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Collapsed" />
+                        <b:ChangePropertyAction TargetName="gamePlayPage" PropertyName="Visibility" Value="Visible" />
                         <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Collapsed" />
                         <b:ChangePropertyAction TargetName="readyInfoPage" PropertyName="Visibility" Value="Collapsed" />
                     </b:DataTrigger>
@@ -245,6 +245,7 @@
                                         </ContentControl>
                                         <Control x:Name="gameplayPanel" Height="{StaticResource gameplayPanelHeightSplit}"/>
                                         <Control x:Name="appearanceContentsPanel" Height="{StaticResource gameplayPanelHeightSplit}" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" Visibility="Collapsed"/>
+                                        <Control x:Name="daisyContentsPanel" Height="{StaticResource gameplayPanelHeightSplit}" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Right" Visibility="Collapsed"/>
                                         
                                     </Grid>
 
@@ -686,6 +687,132 @@
 
                                             </Grid>
 
+                                            <!-- New Daisy Tabs System -->
+                                            <ListBox x:Name="daisyTabs" VerticalAlignment="Center" SelectedIndex="0" Visibility="Collapsed" Height="{Binding ElementName=gameplayTabs, Path=ActualHeight}" Width="{Binding ElementName=gameplayTabs, Path=ActualWidth}">
+                                                <ListBox.Template>
+                                                    <ControlTemplate TargetType="ListBox">
+                                                        <Grid x:Name="templateRoot">
+                                                            <b:Interaction.Behaviors>
+                                                                <ls:SubListBoxBehavior x:Name="DaisyTabNavigator" RootListBox="{Binding RelativeSource={RelativeSource TemplatedParent}}" DoPrevious="{Binding ElementName=prevTabButton, Path=IsPressed}" DoNext="{Binding ElementName=nextTabButton, Path=IsPressed}"/>
+                                                            </b:Interaction.Behaviors>
+
+                                                            <!-- Daisy backplate -->
+                                                            <Grid x:Name="daisyBackplate" Width="{Binding ElementName=DaisyTabNavigator, Path=BackplateWidth}" MinWidth="{Binding ElementName=DaisyTabNavigator, Path=RootListBox.SelectedItem.ActualWidth}"
+                                                                  Height="{StaticResource TabsPanelHeight}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Visible">
+                                                                <Grid.Tag>
+                                                                    <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                        <Binding ElementName="DaisyTabNavigator" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
+                                                                        <Binding ElementName="daisyTabSelector" Path="Width" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-0.5"/>
+                                                                        <Binding ElementName="tabBarClipper" Path="Tag"/>
+                                                                        <Binding ElementName="DaisyTabNavigator" Path="BackplateOffset"/>
+                                                                    </MultiBinding>
+                                                                </Grid.Tag>
+
+                                                                <Grid.Background>
+                                                                    <LinearGradientBrush Opacity="1.0" StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Offset="0" Color="{StaticResource transparentBlack}"/>
+                                                                        <GradientStop Offset="0.5" Color="#70af8768"/>
+                                                                        <GradientStop Offset="1.0" Color="#b0af8768" />
+                                                                    </LinearGradientBrush>
+                                                                </Grid.Background>
+
+                                                                <Grid.RenderTransform>
+                                                                    <TranslateTransform X="{Binding ElementName=daisyBackplate,Path=Tag}" Y="0"/>
+                                                                </Grid.RenderTransform>
+
+                                                                <Grid.Resources>
+                                                                    <Storyboard x:Key="SlideDaisyBackplateAnimation">
+                                                                        <DoubleAnimation Storyboard.TargetName="daisyBackplate" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="{StaticResource BackplateSlideAnimationDuration}"
+                                                                            AccelerationRatio="0.25" DecelerationRatio="0.25" To="{Binding ElementName=daisyBackplate,Path=Tag}" FillBehavior="HoldEnd"/>
+                                                                    </Storyboard>
+                                                                </Grid.Resources>
+
+                                                                <b:Interaction.Triggers>
+                                                                    <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=DaisyTabNavigator}">
+                                                                        <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideDaisyBackplateAnimation}"/>
+                                                                        <ls:LSControlStoryboard ControlStoryboardOption="Play" >
+                                                                            <ls:LSControlStoryboard.Storyboard>
+                                                                                <Storyboard x:Name="initialDaisyBackplateWidthSetting" Duration="0:0:0.1">
+                                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="daisyBackplate">
+                                                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+                                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                                </Storyboard>
+                                                                            </ls:LSControlStoryboard.Storyboard>
+                                                                        </ls:LSControlStoryboard>
+                                                                    </b:PropertyChangedTrigger>
+                                                                </b:Interaction.Triggers>
+                                                            </Grid>
+
+                                                            <Grid x:Name="daisyItemsPanel">
+                                                                <Grid.Tag>
+                                                                    <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                        <Binding ElementName="DaisyTabNavigator" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
+                                                                        <Binding ElementName="daisyTabSelector" Path="Width" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-0.5"/>
+                                                                        <Binding ElementName="tabBarClipper" Path="Tag"/>
+                                                                    </MultiBinding>
+                                                                </Grid.Tag>
+
+                                                                <Grid.RenderTransform>
+                                                                    <TranslateTransform X="{Binding ElementName=daisyItemsPanel,Path=Tag}" Y="0"/>
+                                                                </Grid.RenderTransform>
+
+                                                                <Grid.Resources>
+                                                                    <Storyboard x:Key="ScrollDaisyTabsAnimation">
+                                                                        <DoubleAnimation Storyboard.TargetName="daisyItemsPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="{StaticResource TabsSlideAnimationDuration}"
+                                                                            AccelerationRatio="0.25" DecelerationRatio="0.25" To="{Binding ElementName=daisyItemsPanel,Path=Tag}" FillBehavior="HoldEnd"/>
+                                                                    </Storyboard>
+                                                                </Grid.Resources>
+
+                                                                <b:Interaction.Triggers>
+                                                                    <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=DaisyTabNavigator}">
+                                                                        <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource ScrollDaisyTabsAnimation}"/>
+                                                                    </b:PropertyChangedTrigger>
+                                                                </b:Interaction.Triggers>
+                                                                <ItemsPresenter/>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </ListBox.Template>
+                                                
+                                                <ListBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ListBox.ItemsPanel>
+
+                                                <ListBox.ItemContainerStyle>
+                                                    <Style TargetType="ListBoxItem">
+                                                        <Setter Property="Template" Value="{StaticResource daisyTabTemplate2}"/>
+                                                    </Style>
+                                                </ListBox.ItemContainerStyle>
+
+                                                <ListBoxItem x:Name="raceDaisyTab" Tag="race" Content="{Binding Source=hadf27237ge191g4922ga84cg055b984c9b1f, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                <ListBoxItem x:Name="generalDaisyTab" Tag="general" Content="{Binding Source=h4c12a52dgcd71g43b9ga266gf506b54b0c55, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                <ListBoxItem x:Name="headDaisyTab" Tag="head" Content="{Binding Source=h1cb3665cgbe61g4230g8861g9bbfa408442b, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                <ListBoxItem x:Name="hairDaisyTab" Tag="hair" Content="{Binding Source=h64935fcfg6ce0g4110g919cg15e8a57601b9, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                <ListBoxItem x:Name="hornsDaisyTab" Tag="horns" Content="{Binding Source=h1e2fea14g1a4fg4567ga286g8c4162b78d6e_14, Converter={StaticResource TranslatedStringConverter}}" Visibility="{Binding SelectableHorns.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                                <ListBoxItem x:Name="accessoriesDaisyTab" Tag="accessories" Content="{Binding Source=hf8efcfc3g3463g4154g87deg839d6f7969da, Converter={StaticResource TranslatedStringConverter}}"/>
+                                                <ListBoxItem x:Name="passiveAppearanceDaisyTab" Tag="passiveappearance" Content="{Binding Source=h7572d825gd782g43a5g90aag7f5d814a5f1a, Converter={StaticResource TranslatedStringConverter}}" Visibility="Collapsed"/>
+                                                
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="SelectionChanged">
+                                                        <b:Interaction.Behaviors>
+                                                            <b:ConditionBehavior>
+                                                                <b:ConditionalExpression>
+                                                                    <b:ComparisonCondition LeftOperand="{Binding ElementName=daisyTabs, Path=SelectedIndex}" Operator="NotEqual" RightOperand="-1"/>
+                                                                </b:ConditionalExpression>
+                                                            </b:ConditionBehavior>
+                                                        </b:Interaction.Behaviors>
+                                                        <b:ChangePropertyAction TargetName="daisyTabs" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=daisyTabs}" />
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ListBox>
+
+                                            <Grid x:Name="selectedDaisyTabUnderline" HorizontalAlignment="Left" Margin="102,-56,0,0" Width="600" Visibility="Collapsed">
+                                                <!-- Daisy underline positioned to align with daisy tabs -->
+                                                <ls:LSNineSliceImage x:Name="daisyTabSelector" Style="{StaticResource tabSelectorStyle}" Width="0" Margin="0,-20,0,20"/>
+                                            </Grid>
+
                                             <Grid x:Name="selectedTabUnderline" HorizontalAlignment="Left" Margin="102,-56,0,0" Width="600">
                                                 <!-- Variable width element, always centered in surrounding Grid -->
                                                 <!-- Width for animation -->
@@ -695,23 +822,54 @@
                                             <Grid x:Name="selectedAppearanceTabUnderline" HorizontalAlignment="Left" Margin="102,-56,0,0" Width="600" Visibility="Collapsed">
                                                 <!-- Appearance underline positioned to align with first appearance tab -->
                                                 <ls:LSNineSliceImage x:Name="appearanceTabSelector" Style="{StaticResource tabSelectorStyle}" Width="0" Margin="0,-20,0,20"/>
-                                            </Grid>                                        </StackPanel>
+                                            </Grid>
+
+
+                                        </StackPanel>
 
                                         <StackPanel x:Name="tabBarButtons" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,0,0,0">
                                             <ls:LSButton x:Name="prevTabButton" 
                                                          IsEnabled="{Binding ElementName=SubListBoxHelper,Path=HasPrevious}"
-                                                                        
                                                          ContentTemplate="{StaticResource ControllerButtonHintImageOnly}"
                                                          Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UITabPrev, Converter={StaticResource FindInputEventConverter}}"
                                                          BoundEvent="UITabPrev"
-                                                         Margin="-20,0,-20,0"/>
+                                                         Margin="-20,0,-20,0">
+                                                <ls:LSButton.Style>
+                                                    <Style TargetType="ls:LSButton" BasedOn="{StaticResource {x:Type ls:LSButton}}">
+                                                        <Style.Triggers>
+                                                            <!-- Bind to AppearanceTabNavigator when in appearance mode -->
+                                                            <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
+                                                                <Setter Property="IsEnabled" Value="{Binding ElementName=AppearanceTabNavigator,Path=HasPrevious}"/>
+                                                            </DataTrigger>
+                                                            <!-- Bind to DaisyTabNavigator when in daisy mode -->
+                                                            <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                                                                <Setter Property="IsEnabled" Value="{Binding ElementName=DaisyTabNavigator,Path=HasPrevious}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ls:LSButton.Style>
+                                            </ls:LSButton>
                                             <ls:LSButton x:Name="nextTabButton" 
                                                          IsEnabled="{Binding ElementName=SubListBoxHelper,Path=HasNext}"
-                                                                        
                                                          ContentTemplate="{StaticResource ControllerButtonHintImageOnly}"
                                                          Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UITabNext, Converter={StaticResource FindInputEventConverter}}"
                                                          BoundEvent="UITabNext"
-                                                         Margin="-20,0,-20,0"/>
+                                                         Margin="-20,0,-20,0">
+                                                <ls:LSButton.Style>
+                                                    <Style TargetType="ls:LSButton" BasedOn="{StaticResource {x:Type ls:LSButton}}">
+                                                        <Style.Triggers>
+                                                            <!-- Bind to AppearanceTabNavigator when in appearance mode -->
+                                                            <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
+                                                                <Setter Property="IsEnabled" Value="{Binding ElementName=AppearanceTabNavigator,Path=HasNext}"/>
+                                                            </DataTrigger>
+                                                            <!-- Bind to DaisyTabNavigator when in daisy mode -->
+                                                            <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                                                                <Setter Property="IsEnabled" Value="{Binding ElementName=DaisyTabNavigator,Path=HasNext}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ls:LSButton.Style>
+                                            </ls:LSButton>
                                         </StackPanel>
 
 
@@ -732,6 +890,22 @@
                                                     <b:EventTrigger EventName="Click">
                                                         <b:ChangePropertyAction TargetName="gamePlayPage" PropertyName="Visibility" Value="Collapsed" />
                                                         <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Visible" />
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSButton>
+                                        </ContentControl>
+
+                                        <!-- VentureForthButton for Daisy Mode -->
+                                        <ContentControl x:Name="ventureForthButton" Template="{StaticResource buttonBackplateTemplate}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,148" Visibility="Collapsed">
+                                            <ls:LSButton Style="{StaticResource ControllerHoldButtonStyle}" 
+                                                        Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIDelete'}" 
+                                                        Tag="{Binding Source='h06b74424gf3bdg4b6cgbe63g84b32198e162', Converter={StaticResource TranslatedStringConverter}}" 
+                                                        Command="{Binding DataContext.FinishCreating, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" 
+                                                        SoundID="UI_HUD_CC_VentureForth" 
+                                                        Margin="2,0,0,0">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSButtonReleased">
+                                                        <ls:LSPlaySound Sound="UI_HUD_CC_VentureForth_Controller_Release"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSButton>
@@ -809,6 +983,20 @@
 
                                 <StackPanel x:Name="bottomButtonsHolder" Margin="0,0,24,56" Style="{StaticResource ButtonHint.Container.Right}">
                                     <Control x:Name="bottomButtons" Template="{StaticResource StandardBottomButtonsTemplate2}"/>
+                                    
+                                    <!-- Daisy mode back button -->
+                                    <ls:LSButton x:Name="daisyBackButton" Visibility="Collapsed"
+                                                 ContentTemplate="{StaticResource ControllerButtonHint}" 
+                                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" 
+                                                 BoundEvent="UICancel" 
+                                                 Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" 
+                                                 Margin="50,0,0,0">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="Click">
+                                                <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Naming"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </ls:LSButton>
                                 </StackPanel>
 
                             </Grid>
@@ -836,6 +1024,8 @@
                                     <Setter TargetName="gameplayPanel" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
                                     <Setter TargetName="appearanceContentsPanel" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
                                     <Setter TargetName="appearanceContentsPanel" Property="Width" Value="{StaticResource gameplayPanelWidth}" />
+                                    <Setter TargetName="daisyContentsPanel" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
+                                    <Setter TargetName="daisyContentsPanel" Property="Width" Value="{StaticResource gameplayPanelWidth}" />
                                     <Setter TargetName="MissingRequirementsMainError" Property="HorizontalAlignment" Value="Center" />
                                     <Setter TargetName="MissingRequirementsMainError" Property="VerticalAlignment" Value="Bottom" />
                                     <Setter TargetName="MissingRequirementsMainError" Property="Margin" Value="0,0,0,300" />
@@ -854,6 +1044,15 @@
                                         <Condition Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance"/>
                                     </MultiDataTrigger.Conditions>
                                     <Setter TargetName="selectedAppearanceTabUnderline" Property="Margin" Value="252,-54,0,0" />
+                                </MultiDataTrigger>
+
+                                <!-- Common layout with daisy mode -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Layout}" Value="Common"/>
+                                        <Condition Binding="{Binding CharacterCreationStep}" Value="Companion"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="selectedDaisyTabUnderline" Property="Margin" Value="252,-54,0,0" />
                                 </MultiDataTrigger>
 
                                 <DataTrigger Binding="{Binding Layout}" Value="Common">
@@ -1458,6 +1657,73 @@
                                     <Setter TargetName="passiveFeaturesTab" Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
 
+                                <!-- Daisy Tabs Mode - triggered by CharacterCreationStep -->
+                                <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                                    <!-- Hide other tab systems -->
+                                    <Setter TargetName="gameplayTabs" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="appearanceTabs" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="selectedTabUnderline" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="selectedAppearanceTabUnderline" Property="Visibility" Value="Collapsed"/>
+                                    
+                                    <!-- Show daisy systems -->
+                                    <Setter TargetName="daisyTabs" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="selectedDaisyTabUnderline" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="daisyContentsPanel" Property="Visibility" Value="Visible"/>
+                                    
+                                    <!-- Hide other content panels -->
+                                    <Setter TargetName="gameplayPanel" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="appearanceContentsPanel" Property="Visibility" Value="Collapsed"/>
+                                    
+                                    <!-- Hide summary in daisy mode -->
+                                    <Setter TargetName="summary" Property="Visibility" Value="Collapsed"/>
+                                    
+                                    <!-- Hide the old daisy page list in daisy mode -->
+                                    <Setter TargetName="daisyPage" Property="Visibility" Value="Collapsed"/>
+                                    
+                                    <!-- Hide mode controller in daisy mode -->
+                                    <Setter TargetName="modeController" Property="Visibility" Value="Collapsed"/>
+                                    
+                                    <!-- Replace gotoNamingButton with VentureForthButton behavior -->
+                                    <Setter TargetName="gotoNamingButton" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="ventureForthButton" Property="Visibility" Value="Visible"/>
+                                    
+                                    <!-- Show back button in daisy mode -->
+                                    <Setter TargetName="daisyBackButton" Property="Visibility" Value="Visible"/>
+                                    
+                                    <!-- Set the daisy contents panel template - default to Race when entering daisy mode -->
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource RaceDaisyTemplate}"/>
+
+                                </DataTrigger>
+
+                                <!-- Daisy Tab Specific DataTriggers -->
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="race">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource RaceDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="general">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource GeneralDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="head">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource HeadDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="hair">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource HairDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="horns">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource HornsDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="accessories">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource AccessoriesDaisyTemplate}"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="passiveappearance">
+                                    <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource PassiveAppearanceDaisyTemplate}"/>
+                                </DataTrigger>
+
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Control.Template>
@@ -1520,8 +1786,7 @@
                                                          Tag="{Binding Source=h29f5143dgf3f8g4185ga82ag411205073b03,Converter={StaticResource TranslatedStringConverter}}">
                                             <b:Interaction.Triggers>
                                                 <b:EventTrigger EventName="Click">
-                                                    <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Collapsed" />
-                                                    <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Visible" />
+                                                    <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Companion"/>
                                                 </b:EventTrigger>
                                             </b:Interaction.Triggers>
                                         </ls:LSButton>
@@ -1667,6 +1932,16 @@
                                     <!-- Replacements for Avatar Appearance Templates -->
                                     <ControlTemplate x:Key="StandardBottomButtonsTemplate2">
                                         <StackPanel Orientation="Horizontal">
+                                            <!-- Toggle tooltips -->
+                                            <ls:LSButton x:Name="ToggleTooltips"
+                                                         ContentTemplate="{StaticResource ControllerButtonHint}"
+                                                         Tag="{Binding Source='hf8dd4c2fg97e0g4ccdgac1ag3cd1fe5060ef', Converter={StaticResource TranslatedStringConverter}}" 
+                                                         TapTime="{StaticResource DefaultButtonTapTime}"
+                                                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIShowInfo, Converter={StaticResource FindInputEventConverter}}"
+                                                         Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
+                                                         CommandParameter="{Binding FocusedElement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ls:UIWidget}}"
+                                                         BoundEvent="UIShowInfo"/>
+
                                             <ls:LSButton x:Name="backFromDaisyButton"
                                             ContentTemplate="{StaticResource ControllerButtonHint}" 
                                             Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}" 
@@ -1676,7 +1951,7 @@
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="Click">
                                                         <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Visible" />
-                                                        <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Collapsed" />
+                                                        <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Naming"/>
                                                     </b:EventTrigger>
                                                 </b:Interaction.Triggers>
                                             </ls:LSButton>
@@ -1856,7 +2131,7 @@
                     </Control.Template>
                 </Control>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0">
+                <StackPanel x:Name="PlayerSlotsContainer" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,25,0">
                     <Control x:Name="PlayerSlots" Template="{StaticResource PlayerSlotsTemplate}" VerticalAlignment="Center"/>
                     <TextBlock x:Name="PressToJoinText" Foreground="{StaticResource LS_accent75TxtColor}" FontSize="{StaticResource ScaledSmallishFontSize}"
                                VerticalAlignment="Center" Visibility="Collapsed" Opacity="0" Margin="12,-18,0,18">
@@ -1869,6 +2144,25 @@
                 </StackPanel>
 
                 <ls:LSInputBinding x:Name="PinTooltipBinding" Style="{StaticResource PinTooltipBindingStyle}" EatInput="False"/>
+
+                <!-- Daisy mode UICancel handling - allow returning to naming page -->
+                <ls:LSInputBinding x:Name="DaisyModeCancel" BoundEvent="UICancel" EatInput="True">
+                    <ls:LSInputBinding.IsEnabled>
+                        <MultiBinding Converter="{StaticResource EqualConverter}">
+                            <Binding Path="CharacterCreationStep"/>
+                            <Binding Source="Companion"/>
+                        </MultiBinding>
+                    </ls:LSInputBinding.IsEnabled>
+                    <b:Interaction.Triggers>
+                        <!-- Allow going back to naming page -->
+                        <b:EventTrigger EventName="LSInputBindingPressed">
+                            <b:ChangePropertyAction TargetName="gamePlayPage" PropertyName="Visibility" Value="Visible" />
+                            <b:ChangePropertyAction TargetName="namingPage" PropertyName="Visibility" Value="Visible" />
+                            <b:ChangePropertyAction TargetName="daisyPage" PropertyName="Visibility" Value="Collapsed" />
+                            <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Naming"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </ls:LSInputBinding>
 
                 <ls:LSInputBinding x:Name="RotateLeftBinding" BoundEvent="CharacterCreationRotateLeft" GameInputCommand="{Binding GameInputRotateLeftCommand}"/>
                 <ls:LSInputBinding x:Name="RotateRightBinding" BoundEvent="CharacterCreationRotateRight" GameInputCommand="{Binding GameInputRotateRightCommand}"/>

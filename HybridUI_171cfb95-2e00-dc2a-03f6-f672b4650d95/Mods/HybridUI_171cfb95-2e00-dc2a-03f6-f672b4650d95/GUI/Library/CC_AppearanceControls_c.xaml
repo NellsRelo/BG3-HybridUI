@@ -8,222 +8,222 @@
 					xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
 					mc:Ignorable="d">
 
-          <!-- Appearance Components -->
+        <!-- Appearance Components -->
 
-        <!-- Input Components -->
-          <!-- Name Input -->
-          <!-- HUI Naming Box Component - Character name input using HUI_TextInputTemplate -->
-          <ControlTemplate x:Key="HUI_NamingBoxComponent">
-              <ContentControl Template="{StaticResource HUI_NameInputTemplate}" 
-                              Tag="{Binding Source='h5cd3cabag657ag4abfga33fg9b1b2808ee7f', Converter={StaticResource TranslatedStringConverter}}"/>
-          </ControlTemplate>
+          <!-- Input Components -->
+            <!-- Name Input -->
+            <!-- HUI Naming Box Component - Character name input using HUI_TextInputTemplate -->
+            <ControlTemplate x:Key="HUI_NamingBoxComponent">
+                <ContentControl Template="{StaticResource HUI_NameInputTemplate}" 
+                                Tag="{Binding Source='h5cd3cabag657ag4abfga33fg9b1b2808ee7f', Converter={StaticResource TranslatedStringConverter}}"/>
+            </ControlTemplate>
 
-        <!-- Hardcoded Carousels -->
-          <!-- Body Type Selection -->
-          <ControlTemplate x:Key="HUI_BodyTypeBoxComponent">
-              <StackPanel d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}">
-                  <b:Interaction.Triggers>
-                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Female">
-                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="0"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Male">
-                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="1"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="FemaleStrong">
-                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="2"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="MaleStrong">
-                          <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="3"/>
-                      </b:DataTrigger>
-                  </b:Interaction.Triggers>
+          <!-- Hardcoded Carousels -->
+            <!-- Body Type Selection -->
+            <ControlTemplate x:Key="HUI_BodyTypeBoxComponent">
+                <StackPanel d:DataContext="{d:DesignInstance {x:Type ls:DCCharacterCreation}, IsDesignTimeCreatable=True}">
+                    <b:Interaction.Triggers>
+                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Female">
+                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="0"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="Male">
+                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="1"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="FemaleStrong">
+                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="2"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding BodyTypeAndShape}" Value="MaleStrong">
+                            <b:ChangePropertyAction TargetName="bodyTypeCarousel" PropertyName="SelectedIndex" Value="3"/>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
 
-                  <ContentControl x:Name="bodyTypeSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                      <TextBlock Text="{Binding Source='hc4f5c05bgc2feg4333ga08fg229b33c42437', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
-                  </ContentControl>
-                  <ListBox x:Name="bodyTypeCarousel" Margin="0,12,0,0" 
-                           Tag="BodyType" Template="{StaticResource HUI_CarouselTemplate}">
-                      <b:Interaction.Triggers>
-                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                              <ls:BringIntoViewAction TargetName="bodyTypeSubheader"/>
-                          </b:DataTrigger>
-                      </b:Interaction.Triggers>
-                      
-                      <ListBoxItem x:Name="female" Content="1"/>
-                      <ListBoxItem x:Name="male" Content="2"/>
-                      <ListBoxItem x:Name="femaleStrong" Content="3"/>
-                      <ListBoxItem x:Name="maleStrong" Content="4"/>
-                  </ListBox>
-              </StackPanel>
-              
-              <ControlTemplate.Triggers>
-                  <!-- Hide strong body types for races that don't support additional body shapes -->
-                  <DataTrigger Binding="{Binding SelectedRace.HasAdditionalBodyShapes}" Value="False">
-                      <Setter TargetName="femaleStrong" Property="Visibility" Value="Collapsed"/>
-                      <Setter TargetName="maleStrong" Property="Visibility" Value="Collapsed"/>
-                  </DataTrigger>
-              </ControlTemplate.Triggers>
-          </ControlTemplate>
+                    <ContentControl x:Name="bodyTypeSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock Text="{Binding Source='hc4f5c05bgc2feg4333ga08fg229b33c42437', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                    </ContentControl>
+                    <ListBox x:Name="bodyTypeCarousel" Margin="0,12,0,0" 
+                            Tag="BodyType" Template="{StaticResource HUI_CarouselTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="bodyTypeSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+                        
+                        <ListBoxItem x:Name="female" Content="1"/>
+                        <ListBoxItem x:Name="male" Content="2"/>
+                        <ListBoxItem x:Name="femaleStrong" Content="3"/>
+                        <ListBoxItem x:Name="maleStrong" Content="4"/>
+                    </ListBox>
+                </StackPanel>
+                
+                <ControlTemplate.Triggers>
+                    <!-- Hide strong body types for races that don't support additional body shapes -->
+                    <DataTrigger Binding="{Binding SelectedRace.HasAdditionalBodyShapes}" Value="False">
+                        <Setter TargetName="femaleStrong" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="maleStrong" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
 
-          <!-- Identity Selection -->
-          <ControlTemplate x:Key="HUI_IdentityBoxComponent">
-              <StackPanel x:Name="IdentityContainer" Visibility="{Binding CanShowIdentity, Converter={StaticResource BoolToVisibleConverter}}">
-                  <b:Interaction.Triggers>
-                      <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Male">
-                          <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="0"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Female">
-                          <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="1"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Neutral">
-                          <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="2"/>
-                      </b:DataTrigger>
-                  </b:Interaction.Triggers>
+            <!-- Identity Selection -->
+            <ControlTemplate x:Key="HUI_IdentityBoxComponent">
+                <StackPanel x:Name="IdentityContainer" Visibility="{Binding CanShowIdentity, Converter={StaticResource BoolToVisibleConverter}}">
+                    <b:Interaction.Triggers>
+                        <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Male">
+                            <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="0"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Female">
+                            <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="1"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding SelectedIdentity}" Value="Neutral">
+                            <b:ChangePropertyAction TargetName="identityCarousel" PropertyName="SelectedIndex" Value="2"/>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
 
-                  <ContentControl x:Name="identitySubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                      <TextBlock Text="{Binding Source='hcc23cfaagbc1eg4bb0gafb9g9f720497b786', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
-                  </ContentControl>
+                    <ContentControl x:Name="identitySubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock Text="{Binding Source='hcc23cfaagbc1eg4bb0gafb9g9f720497b786', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
+                    </ContentControl>
 
-                  <ListBox x:Name="identityCarousel" IsEnabled="{Binding IsIdentityEnabled}" Margin="0,12,0,0" 
-                           Tag="Identity" Template="{StaticResource HUI_CarouselTemplate}">
-                      <b:Interaction.Triggers>
-                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                              <ls:BringIntoViewAction TargetName="identitySubheader"/>
-                          </b:DataTrigger>
-                      </b:Interaction.Triggers>
-                      <ListBox.Items>
-                          <ListBoxItem x:Name="male" Content="{Binding Source='hf12d3837gd6fbg448ag813dg9cf6d9a4d412', Converter={StaticResource TranslatedStringConverter}}"/>
-                          <ListBoxItem x:Name="female" Content="{Binding Source='h5d60ad1cg41dcg4d9fgaba8gda842c090327', Converter={StaticResource TranslatedStringConverter}}"/>
-                          <ListBoxItem x:Name="neutral" Content="{Binding Source='hea2ce077g2b7ag42dfgb194g928c3dd108a7', Converter={StaticResource TranslatedStringConverter}}"/>
-                      </ListBox.Items>
-                  </ListBox>
-              </StackPanel>
-          </ControlTemplate>
+                    <ListBox x:Name="identityCarousel" IsEnabled="{Binding IsIdentityEnabled}" Margin="0,12,0,0" 
+                            Tag="Identity" Template="{StaticResource HUI_CarouselTemplate}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="identitySubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+                        <ListBox.Items>
+                            <ListBoxItem x:Name="male" Content="{Binding Source='hf12d3837gd6fbg448ag813dg9cf6d9a4d412', Converter={StaticResource TranslatedStringConverter}}"/>
+                            <ListBoxItem x:Name="female" Content="{Binding Source='h5d60ad1cg41dcg4d9fgaba8gda842c090327', Converter={StaticResource TranslatedStringConverter}}"/>
+                            <ListBoxItem x:Name="neutral" Content="{Binding Source='hea2ce077g2b7ag42dfgb194g928c3dd108a7', Converter={StaticResource TranslatedStringConverter}}"/>
+                        </ListBox.Items>
+                    </ListBox>
+                </StackPanel>
+            </ControlTemplate>
 
-          <!-- Heterochromia Toggle -->
-          <ControlTemplate x:Key="HUI_HeterochromiaBoxComponent">
-              <StackPanel x:Name="HeterochromiaContainer">
-                  <ContentControl x:Name="heterochromiaSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                      <TextBlock Text="{Binding Source='h6f4a0631g9994g44ffg9468gaec6c6a62838', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
-                  </ContentControl>
+            <!-- Heterochromia Toggle -->
+            <ControlTemplate x:Key="HUI_HeterochromiaBoxComponent">
+                <StackPanel x:Name="HeterochromiaContainer">
+                    <ContentControl x:Name="heterochromiaSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock Text="{Binding Source='h6f4a0631g9994g44ffg9468gaec6c6a62838', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                    </ContentControl>
 
-                  <ListBox x:Name="heterochromiaCarousel" Margin="0,12,0,0" 
-                           Tag="Heterochromia" Template="{StaticResource HUI_CarouselTemplate}"
-                           SelectedIndex="{Binding HeterochromiaEnabled, Converter={StaticResource BoolToIntConverter}, FallbackValue=0}">
-                      <b:Interaction.Triggers>
-                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                              <ls:BringIntoViewAction TargetName="heterochromiaSubheader"/>
-                          </b:DataTrigger>
-                          
-                          <b:EventTrigger EventName="SelectionChanged">
-                              <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding .}"/>
-                          </b:EventTrigger>
-                      </b:Interaction.Triggers>
-                      
-                      <ListBoxItem x:Name="disabled" Content="{Binding Source='h468f21a6g00c2g41c3g81d3gbe5291d6ab4d', Converter={StaticResource TranslatedStringConverter}}"/>
-                      <ListBoxItem x:Name="enabled" Content="{Binding Source='h054025c0gd806g418agb58dg6b325823b7cd', Converter={StaticResource TranslatedStringConverter}}"/>
-                  </ListBox>
+                    <ListBox x:Name="heterochromiaCarousel" Margin="0,12,0,0" 
+                            Tag="Heterochromia" Template="{StaticResource HUI_CarouselTemplate}"
+                            SelectedIndex="{Binding HeterochromiaEnabled, Converter={StaticResource BoolToIntConverter}, FallbackValue=0}">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="heterochromiaSubheader"/>
+                            </b:DataTrigger>
+                            
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding DataContext.ValueChanged, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding .}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                        
+                        <ListBoxItem x:Name="disabled" Content="{Binding Source='h468f21a6g00c2g41c3g81d3gbe5291d6ab4d', Converter={StaticResource TranslatedStringConverter}}"/>
+                        <ListBoxItem x:Name="enabled" Content="{Binding Source='h054025c0gd806g418agb58dg6b325823b7cd', Converter={StaticResource TranslatedStringConverter}}"/>
+                    </ListBox>
 
-              </StackPanel>
-          </ControlTemplate>
+                </StackPanel>
+            </ControlTemplate>
 
-          <!-- Show Ancestry Toggle -->
-          <ControlTemplate x:Key="HUI_ShowAncestryBoxComponent">
-              <StackPanel x:Name="ShowAncestryContainer">
-                  <ContentControl x:Name="showAncestrySubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                      <TextBlock Text="{Binding Source='h6ea184f4g802bg4712gac5cgdeaee9390e44', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
-                  </ContentControl>
+            <!-- Show Ancestry Toggle -->
+            <ControlTemplate x:Key="HUI_ShowAncestryBoxComponent">
+                <StackPanel x:Name="ShowAncestryContainer">
+                    <ContentControl x:Name="showAncestrySubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock Text="{Binding Source='h6ea184f4g802bg4712gac5cgdeaee9390e44', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                    </ContentControl>
 
-                  <ListBox x:Name="showAncestryCarousel" Margin="0,12,0,0" 
-                           Tag="ShowAncestry" Template="{StaticResource HUI_CarouselTemplate}" 
-                           SelectedIndex="0">
-                      <b:Interaction.Triggers>
-                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                              <ls:BringIntoViewAction TargetName="showAncestrySubheader"/>
-                          </b:DataTrigger>
-                          
-                          <!-- Set SelectedIndex based on EmptyMaterialSelected -->
-                          <b:DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
-                              <b:ChangePropertyAction PropertyName="SelectedIndex" Value="0"/>
-                          </b:DataTrigger>
-                          <b:DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="False">
-                              <b:ChangePropertyAction PropertyName="SelectedIndex" Value="1"/>
-                          </b:DataTrigger>
-                          
-                          <b:EventTrigger EventName="SelectionChanged">
-                              <b:Interaction.Behaviors>
-                                  <b:ConditionBehavior>
-                                      <b:ConditionalExpression>
-                                          <b:ComparisonCondition LeftOperand="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=ListBox}}" Operator="Equal" RightOperand="0"/>
-                                      </b:ConditionalExpression>
-                                  </b:ConditionBehavior>
-                              </b:Interaction.Behaviors>
-                              <b:ChangePropertyAction TargetObject="{Binding AppearancePassive}" PropertyName="EmptyMaterialSelected" Value="True"/>
-                              <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
-                          </b:EventTrigger>
-                          
-                          <b:EventTrigger EventName="SelectionChanged">
-                              <b:Interaction.Behaviors>
-                                  <b:ConditionBehavior>
-                                      <b:ConditionalExpression>
-                                          <b:ComparisonCondition LeftOperand="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=ListBox}}" Operator="Equal" RightOperand="1"/>
-                                      </b:ConditionalExpression>
-                                  </b:ConditionBehavior>
-                              </b:Interaction.Behaviors>
-                              <b:ChangePropertyAction TargetObject="{Binding AppearancePassive}" PropertyName="EmptyMaterialSelected" Value="False"/>
-                              <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
-                          </b:EventTrigger>
-                      </b:Interaction.Triggers>
-                      
-                      <ListBoxItem x:Name="disabled" Content="{Binding Source='h468f21a6g00c2g41c3g81d3gbe5291d6ab4d', Converter={StaticResource TranslatedStringConverter}}"/>
-                      <ListBoxItem x:Name="enabled" Content="{Binding Source='h054025c0gd806g418agb58dg6b325823b7cd', Converter={StaticResource TranslatedStringConverter}}"/>
-                  </ListBox>
+                    <ListBox x:Name="showAncestryCarousel" Margin="0,12,0,0" 
+                            Tag="ShowAncestry" Template="{StaticResource HUI_CarouselTemplate}" 
+                            SelectedIndex="0">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="showAncestrySubheader"/>
+                            </b:DataTrigger>
+                            
+                            <!-- Set SelectedIndex based on EmptyMaterialSelected -->
+                            <b:DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="True">
+                                <b:ChangePropertyAction PropertyName="SelectedIndex" Value="0"/>
+                            </b:DataTrigger>
+                            <b:DataTrigger Binding="{Binding AppearancePassive.EmptyMaterialSelected}" Value="False">
+                                <b:ChangePropertyAction PropertyName="SelectedIndex" Value="1"/>
+                            </b:DataTrigger>
+                            
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=ListBox}}" Operator="Equal" RightOperand="0"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ChangePropertyAction TargetObject="{Binding AppearancePassive}" PropertyName="EmptyMaterialSelected" Value="True"/>
+                                <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
+                            </b:EventTrigger>
+                            
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding SelectedIndex, RelativeSource={RelativeSource AncestorType=ListBox}}" Operator="Equal" RightOperand="1"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ChangePropertyAction TargetObject="{Binding AppearancePassive}" PropertyName="EmptyMaterialSelected" Value="False"/>
+                                <b:InvokeCommandAction Command="{Binding DragonbornDraconicLinesToggleCommand}" CommandParameter="{Binding .}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                        
+                        <ListBoxItem x:Name="disabled" Content="{Binding Source='h468f21a6g00c2g41c3g81d3gbe5291d6ab4d', Converter={StaticResource TranslatedStringConverter}}"/>
+                        <ListBoxItem x:Name="enabled" Content="{Binding Source='h054025c0gd806g418agb58dg6b325823b7cd', Converter={StaticResource TranslatedStringConverter}}"/>
+                    </ListBox>
 
-              </StackPanel>
-          </ControlTemplate>
+                </StackPanel>
+            </ControlTemplate>
 
-        <!-- Dynamic Carousels -->
-          <!-- Genitals Selection -->
-          <ControlTemplate x:Key="HUI_GenitaliaBoxComponent">
-              <StackPanel x:Name="GenitaliaContainer" Visibility="{Binding CanShowGenitalia, Converter={StaticResource BoolToVisibleConverter}}">
-                  <b:Interaction.Triggers>
-                      <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Male">
-                          <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="0"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Female">
-                          <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="1"/>
-                      </b:DataTrigger>
-                      <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Neutral">
-                          <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="2"/>
-                      </b:DataTrigger>
-                  </b:Interaction.Triggers>
+          <!-- Dynamic Carousels -->
+            <!-- Genitals Selection -->
+            <ControlTemplate x:Key="HUI_GenitaliaBoxComponent">
+                <StackPanel x:Name="GenitaliaContainer" Visibility="{Binding CanShowGenitalia, Converter={StaticResource BoolToVisibleConverter}}">
+                    <b:Interaction.Triggers>
+                        <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Male">
+                            <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="0"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Female">
+                            <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="1"/>
+                        </b:DataTrigger>
+                        <b:DataTrigger Binding="{Binding SelectedGenitalia}" Value="Neutral">
+                            <b:ChangePropertyAction TargetName="genitaliaCarousel" PropertyName="SelectedIndex" Value="2"/>
+                        </b:DataTrigger>
+                    </b:Interaction.Triggers>
 
-                  <ContentControl x:Name="genitaliaSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
-                      <TextBlock Text="{Binding Source='h72410e08g770dg48c8g98e8g5a5a933a2254', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
-                  </ContentControl>
+                    <ContentControl x:Name="genitaliaSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                        <TextBlock Text="{Binding Source='h72410e08g770dg48c8g98e8g5a5a933a2254', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource AppearanceCarouselTitleText}" />
+                    </ContentControl>
 
-                  <ListBox x:Name="genitaliaCarousel" ItemsSource="{Binding SelectableGenitals}" SelectedItem="{Binding SelectedGenitals}" 
-                            Margin="0,12,0,0" Visibility="{Binding SelectableGenitals.Count, Converter={StaticResource CountToVisibilityConverter}}"
-                            Template="{StaticResource HUI_CarouselTemplate}" Tag="Genitalia">
-                      <b:Interaction.Triggers>
-                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
-                              <ls:BringIntoViewAction TargetName="genitaliaSubheader"/>
-                          </b:DataTrigger>
-                      </b:Interaction.Triggers>
-                  </ListBox>
-              </StackPanel>
-              
-              <ControlTemplate.Triggers>
-                  <!-- Hide genitals when nudity is covered -->
-                  <DataTrigger Binding="{Binding CoverNudity}" Value="True">
-                      <Setter TargetName="GenitaliaContainer" Property="Visibility" Value="Collapsed"/>
-                  </DataTrigger>
-                  
-                  <!-- Hide genitals for companions (Daisy) - I got your back Swen -->
-                  <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
-                      <Setter TargetName="GenitaliaContainer" Property="Visibility" Value="Collapsed"/>
-                  </DataTrigger>
-              </ControlTemplate.Triggers>
-          </ControlTemplate>
+                    <ListBox x:Name="genitaliaCarousel" ItemsSource="{Binding SelectableGenitals}" SelectedItem="{Binding SelectedGenitals}" 
+                              Margin="0,12,0,0" Visibility="{Binding SelectableGenitals.Count, Converter={StaticResource CountToVisibilityConverter}}"
+                              Template="{StaticResource HUI_CarouselTemplate}" Tag="Genitalia">
+                        <b:Interaction.Triggers>
+                            <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                <ls:BringIntoViewAction TargetName="genitaliaSubheader"/>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+                </StackPanel>
+                
+                <ControlTemplate.Triggers>
+                    <!-- Hide genitals when nudity is covered -->
+                    <DataTrigger Binding="{Binding CoverNudity}" Value="True">
+                        <Setter TargetName="GenitaliaContainer" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    
+                    <!-- Hide genitals for companions (Daisy) - I got your back Swen -->
+                    <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                        <Setter TargetName="GenitaliaContainer" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
 
             <!-- Voice Selector Component -->
             <ControlTemplate x:Key="HUI_VoiceBoxComponent">
@@ -1052,17 +1052,17 @@
             </ControlTemplate>
 
             <!-- Lip Intensity -->
-          <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
-            <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
-                <Slider x:Name="huiLipColorIntensity" 
-                        DataContext="{Binding AppearanceLipsMakeup.ColorOptions[0]}" 
-                        Style="{StaticResource HUI_CCSliderStyle}"
-                        Tag="{Binding Source='hc93c40a6gf955g459bg835eg11152b6f0683', Converter={StaticResource TranslatedStringConverter}}"
-                        ls:MoveFocus.Focusable="True"
-                        Focusable="True"
-                        Margin="0,0,0,20"/>
-            </StackPanel>
-          </ControlTemplate>
+            <ControlTemplate x:Key="HUI_LipIntensityBoxComponent">
+              <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                  <Slider x:Name="huiLipColorIntensity" 
+                          DataContext="{Binding AppearanceLipsMakeup.ColorOptions[0]}" 
+                          Style="{StaticResource HUI_CCSliderStyle}"
+                          Tag="{Binding Source='hc93c40a6gf955g459bg835eg11152b6f0683', Converter={StaticResource TranslatedStringConverter}}"
+                          ls:MoveFocus.Focusable="True"
+                          Focusable="True"
+                          Margin="0,0,0,20"/>
+              </StackPanel>
+            </ControlTemplate>
 
             <!-- Lip Metallic Finish -->
             <ControlTemplate x:Key="HUI_LipMetallicBoxComponent">
@@ -1093,17 +1093,17 @@
             </ControlTemplate>
 
             <!-- Makeup Intensity -->
-          <ControlTemplate x:Key="HUI_MakeupIntensityBoxComponent">
-            <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
-                <Slider x:Name="huiMakeupColorIntensity" 
-                        DataContext="{Binding AppearanceMakeup.ColorOptions[0]}" 
-                        Style="{StaticResource HUI_CCSliderStyle}"
-                        Tag="{Binding Source='hc93c40a6gf955g459bg835eg11152b6f0683', Converter={StaticResource TranslatedStringConverter}}"
-                        ls:MoveFocus.Focusable="True"
-                        Focusable="True"
-                        Margin="0,0,0,20"/>
-            </StackPanel>
-          </ControlTemplate>
+            <ControlTemplate x:Key="HUI_MakeupIntensityBoxComponent">
+              <StackPanel HorizontalAlignment="Center" Margin="0,20,0,20">
+                  <Slider x:Name="huiMakeupColorIntensity" 
+                          DataContext="{Binding AppearanceMakeup.ColorOptions[0]}" 
+                          Style="{StaticResource HUI_CCSliderStyle}"
+                          Tag="{Binding Source='hc93c40a6gf955g459bg835eg11152b6f0683', Converter={StaticResource TranslatedStringConverter}}"
+                          ls:MoveFocus.Focusable="True"
+                          Focusable="True"
+                          Margin="0,0,0,20"/>
+              </StackPanel>
+            </ControlTemplate>
 
             <!-- Lip Metallic Finish -->
             <ControlTemplate x:Key="HUI_MakeupMetallicBoxComponent">
@@ -1173,7 +1173,7 @@
             </ControlTemplate>
 
 
-            <!-- Appearance Tab Containers -->
+        <!-- Appearance Tab Containers -->
              
 
           <!-- General Appearance Template -->
@@ -2156,4 +2156,56 @@
             </DataTrigger>
           </ControlTemplate.Triggers>
           </ControlTemplate>
+
+        <!-- Daisy Tab Templates -->
+
+          <!-- Race Template -->
+          <ControlTemplate x:Key="RaceDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="Race Selection - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- General Appearance Template -->
+          <ControlTemplate x:Key="GeneralDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="General Appearance - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- Head Template -->
+          <ControlTemplate x:Key="HeadDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="Head - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- Hair Template -->
+          <ControlTemplate x:Key="HairDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="Hair - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- Horns Template -->
+          <ControlTemplate x:Key="HornsDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="Horns - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- Accessories Template -->
+          <ControlTemplate x:Key="AccessoriesDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="Accessories - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
+          <!-- Passive Appearance Template -->
+          <ControlTemplate x:Key="PassiveAppearanceDaisyTemplate">
+              <DockPanel>
+                  <TextBlock Text="Passive Appearance - Placeholder Content" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+              </DockPanel>
+          </ControlTemplate>
+
 </ResourceDictionary>
