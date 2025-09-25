@@ -2313,4 +2313,70 @@
               <Control Template="{StaticResource FeaturesAppearanceTemplate}"/>
           </ControlTemplate>
 
+        <!-- Magic Mirror -->
+          <!-- General Template - Same as Appearance but no Body Type Selector -->         
+          <ControlTemplate x:Key="GeneralAppearanceTemplateMM">
+              <DockPanel>
+                  <Grid>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                      </Grid.RowDefinitions>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Auto-close any open grids when this template loads -->
+                          <b:EventTrigger EventName="Loaded">
+                              <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                              <!-- Set initial focus to the name input -->
+                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=nameInput}"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+
+                      <ContentControl x:Name="generalAppearanceOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                      <ContentControl x:Name="generalAppearanceHeader" Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                          <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h4c12a52dgcd71g43b9ga266gf506b54b0c55', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
+                      </ContentControl>
+                      
+                      <ScrollViewer Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                    VerticalScrollBarVisibility="Auto" Margin="0,0,0,0" Height="1400" Visibility="Visible">
+
+                          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
+                              <Control x:Name="nameInput" Template="{StaticResource HUI_NamingBoxComponent}" />
+
+                              <StackPanel x:Name="randomizeCharacter" HorizontalAlignment="Center" Margin="0,0,0,0">
+                                  <ContentControl x:Name="randomizeSubheader" Template="{StaticResource HUI_Decorated_Subheader}" Margin="0,20,0,0">
+                                      <TextBlock Text="{Binding Source='h1595c068g30a1g4efegbd7fg072665991b3b', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelSubHeaderText}" />
+                                  </ContentControl>
+                                  
+                                  <ListBox x:Name="randomizeCarousel" Margin="0,12,0,0" 
+                                           Tag="Randomize" Template="{StaticResource HUI_CarouselTemplate}">
+                                      <b:Interaction.Triggers>
+                                          <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), RelativeSource={RelativeSource Self}}" Value="True">
+                                              <ls:BringIntoViewAction TargetName="randomizeSubheader"/>
+                                          </b:DataTrigger>
+                                      </b:Interaction.Triggers>
+                                  </ListBox>
+                              </StackPanel>
+                              <Control x:Name="identity" Template="{StaticResource HUI_IdentityBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="voice" Template="{StaticResource HUI_VoiceBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                              <Control x:Name="genitals" Template="{StaticResource HUI_GenitaliaBoxComponent}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+
+                          </StackPanel>
+                      </ScrollViewer>
+                  </Grid>
+              </DockPanel>
+              
+              <ControlTemplate.Triggers>
+                  <!-- Voice visibility - Hide if 1 or less are available -->
+                  <DataTrigger Binding="{Binding Voices.ComboItems.Count, Converter={StaticResource LessThanConverter}, ConverterParameter=2}" Value="True">
+                      <Setter TargetName="voice" Property="Visibility" Value="Collapsed"/>
+                  </DataTrigger>
+                  
+                  <!-- Random appearance visibility -->
+                  <DataTrigger Binding="{Binding HasNewRandomAppearance}" Value="True">
+                      <Setter TargetName="randomizeCharacter" Property="Visibility" Value="Visible"/>
+                  </DataTrigger>
+              </ControlTemplate.Triggers>
+          </ControlTemplate>
 </ResourceDictionary>
