@@ -2041,7 +2041,7 @@
     <!-- Character Change Appearance tabs template - specialized for appearance change page -->
     <ControlTemplate x:Key="appearanceChangeTabTemplate2" TargetType="ListBoxItem">
         <Grid>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,4">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-40,0,0">
 
                 <Grid x:Name="tabItem" Width="0">
 
@@ -2113,6 +2113,64 @@
                                     <b:ControlStoryboardAction.Storyboard>
                                         <Storyboard x:Name="setSelectorWidth">
                                             <DoubleAnimation Storyboard.TargetName="daisyTabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+
+                            <b:DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="tabAppear">
+                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+
+                            <b:DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="tabDisappear">
+                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:DataTrigger>
+                        </b:Interaction.Triggers>
+
+                    </TextBlock>
+
+                </Grid>
+
+            </StackPanel>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+
+    </ControlTemplate>
+
+    <!-- Respec tabs template - specialized for respec page -->
+    <ControlTemplate x:Key="respecTabTemplate2" TargetType="ListBoxItem">
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,4">
+
+                <Grid x:Name="tabItem" Width="0">
+
+                    <TextBlock x:Name="label" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right"
+                               Text="{Binding Content, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
+                        
+                        <b:Interaction.Triggers>
+                            <!-- Set the tab underline asset width when selected -->
+                            <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="setSelectorWidth">
+                                            <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
                                         </Storyboard>
                                     </b:ControlStoryboardAction.Storyboard>
                                 </b:ControlStoryboardAction>
@@ -5340,17 +5398,17 @@
                             <MultiBinding Converter="{StaticResource PassThroughConverter}">
                                 <Binding>
                                     <Binding.Source>
-                                        <System:Single>1.3</System:Single>
+                                        <System:Single>-9.9</System:Single>
                                     </Binding.Source>
                                 </Binding>
                                 <Binding>
                                     <Binding.Source>
-                                        <System:Single>1.3</System:Single>
+                                        <System:Single>-5.5</System:Single>
                                     </Binding.Source>
                                 </Binding>
                                 <Binding>
                                     <Binding.Source>
-                                        <System:Single>1.3</System:Single>
+                                        <System:Single>-4.4</System:Single>
                                     </Binding.Source>
                                 </Binding>
                             </MultiBinding>

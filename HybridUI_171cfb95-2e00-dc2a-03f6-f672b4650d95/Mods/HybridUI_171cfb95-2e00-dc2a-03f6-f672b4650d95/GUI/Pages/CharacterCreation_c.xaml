@@ -105,17 +105,17 @@
                                     <MultiBinding Converter="{StaticResource PassThroughConverter}">
                                         <Binding>
                                             <Binding.Source>
-                                                <System:Single>-0.5</System:Single>
+                                                <System:Single>-9.9</System:Single>
                                             </Binding.Source>
                                         </Binding>
                                         <Binding>
                                             <Binding.Source>
-                                                <System:Single>-1.5</System:Single>
+                                                <System:Single>-5.5</System:Single>
                                             </Binding.Source>
                                         </Binding>
                                         <Binding>
                                             <Binding.Source>
-                                                <System:Single>0.5</System:Single>
+                                                <System:Single>-4.4</System:Single>
                                             </Binding.Source>
                                         </Binding>
                                     </MultiBinding>

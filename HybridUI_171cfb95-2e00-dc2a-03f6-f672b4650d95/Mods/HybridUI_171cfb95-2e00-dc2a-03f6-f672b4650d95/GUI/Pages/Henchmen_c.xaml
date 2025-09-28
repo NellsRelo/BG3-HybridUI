@@ -588,44 +588,14 @@
                                     </Setter>
                                 </DataTrigger>
 
-                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="draconic">
-                                <Setter TargetName="gameplayPanel" Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <DockPanel LastChildFill="True">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="Henchmen_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="draconic">
+                                    <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource PassiveFeaturesAppearanceTemplate}"/>
+                                </DataTrigger>
 
-                                                    <StackPanel x:Name="draconicAppearanceSelectors" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                        <Control x:Name="draconicAppearanceSelectionTemplate" Template="{StaticResource draconicAppearanceTemplate}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                </Grid>
-                                            </DockPanel>
-                                        <ControlTemplate.Triggers>
-                                                <DataTrigger Binding="{Binding IsDragonborn}" Value="True">
-                                                    <Setter TargetName="draconicAppearanceSelectionTemplate" Property="Template" Value="{StaticResource draconicAppearanceTemplateDragonBorn}"/>
-                                                </DataTrigger>
-                                        </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-
-                            </DataTrigger>
+                                <!-- Show passiveFeaturesTab for Draconic Sorcerer -->
+                                <DataTrigger Binding="{Binding SelectedSubClass.IsDraconicSorcerer}" Value="True">
+                                    <Setter TargetName="draconicTab" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
                                     <Setter TargetName="gameplayPanel" Property="Template">

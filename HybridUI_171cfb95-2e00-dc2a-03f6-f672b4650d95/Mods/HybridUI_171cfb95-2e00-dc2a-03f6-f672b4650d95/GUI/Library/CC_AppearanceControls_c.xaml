@@ -2085,8 +2085,8 @@
                           </b:EventTrigger>
                       </b:Interaction.Triggers>
                       <ContentControl Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
-                      <Control x:Name="scalesVisual" Template="{StaticResource HUI_ScalesBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0"/>
-                      <ContentControl x:Name="scalesHeaderDragonborn" Template="{StaticResource HUI_CarouselHeaderDecorator}" Visibility="Collapsed" Grid.Row="1" Margin="0,20,0,0">
+                      <Control x:Name="scalesVisual" Template="{StaticResource HUI_ScalesBoxComponent}" Grid.Row="1" HorizontalAlignment="Center" MaxWidth="1200" Margin="0,0,0,0"/>
+                      <ContentControl x:Name="scalesHeaderDragonborn" Template="{StaticResource HUI_CarouselHeaderDecorator}" Visibility="Collapsed" Grid.Row="1" MaxWidth="1200" HorizontalAlignment="Center" Margin="0,20,0,0">
                           <TextBlock x:Name="draconicDragonbornColourHeader" ls:TextBlockFormatter.SourceText="{Binding Source='h861a433dgcc20g452bg9b1agde89d14c85c9', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10" />
                       </ContentControl>
                       <!-- Hidden element to store the focused carousel for dynamic focus restoration -->
