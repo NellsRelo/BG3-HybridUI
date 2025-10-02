@@ -20,7 +20,7 @@
                                 VerticalScrollBarVisibility="Auto" MaxHeight="1200" Height="Auto"
                                 DockPanel.Dock="Top" Margin="0,20,0,0">
 
-                      <ListBox x:Name="deityListBox" ItemTemplate="{StaticResource CustomIconTemplate}"
+                      <ListBox x:Name="deityListBox" ItemTemplate="{StaticResource HUI_CCIconGridTemplate}"
                           ItemsSource="{Binding SelectableDeities}" SelectedItem="{Binding SelectedDeity}"
                           ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
                           Style="{StaticResource gameplayIconGridStyle}">
@@ -45,5 +45,112 @@
               </StackPanel>
           </Grid>
     </ControlTemplate>
+
+    <ControlTemplate x:Key="deityDescriptionTemplate">
+          <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+              <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
+                <StackPanel>  
+                <TextBlock x:Name="SelectionDescriptionDeity" ls:TextBlockFormatter.SourceText="{Binding SelectedDeity.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
+                  </StackPanel>
+              </ContentControl>
+          </StackPanel>
+
+        <ControlTemplate.Triggers>
+            <!-- Split Screen variation -->
+            <DataTrigger Binding="{Binding Layout}" Value="Common">
+                <Setter TargetName="SelectionDescriptionDeity" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+  </ControlTemplate>
+
+    <ControlTemplate x:Key="deityProgressionsTemplateSimplified">
+          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+              <!-- Deities typically don't have complex progressions like classes, so this is simplified -->
+              <TextBlock Text="Deity features and benefits would be displayed here" 
+                        Style="{StaticResource PanelDescriptionText}" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,20,0,20"/>
+          </StackPanel>
+    </ControlTemplate>
+
+      
+      <ControlTemplate x:Key="DeitySelectorTemplate">
+          <DockPanel>
+              <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+
+                  <b:Interaction.Triggers>
+                      <!-- Auto-close any open grids when this template loads -->
+                      <b:EventTrigger EventName="Loaded">
+                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                          <!-- Set initial focus to the name input -->
+                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=nameInput}"/>
+                      </b:EventTrigger>
+                  </b:Interaction.Triggers>
+
+                  <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                  <ContentControl x:Name="ClassOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                  <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedDeity.Name}" Style="{StaticResource PanelHeaderText}" HorizontalAlignment="Center"  Height="100" Margin="0,-10,0,10"/>
+                  </ContentControl>
+                  <!-- Deity Selection ScrollViewer -->
+                  <ScrollViewer x:Name="deitySelectionScrollViewer" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                VerticalScrollBarVisibility="Auto" Margin="0,12,0,0" MaxHeight="1375" Height="Auto">
+
+                      <ListBox x:Name="deityListBox" 
+                              ItemTemplate="{StaticResource HUI_CCIconGridTemplate}"
+                              ItemsSource="{Binding SelectableDeities}" 
+                              SelectedItem="{Binding SelectedDeity}"
+                              ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                              Style="{StaticResource gameplayIconGridStyle}">
+                          <ListBox.Resources>
+                              <Style x:Key="CustomIconStyle" BasedOn="{StaticResource DeityIconStyle}" TargetType="Rectangle"/>
+                          </ListBox.Resources>
+                      </ListBox>
+                  </ScrollViewer>
+
+                  <StackPanel x:Name="ProgressionsHeader" Grid.Row="3" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+                      <StackPanel.Resources>
+                          <Storyboard x:Key="SlideProgressionsHeaderAnimation">
+                              <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" 
+                                               Duration="0:0:0.5" 
+                                               From="-60" 
+                                               To="0">
+                                  <DoubleAnimation.EasingFunction>
+                                      <QuadraticEase EasingMode="EaseOut"/>
+                                  </DoubleAnimation.EasingFunction>
+                              </DoubleAnimation>
+                          </Storyboard>
+                      </StackPanel.Resources>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Animate when deity collection changes -->
+                          <b:PropertyChangedTrigger Binding="{Binding SelectableDeities.Count}">
+                              <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideProgressionsHeaderAnimation}"/>
+                          </b:PropertyChangedTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <StackPanel.RenderTransform>
+                          <TranslateTransform/>
+                      </StackPanel.RenderTransform>
+                      
+                      <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,0,0,0" Height="108" HorizontalAlignment="Center" />
+                  </StackPanel>
+
+                  <Control Template="{StaticResource HUI_DescriptionPanelTemplate}" Tag="{Binding SelectedDeity.Description}" Grid.Column="1" Grid.RowSpan="4" DockPanel.Dock="Top"  Margin="-175,200,0,0"/>
+
+              </Grid>
+          </DockPanel>
+      </ControlTemplate>
 
 </ResourceDictionary>

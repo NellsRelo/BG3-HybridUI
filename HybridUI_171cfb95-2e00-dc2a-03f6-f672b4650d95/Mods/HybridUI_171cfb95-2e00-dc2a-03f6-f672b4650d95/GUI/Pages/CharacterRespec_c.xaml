@@ -142,30 +142,13 @@
                     </ls:LSButton>
 
                     <ls:LSButton x:Name="backButton" Style="{StaticResource ControllerHoldButtonStyle}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}"
-                                 BoundEvent="UICancel" Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" Margin="50,0,0,0">
-                        <b:Interaction.Triggers>
-                            <b:EventTrigger EventName="Click" >
-                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                                    <b:ControlStoryboardAction.Storyboard>
-                                        <Storyboard FillBehavior="Stop">
-                                            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(b:Interaction.Behaviors)[0].DoPrevious" Storyboard.TargetName="gameplayTabs">
-                                                <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
-                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.01" Value="True"/>
-                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.2" Value="False"/>
-                                            </BooleanAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </b:ControlStoryboardAction.Storyboard>
-                                </b:ControlStoryboardAction> 
-                            </b:EventTrigger>
-                        </b:Interaction.Triggers>
+                                 BoundEvent="UICancel" EatInput="False" Tag="{Binding Source=h77fec760g866dg4e47g8e81g467c9c05e447,Converter={StaticResource TranslatedStringConverter}}" Margin="50,0,0,0"
+                                 Command="{Binding DataContext.ExitCharacterRespec, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}">
                     </ls:LSButton>
                     
                     <ls:LSInputBinding x:Name="PinTooltipBinding" Style="{StaticResource PinTooltipBindingStyle}"/>
                 </StackPanel>
                 <ControlTemplate.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedIndex}" Value="0">
-                        <Setter TargetName="backButton" Property="Command" Value="{Binding DataContext.ExitCharacterRespec, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}"/>
-                    </DataTrigger>
                     <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="ability">
                         <Setter TargetName="useRecommended" Property="Visibility" Value="Visible"/>
                     </DataTrigger>
@@ -511,8 +494,8 @@
                                         <ListBoxItem x:Name="subRaceTab" Tag="subrace" IsEnabled="{Binding SelectableSubRaces.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
 
                                         <ListBoxItem x:Name="classTab" Tag="class"/>
-                                        <ListBoxItem x:Name="subClassTab" Tag="subclass" Visibility="{Binding SelectableSubClasses.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
-                                        <ListBoxItem x:Name="deityTab" Tag="deity" Visibility="{Binding SelectableDeities.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                        <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                        <ListBoxItem x:Name="deityTab" Tag="deity" IsEnabled="{Binding SelectableDeities.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                         <ListBoxItem x:Name="spellPrepTab" Tag="spellprep" IsEnabled="{Binding SpellPrepare.Preparable.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                         <ListBoxItem x:Name="draconicTab" Tag="draconic" Visibility="Collapsed"/>
 
@@ -710,144 +693,47 @@
                         Gameplay Panel Content 
                         -->
 
-                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="race">
-                                    <Setter TargetName="gameplayPanel" Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                              <DockPanel LastChildFill="True">
-                                                <Grid>
-                                                  <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                  </Grid.RowDefinitions>
-                                                  <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                  </Grid.ColumnDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="race">
+                            <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource RaceSelectorTemplate}"/>
+                        </DataTrigger>
 
-                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
-
-                                                    <StackPanel x:Name="raceCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                        <Control Template="{StaticResource raceSelectionTemplate}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource raceProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-
-                                                  <Control Template="{StaticResource raceDescriptionTemplate}" Grid.Column="1" Grid.RowSpan="2" DockPanel.Dock="Top"  Margin="-250,200,0,0"/>
-                                                </Grid>
-                                                </DockPanel>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-
-                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
-                                    <Setter TargetName="gameplayPanel" Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                              <DockPanel LastChildFill="True">
-                                                <Grid>
-                                                  <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                  </Grid.RowDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
-
-                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
-
-                                                    <StackPanel x:Name="raceCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top"  Grid.Row="0">
-                                                      <Control Template="{StaticResource subRaceSelectionTemplate}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource subRaceProgressionsTemplate}"  Grid.Row="1"/>
-                                                </Grid>
-                                              </DockPanel>
-
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-
-                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
+                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
                             <Setter TargetName="gameplayPanel" Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate>
-                                                <DockPanel  LastChildFill="True">
-                                                  <Grid>
-                                                    <Grid.RowDefinitions>
-                                                      <RowDefinition Height="Auto" />
-                                                      <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="Auto" />
-                                                      <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
+                                      <DockPanel LastChildFill="True">
+                                        <Grid>
+                                          <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                          </Grid.RowDefinitions>
+                                            <b:Interaction.Triggers>
+                                                <b:EventTrigger EventName="Loaded">
+                                                    <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
+                                                </b:EventTrigger>
+                                            </b:Interaction.Triggers>
 
-                                                      <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+                                            <Control Template="{StaticResource setGameplayCameraOffsets}"/>
 
-                                                      <StackPanel x:Name="classCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                          <Control Template="{StaticResource classSelectionTemplate}"/>
-                                                      </StackPanel>
+                                            <StackPanel x:Name="raceCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top"  Grid.Row="0">
+                                              <Control Template="{StaticResource subRaceSelectionTemplate}"/>
+                                            </StackPanel>
 
-                                                      <Control Template="{StaticResource classProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-                                                      <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
-                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
-                                                                      Tag="{Binding SelectedClass.Description}" />
-                                                    </Grid>
-                                                </DockPanel>
+                                            <Control Template="{StaticResource subRaceProgressionsTemplate}"  Grid.Row="1"/>
+                                        </Grid>
+                                      </DockPanel>
+
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
 
+                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
+                            <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource ClassSelectorTemplate}"/>
+                        </DataTrigger>
+
                         <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
-                            <Setter TargetName="gameplayPanel" Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <DockPanel LastChildFill="True">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="Loaded">
-                                                        <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                    </b:EventTrigger>
-                                                </b:Interaction.Triggers>
-
-                                                    <StackPanel x:Name="subclassSelectionAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                        <Control Template="{StaticResource subClassSelectionTemplate}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource subClassProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
-                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
-                                                                      Tag="{Binding SelectedSubClass.Description}" />
-
-                                            </Grid>
-                                        </DockPanel>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource SubClassSelectorTemplate}"/>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="draconic">
@@ -860,118 +746,16 @@
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">
-                            <Setter TargetName="gameplayPanel" Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                            <DockPanel LastChildFill="True">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
-
-                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
-
-                                                    <StackPanel x:Name="deityCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                        <Control Template="{StaticResource deitySelectionTemplate}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource deityProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
-                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
-                                                                      Tag="{Binding SelectedDeity.Description}" />
-                                                </Grid>
-                                            </DockPanel>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource DeitySelectorTemplate}"/>
                         </DataTrigger>
 
-                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep">
-                                    <Setter TargetName="gameplayPanel" Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <DockPanel LastChildFill="True">
-                                                  <Grid>
-                                                    <Grid.RowDefinitions>
-                                                      <RowDefinition Height="Auto" />
-                                                      <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="Auto" />
-                                                      <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep">
+                            <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource HUI_SpellPrepTemplate}"/>
+                        </DataTrigger>
 
-                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
-
-                                                    <StackPanel x:Name="spellPreperationScreen" Orientation="Horizontal" VerticalAlignment="Stretch"  DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                          <Control Template="{StaticResource HUI_SpellPrepTemplate}"/>
-                                                    </StackPanel>
-
-                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-                                                    <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
-                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
-                                                                      Tag="{Binding Source='he47d6cc7g50c3g4ab6g9027g2c54a173db29', Converter={StaticResource TranslatedStringConverter}}" /> 
-
-
-                                                  </Grid>
-                                                </DockPanel>
-                                          </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-
-                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="background">
-                                    <Setter TargetName="gameplayPanel" Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <DockPanel LastChildFill="True">
-                                                  <Grid>
-                                                    <Grid.RowDefinitions>
-                                                      <RowDefinition Height="Auto" />
-                                                      <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                      <ColumnDefinition Width="Auto" />
-                                                      <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <b:Interaction.Triggers>
-                                                        <b:EventTrigger EventName="Loaded">
-                                                            <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                        </b:EventTrigger>
-                                                    </b:Interaction.Triggers>
-
-                                                    <Control Template="{StaticResource setGameplayCameraOffsets}"/>
-
-                                                      <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
-                                                          <Control Template="{StaticResource backgroundSelectionTemplate}"/>
-                                                      </StackPanel>
-
-                                                      <Control Template="{StaticResource backgroundProgressionsTemplate}" Grid.Column="0" Grid.Row="1"/>
-                                                      <ContentControl Template="{StaticResource HUI_DescriptionTemplate}" 
-                                                                      HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Column="1" Grid.RowSpan="2"
-                                                                      Tag="{Binding SelectedBackground.Description}" />
-                                                    </Grid>
-                                                </DockPanel>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="background">
+                            <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource BackgroundSelectorTemplate}"/>
+                        </DataTrigger>
 
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="feat">
                                     <Setter TargetName="gameplayPanel" Property="Template">
@@ -1060,9 +844,6 @@
                                                       <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                           <Control Template="{StaticResource raceSkillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
-
-                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
                                                     </Grid>
                                                 </DockPanel>
                                             </ControlTemplate>
@@ -1086,9 +867,6 @@
                                                       <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                           <Control Template="{StaticResource skillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
-
-                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
                                                     </Grid>
                                                 </DockPanel>
                                             </ControlTemplate>
@@ -1111,9 +889,6 @@
                                                     <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                       <Control Template="{StaticResource skillExpertisePanelTemplate}"/>
                                                     </StackPanel>
-
-                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
                                                   </Grid>
                                                 </DockPanel>
                                             </ControlTemplate>

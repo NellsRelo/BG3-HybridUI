@@ -80,7 +80,7 @@
               </ScrollViewer>
               
               <!-- Collapse Race ListBox -->
-              <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=raceListBox, Path=IsVisible}">
+              <ls:LSInputBinding BoundEvent="UICancel" EatInput="False" IsEnabled="{Binding ElementName=raceListBox, Path=IsVisible}">
                   <b:Interaction.Triggers>
                       <b:EventTrigger EventName="LSInputBindingReleased">
                           <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
@@ -132,34 +132,20 @@
   </ControlTemplate>
 
     <ControlTemplate x:Key="raceProgressionsTemplate">
-          <Grid HorizontalAlignment="Left">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-              </Grid.RowDefinitions>
-              <StackPanel Grid.Row="0">
-                  <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="0,-30,0,0" Height="108" HorizontalAlignment="Center" />
-                  <TextBlock Text="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}"/>
-              </StackPanel>
-              <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto"
-                            Grid.Row="1" Margin="0,-20,0,0">
-                  <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
 
-                      <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=RaceProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
-                      <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubRaceProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
+              <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=RaceProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
+              <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubRaceProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
 
-                      <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=RaceSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
-                      <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=SubRaceSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
-                      <ItemsControl x:Name="racePassives" ItemsSource="{Binding FilteredItems, ElementName=RacePassiveFeatures}" ItemTemplate="{StaticResource ProgressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=RacePassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}" Margin="0,20,0,0"/>
-                      <ItemsControl x:Name="subRacePassives" ItemsSource="{Binding FilteredItems, ElementName=SubRacePassiveFeatures}" ItemTemplate="{StaticResource ProgressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubRacePassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}" Margin="0,20,0,0"/>
+              <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=RaceSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=RaceSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
+              <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubRaceSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=SubRaceSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
+              <ItemsControl x:Name="racePassives" ItemsSource="{Binding FilteredItems, ElementName=RacePassiveFeatures}" ItemTemplate="{StaticResource ProgressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=RacePassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}" Margin="0,20,0,0"/>
+              <ItemsControl x:Name="subRacePassives" ItemsSource="{Binding FilteredItems, ElementName=SubRacePassiveFeatures}" ItemTemplate="{StaticResource ProgressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubRacePassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}" Margin="0,20,0,0"/>
 
+              <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.RaceProgression}" HorizontalAlignment="Center"/>
+              <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.SubRaceProgression}" HorizontalAlignment="Center"/>
 
-                      <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.RaceProgression}" HorizontalAlignment="Center"/>
-                      <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.SubRaceProgression}" HorizontalAlignment="Center"/>
-
-                  </StackPanel>
-                </ScrollViewer>
-              </Grid>
+          </StackPanel>
     </ControlTemplate>
 
 
@@ -279,6 +265,209 @@
             </ScrollViewer>
         </DockPanel>
     </ControlTemplate>
+
+      
+      <ControlTemplate x:Key="RaceSelectorTemplate">
+          <DockPanel>
+              <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+
+                  <b:Interaction.Behaviors>
+                      <ls:CollectionFilterBehavior x:Name="RacePassiveFeatures" ItemsSource="{Binding RacePassiveFeatures}"/>
+                      <ls:CollectionFilterBehavior x:Name="SubRacePassiveFeatures" ItemsSource="{Binding SubRacePassiveFeatures}"/>
+                      <ls:CollectionFilterBehavior x:Name="RaceSpellSelectors" ItemsSource="{Binding RaceSpellSelectors}"/>
+                      <ls:CollectionFilterBehavior x:Name="SubRaceSpellSelectors" ItemsSource="{Binding SubRaceSpellSelectors}"/>
+                      <ls:CollectionFilterBehavior x:Name="RaceProgressions" ItemsSource="{Binding RaceProgressions}"/>
+                      <ls:CollectionFilterBehavior x:Name="SubRaceProgressions" ItemsSource="{Binding SubRaceProgressions}"/>
+                  </b:Interaction.Behaviors>
+
+                  <b:Interaction.Triggers>
+                      <!-- Auto-close any open grids when this template loads -->
+                      <b:EventTrigger EventName="Loaded">
+                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                          <!-- Set initial focus to the name input -->
+                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=nameInput}"/>
+                      </b:EventTrigger>
+                  </b:Interaction.Triggers>
+
+                  <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                  <ContentControl x:Name="RaceOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                  <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                    <ListBox x:Name="RaceCarousel" Template="{StaticResource RaceCarouselWithUIAccept}" 
+                            ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}">
+                        <ListBox.Style>
+                            <Style TargetType="ListBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=raceListBox, Path=Visibility}" Value="Visible">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Style>
+                    </ListBox>
+                  </ContentControl>
+                  <!-- Race Selection ScrollViewer - Dynamic Height -->
+                  <ScrollViewer x:Name="raceSelectionScrollViewer" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                VerticalScrollBarVisibility="Auto" Margin="0,12,0,0" MaxHeight="600" Height="Auto">
+
+                      <StackPanel x:Name="listStackPanel">
+                          <b:Interaction.Triggers>
+                              <!-- Default behavior: close race list and focus RaceCarousel when an item is selected -->
+                              <b:PropertyChangedTrigger Binding="{Binding ElementName=raceListBox, Path=SelectedItem}">
+                                  <b:Interaction.Behaviors>
+                                      <b:ConditionBehavior>
+                                          <b:ConditionalExpression>
+                                              <b:ComparisonCondition LeftOperand="{Binding ElementName=raceListBox, Path=Visibility}" RightOperand="Visible"/>
+                                          </b:ConditionalExpression>
+                                      </b:ConditionBehavior>
+                                  </b:Interaction.Behaviors>
+                                  <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                                  <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                                  <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=RaceCarousel}"/>
+                              </b:PropertyChangedTrigger>
+                              
+                              <!-- Randomization override: refocus randomize carousel if it had focus -->
+                              <b:PropertyChangedTrigger Binding="{Binding ElementName=raceListBox, Path=SelectedItem}">
+                                  <b:Interaction.Behaviors>
+                                      <b:ConditionBehavior>
+                                          <b:ConditionalExpression>
+                                              <b:ComparisonCondition LeftOperand="{Binding ElementName=randomizeCarousel, Path=(ls:MoveFocus.IsFocused)}" RightOperand="True"/>
+                                          </b:ConditionalExpression>
+                                      </b:ConditionBehavior>
+                                  </b:Interaction.Behaviors>
+                                  <!-- Override: refocus randomize carousel immediately after the default trigger -->
+                                  <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=randomizeCarousel}"/>
+                              </b:PropertyChangedTrigger>
+                          </b:Interaction.Triggers>
+                  
+                          <!-- SubRace ListBox - default visible -->
+                          <ListBox x:Name="subRaceListBox" ItemTemplate="{StaticResource HUI_CCIconGridTemplate}"
+                                  ItemsSource="{Binding SelectableSubRaces}" SelectedItem="{Binding SelectedSubRace}"
+                                  ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                                  Style="{StaticResource gameplayIconGridStyle}">
+                              <ListBox.Resources>
+                                  <Style x:Key="CustomIconStyle" BasedOn="{StaticResource RaceIconStyle}" TargetType="Rectangle"/>
+                              </ListBox.Resources>
+                          </ListBox>
+              
+                          <!-- Race ListBox - hidden by default -->
+                          <ListBox x:Name="raceListBox" ItemTemplate="{StaticResource HUI_CCIconGridTemplate}"
+                                  ItemsSource="{Binding SelectableRaces}" SelectedItem="{Binding SelectedRace}"
+                                  ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                                  Style="{StaticResource gameplayIconGridStyle}"
+                                  IsSynchronizedWithCurrentItem="False"
+                                  Visibility="Collapsed">
+                              <ListBox.Resources>
+                                  <Style x:Key="CustomIconStyle" BasedOn="{StaticResource RaceIconStyle}" TargetType="Rectangle"/>
+                              </ListBox.Resources>
+                              <b:Interaction.Triggers>
+                                  <b:PropertyChangedTrigger Binding="{Binding ElementName=raceListBox, Path=Visibility}">
+                                      <b:Interaction.Behaviors>
+                                          <b:ConditionBehavior>
+                                              <b:ConditionalExpression>
+                                                  <b:ComparisonCondition LeftOperand="{Binding ElementName=raceListBox, Path=Visibility}" Operator="Equal" RightOperand="Visible"/>
+                                              </b:ConditionalExpression>
+                                          </b:ConditionBehavior>
+                                      </b:Interaction.Behaviors>
+                                      <b:ChangePropertyAction TargetName="raceListBox" PropertyName="SelectedItem" Value="{Binding SelectedRace}"/>
+                                  </b:PropertyChangedTrigger>
+                              </b:Interaction.Triggers>
+                          </ListBox>
+                      </StackPanel>
+                  </ScrollViewer>
+
+                  <!-- Progressions Header -->
+                  <StackPanel x:Name="ProgressionsHeader" Grid.Row="3" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+                      <StackPanel.Resources>
+                          <Storyboard x:Key="SlideProgressionsHeaderAnimation">
+                              <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" 
+                                               Duration="0:0:0.5" 
+                                               From="-60" 
+                                               To="0">
+                                  <DoubleAnimation.EasingFunction>
+                                      <QuadraticEase EasingMode="EaseOut"/>
+                                  </DoubleAnimation.EasingFunction>
+                              </DoubleAnimation>
+                          </Storyboard>
+                      </StackPanel.Resources>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Animate when switching between race/subrace lists -->
+                          <b:PropertyChangedTrigger Binding="{Binding Visibility, ElementName=raceListBox}">
+                              <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideProgressionsHeaderAnimation}"/>
+                          </b:PropertyChangedTrigger>
+                          
+                          <!-- Animate when race collection changes -->
+                          <b:PropertyChangedTrigger Binding="{Binding SelectableRaces.Count}">
+                              <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideProgressionsHeaderAnimation}"/>
+                          </b:PropertyChangedTrigger>
+                          
+                          <!-- Animate when subrace collection changes -->
+                          <b:PropertyChangedTrigger Binding="{Binding SelectableSubRaces.Count}">
+                              <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideProgressionsHeaderAnimation}"/>
+                          </b:PropertyChangedTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <StackPanel.RenderTransform>
+                          <TranslateTransform/>
+                      </StackPanel.RenderTransform>
+                      
+                      <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,0,0,0" Height="108" HorizontalAlignment="Center" />
+                      <TextBlock Text="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}" HorizontalAlignment="Center"/>
+                  </StackPanel>
+
+                  <!-- Progressions ScrollViewer -->
+                  <ScrollViewer x:Name="progressionsScrollViewer" Grid.Row="4" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                VerticalScrollBarVisibility="Auto" Margin="0,-20,0,0">
+
+                      <Control Template="{StaticResource raceProgressionsTemplate}"/>
+                  </ScrollViewer>
+
+                  <!-- Collapse Race ListBox -->
+                  <ls:LSInputBinding BoundEvent="UICancel" IsEnabled="{Binding ElementName=raceListBox, Path=IsVisible}">
+                      <b:Interaction.Triggers>
+                          <b:EventTrigger EventName="LSInputBindingReleased">
+                              <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                              <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                              <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=RaceCarousel}"/>
+                              <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                          </b:EventTrigger>
+                      </b:Interaction.Triggers>
+                  </ls:LSInputBinding>
+                  
+                  <!-- Auto-collapse Race ListBox when SelectedRace changes -->
+                  <b:Interaction.Triggers>
+                      <!-- Normal behavior: collapse race list when race changes and focus RaceCarousel (BUT NOT during randomization) -->
+                      <b:PropertyChangedTrigger Binding="{Binding SelectedRace}">
+                          <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                          <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=RaceCarousel}"/>
+                      </b:PropertyChangedTrigger>
+                      
+                      <!-- SelectedRace changes: Just ensure proper visibility state during randomization -->
+                      <b:PropertyChangedTrigger Binding="{Binding SelectedRace}">
+                          <!-- Just ensure proper visibility - don't change focus, let SelectedItem trigger handle it -->
+                          <b:ChangePropertyAction TargetName="raceListBox" PropertyName="Visibility" Value="Collapsed"/>
+                          <b:ChangePropertyAction TargetName="subRaceListBox" PropertyName="Visibility" Value="Visible"/>
+                      </b:PropertyChangedTrigger>
+                  </b:Interaction.Triggers>
+
+                  <Control Template="{StaticResource raceDescriptionTemplate}" Grid.Column="1" Grid.RowSpan="5" DockPanel.Dock="Top"  Margin="-175,200,0,0"/>
+
+              </Grid>
+          </DockPanel>
+      </ControlTemplate>
 
 
 </ResourceDictionary>

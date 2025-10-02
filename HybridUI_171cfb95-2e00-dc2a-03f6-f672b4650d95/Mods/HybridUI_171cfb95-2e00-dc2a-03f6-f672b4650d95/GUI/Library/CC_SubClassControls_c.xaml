@@ -17,7 +17,7 @@
               </StackPanel>
               <StackPanel x:Name="selectedSubclassDescription" Orientation="Horizontal" DockPanel.Dock="Top">
                   <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}" VerticalScrollBarVisibility="Auto" MaxHeight="800" Height="Auto"  DockPanel.Dock="Top" Margin="0,20,0,0">
-                    <ListBox x:Name="SubclassesListBox" ItemTemplate="{StaticResource ClassIconTemplate}" ItemsSource="{Binding SelectableSubClasses}" SelectedItem="{Binding SelectedSubClass}" ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}" Style="{StaticResource gameplayIconGridStyle}"/> <!--  Margin="0,40,0,0" -->
+                    <ListBox x:Name="SubclassesListBox" ItemTemplate="{StaticResource HUI_ClassIconTemplate}" ItemsSource="{Binding SelectableSubClasses}" SelectedItem="{Binding SelectedSubClass}" ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}" Style="{StaticResource gameplayIconGridStyle}"/> <!--  Margin="0,40,0,0" -->
 
                   </ScrollViewer>
               </StackPanel>
@@ -49,5 +49,136 @@
             </ScrollViewer>
         </Grid>
     </ControlTemplate>
+
+    <ControlTemplate x:Key="subClassDescriptionTemplate">
+          <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+              <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
+                <StackPanel>  
+                <TextBlock x:Name="SelectionDescriptionSubClass" ls:TextBlockFormatter.SourceText="{Binding SelectedSubClass.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
+                  </StackPanel>
+              </ContentControl>
+          </StackPanel>
+
+        <ControlTemplate.Triggers>
+            <!-- Split Screen variation -->
+            <DataTrigger Binding="{Binding Layout}" Value="Common">
+                <Setter TargetName="SelectionDescriptionSubClass" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+  </ControlTemplate>
+
+    <ControlTemplate x:Key="subClassProgressionsTemplateSimplified">
+          <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+              <b:Interaction.Behaviors>
+                  <ls:CollectionFilterBehavior x:Name="SubClassPassiveFeatures" ItemsSource="{Binding SubClassPassiveFeatures}"/>
+                  <ls:CollectionFilterBehavior x:Name="SubClassSpellSelectors" ItemsSource="{Binding SubClassSpellSelectors}"/>
+                  <ls:CollectionFilterBehavior x:Name="SubClassProgressions" ItemsSource="{Binding ClassProgressionDetails.Progressions}" Predicate="{Binding IsSubProgressionPredicate}"/>
+              </b:Interaction.Behaviors>
+
+                  <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.SubClassProgression}" HorizontalAlignment="Center"/>
+
+                  <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubClassProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubClassProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                  <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubClassPassiveFeatures}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=SubClassPassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                  <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=SubClassSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=SubClassSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                  <ItemsControl ItemsSource="{Binding ClassProgressionDetails.SubPassiveSelectors}" ItemTemplate="{StaticResource progressionPassiveSelectors}" ItemContainerStyle="{StaticResource UpdateStateItemStyle}"/>
+          </StackPanel>
+    </ControlTemplate>
+
+      
+      <ControlTemplate x:Key="SubClassSelectorTemplate">
+          <DockPanel>
+              <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+
+                  <b:Interaction.Behaviors>
+                      <ls:CollectionFilterBehavior x:Name="SubClassPassiveFeatures" ItemsSource="{Binding SubClassPassiveFeatures}"/>
+                      <ls:CollectionFilterBehavior x:Name="SubClassPassiveSelectors" ItemsSource="{Binding SubClassPassiveSelectors}"/>
+                      <ls:CollectionFilterBehavior x:Name="SubClassSpellSelectors" ItemsSource="{Binding SubClassSpellSelectors}"/>
+                      <ls:CollectionFilterBehavior x:Name="SubClassProgressions" ItemsSource="{Binding SubClassProgressions}"/>
+                  </b:Interaction.Behaviors>
+
+                  <b:Interaction.Triggers>
+                      <!-- Auto-close any open grids when this template loads -->
+                      <b:EventTrigger EventName="Loaded">
+                          <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                          <!-- Set initial focus to the name input -->
+                          <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=nameInput}"/>
+                      </b:EventTrigger>
+                  </b:Interaction.Triggers>
+
+                  <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                  <ContentControl x:Name="ClassOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                  <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedSubClass.Name}" Style="{StaticResource PanelHeaderText}" HorizontalAlignment="Center"  Height="100" Margin="0,-10,0,10"/>
+                  </ContentControl>
+
+                  <!-- SubClass Selection ScrollViewer -->
+                  <ScrollViewer x:Name="subClassSelectionScrollViewer" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                VerticalScrollBarVisibility="Auto" Margin="0,12,0,0" MaxHeight="600" Height="Auto">
+
+                      <ListBox x:Name="subClassListBox" 
+                              ItemTemplate="{StaticResource HUI_ClassIconTemplate}"
+                              ItemsSource="{Binding SelectableSubClasses}" 
+                              SelectedItem="{Binding SelectedSubClass}"
+                              ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                              Style="{StaticResource gameplayIconGridStyle}"/>
+                  </ScrollViewer>
+
+                  <!-- Progressions Header -->
+                  <StackPanel x:Name="ProgressionsHeader" Grid.Row="3" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+                      <StackPanel.Resources>
+                          <Storyboard x:Key="SlideProgressionsHeaderAnimation">
+                              <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" 
+                                               Duration="0:0:0.5" 
+                                               From="-60" 
+                                               To="0">
+                                  <DoubleAnimation.EasingFunction>
+                                      <QuadraticEase EasingMode="EaseOut"/>
+                                  </DoubleAnimation.EasingFunction>
+                              </DoubleAnimation>
+                          </Storyboard>
+                      </StackPanel.Resources>
+                      
+                      <b:Interaction.Triggers>
+                          <!-- Animate when subclass collection changes -->
+                          <b:PropertyChangedTrigger Binding="{Binding SelectableSubClasses.Count}">
+                              <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideProgressionsHeaderAnimation}"/>
+                          </b:PropertyChangedTrigger>
+                      </b:Interaction.Triggers>
+                      
+                      <StackPanel.RenderTransform>
+                          <TranslateTransform/>
+                      </StackPanel.RenderTransform>
+                      
+                      <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,0,0,0" Height="108" HorizontalAlignment="Center" />
+                      <TextBlock Text="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}" HorizontalAlignment="Center"/>
+                  </StackPanel>
+
+                  <!-- Progressions ScrollViewer -->
+                  <ScrollViewer x:Name="progressionsScrollViewer" Grid.Row="4" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                                VerticalScrollBarVisibility="Auto" Margin="0,-20,0,0">
+
+                      <Control Template="{StaticResource subClassProgressionsTemplateSimplified}"/>
+                  </ScrollViewer>
+
+                  <Control Template="{StaticResource HUI_DescriptionPanelTemplate}" Tag="{Binding SelectedSubClass.Description}" Grid.Column="1" Grid.RowSpan="5" DockPanel.Dock="Top"  Margin="-175,200,0,0"/>
+
+              </Grid>
+          </DockPanel>
+      </ControlTemplate>
 
 </ResourceDictionary>

@@ -1961,12 +1961,30 @@
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h1e67bc9cg0f53g4218g8ce8geb6a6636f141', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
 
+            <!-- Dynamic subclass tab name based on SubclassTitle - only for subclass tab -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="subclass"/>
+                    <Condition Binding="{Binding SelectedClass.SubclassTitle, FallbackValue='',Converter={StaticResource CompareStringConverter}, ConverterParameter=''}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="label" Property="Text" Value="{Binding SelectedClass.SubclassTitle}"/>
+            </MultiDataTrigger>
+
             <Trigger Property="Tag" Value="deity">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h5238a9c6gb90fg40bbg9335gfb37d6e91b94', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
             <Trigger Property="Tag" Value="spellprep">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h15329947gc691g4323gac0fge3fbcecb92d9', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="spellprep"/>
+                    <Condition Binding="{Binding SpellPrepare.IsComplete}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+            </MultiDataTrigger>
+
             <Trigger Property="Tag" Value="draconic">
                 <Setter TargetName="label" Property="ls:TextBlockFormatter.SourceText" Value="{Binding Source='h7572d825gd782g43a5g90aag7f5d814a5f1a', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
@@ -2196,64 +2214,6 @@
                                     <b:ControlStoryboardAction.Storyboard>
                                         <Storyboard x:Name="setSelectorWidth">
                                             <DoubleAnimation Storyboard.TargetName="daisyTabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
-                                        </Storyboard>
-                                    </b:ControlStoryboardAction.Storyboard>
-                                </b:ControlStoryboardAction>
-                            </b:DataTrigger>
-
-                            <b:DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                                    <b:ControlStoryboardAction.Storyboard>
-                                        <Storyboard x:Name="tabAppear">
-                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
-                                        </Storyboard>
-                                    </b:ControlStoryboardAction.Storyboard>
-                                </b:ControlStoryboardAction>
-                            </b:DataTrigger>
-
-                            <b:DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
-                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                                    <b:ControlStoryboardAction.Storyboard>
-                                        <Storyboard x:Name="tabDisappear">
-                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
-                                        </Storyboard>
-                                    </b:ControlStoryboardAction.Storyboard>
-                                </b:ControlStoryboardAction>
-                            </b:DataTrigger>
-                        </b:Interaction.Triggers>
-
-                    </TextBlock>
-
-                </Grid>
-
-            </StackPanel>
-        </Grid>
-
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-
-    </ControlTemplate>
-
-    <!-- Respec tabs template - specialized for respec page -->
-    <ControlTemplate x:Key="respecTabTemplate2" TargetType="ListBoxItem">
-        <Grid>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,4">
-
-                <Grid x:Name="tabItem" Width="0">
-
-                    <TextBlock x:Name="label" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right"
-                               Text="{Binding Content, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
-                        
-                        <b:Interaction.Triggers>
-                            <!-- Set the tab underline asset width when selected -->
-                            <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                                    <b:ControlStoryboardAction.Storyboard>
-                                        <Storyboard x:Name="setSelectorWidth">
-                                            <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
                                         </Storyboard>
                                     </b:ControlStoryboardAction.Storyboard>
                                 </b:ControlStoryboardAction>
@@ -4330,13 +4290,12 @@
 
     <DataTemplate x:Key="PassiveSelectorItemTemplate">
         <DockPanel x:Name="Base">
-            <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
-            </StackPanel>
-
             <StackPanel DockPanel.Dock="Top">
-                <TextBlock x:Name="title" ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}"/>
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
 
+                <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
+                </ContentControl>
                 <TextBlock x:Name="description" ls:TextBlockFormatter.SourceText="{Binding Description.Text}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
 
                 <TextBlock x:Name="SelectedTitle" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0">
@@ -4392,13 +4351,12 @@
 
     <DataTemplate x:Key="EquipmentSelectorItemTemplate">
         <DockPanel x:Name="Base">
-            <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
-            </StackPanel>
-
             <StackPanel DockPanel.Dock="Top">
-                <TextBlock x:Name="title" ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}"/>
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
 
+                <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
+                </ContentControl>
                 <TextBlock x:Name="description" ls:TextBlockFormatter.SourceText="{Binding Description.Text}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
 
                 <TextBlock Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0">
@@ -4503,13 +4461,19 @@
                 <Setter TargetName="skillIcon" Property="Opacity" Value="1"/>
             </DataTrigger>
 
+            <DataTrigger Binding="{Binding Enabled}" Value="False">
+                <Setter TargetName="skillName" Property="Foreground" Value="#FF8B0000"/>
+                <Setter TargetName="skillRollBonus" Property="Foreground" Value="#FF8B0000"/>
+                <Setter TargetName="skillIcon" Property="Opacity" Value="0.4"/>
+            </DataTrigger>
+
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding Enabled}" Value="True"/>
                     <Condition Binding="{Binding Selected}" Value="True"/>
                 </MultiDataTrigger.Conditions>
-                <Setter TargetName="skillName" Property="Foreground" Value="{StaticResource LS_specialTxtColor}"/>
-                <Setter TargetName="skillRollBonus" Property="Foreground" Value="{StaticResource LS_specialTxtColor}"/>
+                <Setter TargetName="skillName" Property="Foreground" Value="#FF388E3C"/>
+                <Setter TargetName="skillRollBonus" Property="Foreground" Value="#FF388E3C"/>
                 <Setter TargetName="pointIcon" Property="Source" Value="{StaticResource tabDotOn}"/>
             </MultiDataTrigger>
 
@@ -4588,59 +4552,78 @@
 
 
     <ControlTemplate x:Key="skillsSelectionTemplate">
-        <DockPanel x:Name="skillsPanel" Height="{StaticResource gameplayPanelHeightSplit}">
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Loaded">
-                    <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-            <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
-            </StackPanel>
+        <DockPanel>
+            <Grid x:Name="skillsPanel" Height="{StaticResource gameplayPanelHeightSplit}">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel DockPanel.Dock="Top">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Loaded">
+                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
 
-                <Control Template="{DynamicResource skillsSelectionHeader}"/>
-                <Control Template="{DynamicResource skillsSelectionDescription}"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
-                    <Control Template="{DynamicResource skillsSelectedLabel}"/>
-                    <TextBlock x:Name="AssignedValue" FontSize="{StaticResource ScaledDefaultFontSize}" HorizontalAlignment="Center" Margin="20,0,0,0">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{}{0}/{1}">
-                                <Binding Path="SelectedSkillCount"/>
-                                <Binding Path="MaxSelectedSkillCount"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                <ContentControl x:Name="SkillsOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                    <Control Template="{DynamicResource skillsSelectionHeader}"/>
+                </ContentControl>
+
+                <!-- Skills Description and Counter -->
+                <StackPanel Grid.Row="2" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+                    <Control Template="{DynamicResource skillsSelectionDescription}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
+                        <Control Template="{DynamicResource skillsSelectedLabel}"/>
+                        <TextBlock x:Name="AssignedValue" FontSize="{StaticResource ScaledDefaultFontSize}" HorizontalAlignment="Center" Margin="20,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}/{1}">
+                                    <Binding Path="SelectedSkillCount"/>
+                                    <Binding Path="MaxSelectedSkillCount"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                        <StackPanel.Resources>
+                            <Style TargetType="Image">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Setter Property="Stretch" Value="None"/>
+                                <Setter Property="Width" Value="48"/>
+                                <Setter Property="Height" Value="48"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Image x:Name="point0" Source="{StaticResource tabDotOff}"/>
+                        <Image x:Name="point1" Source="{StaticResource tabDotOff}"/>
+                        <Image x:Name="point2" Source="{StaticResource tabDotOff}"/>
+                        <Image x:Name="point3" Source="{StaticResource tabDotOff}"/>
+                    </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-                    <StackPanel.Resources>
-                        <Style TargetType="Image">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Setter Property="Stretch" Value="None"/>
-                            <Setter Property="Width" Value="48"/>
-                            <Setter Property="Height" Value="48"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <Image x:Name="point0" Source="{StaticResource tabDotOff}"/>
-                    <Image x:Name="point1" Source="{StaticResource tabDotOff}"/>
-                    <Image x:Name="point2" Source="{StaticResource tabDotOff}"/>
-                    <Image x:Name="point3" Source="{StaticResource tabDotOff}"/>
+                <!-- Skills ScrollViewer -->
+                <ScrollViewer Grid.Row="3" Style="{StaticResource gameplayPanelScrollViewerStyle}"
+                              VerticalScrollBarVisibility="Auto" MaxHeight="1200" Height="Auto" Margin="0,-20,0,0">
+                    <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
+                        <Control Template="{DynamicResource selectableSkills}"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Fixed Footer -->
+                <StackPanel x:Name="ListFooter" Grid.Row="4" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+                    <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,0,0,0" Height="108" HorizontalAlignment="Center" />
                 </StackPanel>
 
-            </StackPanel>
+                <Control Template="{StaticResource HUI_DescriptionPanelTemplate}" Tag="{Binding Description}" Grid.Column="1" Grid.RowSpan="5" Margin="-175,200,0,0"/>
 
-            <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                                VerticalScrollBarVisibility="Auto" MaxHeight="1200" Height="Auto"
-                                DockPanel.Dock="Top" Margin="0,20,0,0" >
-                <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
-
-                    <Control Template="{DynamicResource selectableSkills}"/>
-
-                </StackPanel>
-            </ScrollViewer>
-
+            </Grid>
         </DockPanel>
 
         <ControlTemplate.Triggers>
@@ -4707,7 +4690,7 @@
         <Control Template="{StaticResource skillsSelectionTemplate}" DataContext="{Binding AllSkills.RaceProficientSkills}">
             <Control.Resources>
                 <ControlTemplate x:Key="skillsSelectionHeader">
-                    <TextBlock Text="{Binding Source='h6df70972gfd55g4f29g9431g0a1530858ccf', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                    <TextBlock Text="{Binding Source='h6df70972gfd55g4f29g9431g0a1530858ccf', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"  Height="100" Margin="0,-10,0,10"/>
                 </ControlTemplate>
                 <ControlTemplate x:Key="skillsSelectionDescription">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h50102d2egd75ag447dgba88gf64cd903a457', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" MaxWidth="1100" TextWrapping="Wrap"/>
@@ -4729,7 +4712,7 @@
         <Control Template="{StaticResource skillsSelectionTemplate}" DataContext="{Binding AllSkills.ClassProficientSkills}">
             <Control.Resources>
                 <ControlTemplate x:Key="skillsSelectionHeader">
-                    <TextBlock Text="{Binding Source='h6df70972gfd55g4f29g9431g0a1530858ccf', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                    <TextBlock Text="{Binding Source='h6df70972gfd55g4f29g9431g0a1530858ccf', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
                 </ControlTemplate>
                 <ControlTemplate x:Key="skillsSelectionDescription">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h50102d2egd75ag447dgba88gf64cd903a457', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" MaxWidth="1100" TextWrapping="Wrap"/>
@@ -4751,7 +4734,7 @@
         <Control Template="{StaticResource skillsSelectionTemplate}" DataContext="{Binding AllSkills.ExpertiseSkills}">
             <Control.Resources>
                 <ControlTemplate x:Key="skillsSelectionHeader">
-                    <TextBlock Text="{Binding Source='hb05a8953g3596g4e62g91c4gb1a8f8babd71', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                    <TextBlock Text="{Binding Source='hb05a8953g3596g4e62g91c4gb1a8f8babd71', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
                 </ControlTemplate>
                 <ControlTemplate x:Key="skillsSelectionDescription">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='hcaaf5b44gc727g4765gb347g4aad3cce1837', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" MaxWidth="1100" TextWrapping="Wrap"/>

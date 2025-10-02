@@ -72,7 +72,7 @@
                                DockPanel.Dock="Top" 
                                Margin="0,20,0,0">
                       <ListBox x:Name="ClassesListBox" 
-                              ItemTemplate="{StaticResource ClassIconTemplate}"
+                              ItemTemplate="{StaticResource HUI_ClassIconTemplate}"
                               ItemsSource="{Binding SelectableAdditionalClasses}" 
                               SelectedItem="{Binding SelectedMultiClass}"
                               ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
@@ -364,6 +364,135 @@
                 <Setter TargetName="CarouselRightItem" Property="IsEnabled" Value="True"/>
             </DataTrigger>
         </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="classDescriptionTemplate">
+        <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
+            <ContentControl Template="{StaticResource PanelSideDescription}" VerticalAlignment="Top">
+              <StackPanel>  
+              <TextBlock x:Name="SelectionDescriptionClass" ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Description}" Style="{StaticResource CarouselSideDescriptionTextSplitScreen}"/>
+                </StackPanel>
+            </ContentControl>
+        </StackPanel>
+
+      <ControlTemplate.Triggers>
+          <!-- Split Screen variation -->
+          <DataTrigger Binding="{Binding Layout}" Value="Common">
+              <Setter TargetName="SelectionDescriptionClass" Property="Style" Value="{StaticResource CarouselSideDescriptionText}"/>
+          </DataTrigger>
+      </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="classProgressionsTemplateSimplified">
+        <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}" VerticalAlignment="Stretch">
+            <b:Interaction.Behaviors>
+                <ls:CollectionFilterBehavior x:Name="ClassPassiveFeatures" ItemsSource="{Binding ClassPassiveFeatures}"/>
+                <ls:CollectionFilterBehavior x:Name="ClassSpellSelectors" ItemsSource="{Binding ClassSpellSelectors}"/>
+                <ls:CollectionFilterBehavior x:Name="ClassProgressions" ItemsSource="{Binding ClassProgressionDetails.Progressions}" Predicate="{Binding IsNotSubProgressionPredicate}"/>
+            </b:Interaction.Behaviors>
+
+            <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassProgressions}" ItemTemplate="{StaticResource progressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=ClassProgressions, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+            <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassPassiveFeatures}" ItemTemplate="{StaticResource ProgressionSpellsTemplate}" Visibility="{Binding FilteredItems.Count, ElementName=ClassPassiveFeatures, Converter={StaticResource CountToVisibilityConverter}}" Margin="0,20,0,0"/>
+
+            <ItemsControl ItemsSource="{Binding FilteredItems, ElementName=ClassSpellSelectors}" ItemTemplate="{StaticResource progressionSpellSelectors}" Visibility="{Binding FilteredItems.Count, ElementName=ClassSpellSelectors, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+            <Control Template="{StaticResource progressionFeaturesList}" DataContext="{Binding ProgressionData.ClassProgression}" HorizontalAlignment="Center"/>
+
+        </StackPanel>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ClassSelectorTemplate">
+        <DockPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <b:Interaction.Behaviors>
+                    <ls:CollectionFilterBehavior x:Name="ClassPassiveFeatures" ItemsSource="{Binding ClassPassiveFeatures}"/>
+                    <ls:CollectionFilterBehavior x:Name="ClassSpellSelectors" ItemsSource="{Binding ClassSpellSelectors}"/>
+                    <ls:CollectionFilterBehavior x:Name="ClassProgressions" ItemsSource="{Binding ClassProgressions}"/>
+                </b:Interaction.Behaviors>
+
+                <b:Interaction.Triggers>
+                    <!-- Auto-close any open grids when this template loads -->
+                    <b:EventTrigger EventName="Loaded">
+                        <b:ChangePropertyAction TargetName="CharacterCreation_c" PropertyName="Tag" Value="HideExpandedGrid"/>
+                        <!-- Set initial focus to the name input -->
+                        <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=nameInput}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+
+                <Control Template="{StaticResource setGameplayCameraOffsets}"/>
+
+                <ContentControl x:Name="ClassOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding SelectedClass.Name}" Style="{StaticResource PanelHeaderText}" HorizontalAlignment="Center"  Height="100" Margin="0,-10,0,10"/>
+                </ContentControl>
+                
+                <!-- Class Selection ScrollViewer - Dynamic Height -->
+                <ScrollViewer x:Name="classSelectionScrollViewer" Grid.Row="2" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                              VerticalScrollBarVisibility="Auto" Margin="0,12,0,0" MaxHeight="600" Height="Auto">
+
+                    <StackPanel x:Name="listStackPanel">
+                        <!-- Class ListBox - always visible (no subclasses complexity like races) -->
+                        <ListBox x:Name="classListBox"
+                            ItemTemplate="{StaticResource HUI_ClassIconTemplate}"
+                            ItemsSource="{Binding SelectableClasses}" SelectedItem="{Binding SelectedClass}"
+                            ItemContainerStyle="{StaticResource CCIconTextListBoxItemStyle}"
+                            Style="{StaticResource gameplayIconGridStyle}"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Progressions Header -->
+                <StackPanel x:Name="ProgressionsHeader" Grid.Row="3" Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
+                    <StackPanel.Resources>
+                        <Storyboard x:Key="SlideProgressionsHeaderAnimation">
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" 
+                                             Duration="0:0:0.5" 
+                                             From="-60" 
+                                             To="0">
+                                <DoubleAnimation.EasingFunction>
+                                    <QuadraticEase EasingMode="EaseOut"/>
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </StackPanel.Resources>
+                    
+                    <b:Interaction.Triggers>
+                        <!-- Animate when class collection changes -->
+                        <b:PropertyChangedTrigger Binding="{Binding SelectableClasses.Count}">
+                            <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideProgressionsHeaderAnimation}"/>
+                        </b:PropertyChangedTrigger>
+                    </b:Interaction.Triggers>
+                    
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform/>
+                    </StackPanel.RenderTransform>
+                    
+                    <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,0,0,0" Height="108" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource FeatureListHeaderText}" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Progressions ScrollViewer -->
+                <ScrollViewer x:Name="progressionsScrollViewer" Grid.Row="4" DockPanel.Dock="Top" Style="{StaticResource gameplayPanelScrollViewerStyle}" 
+                              VerticalScrollBarVisibility="Auto" Margin="0,-20,0,0">
+                    <Control Template="{StaticResource classProgressionsTemplateSimplified}"/>
+                </ScrollViewer>
+
+                <Control Template="{StaticResource HUI_DescriptionPanelTemplate}" Tag="{Binding SelectedClass.Description}" Grid.Column="1" Grid.RowSpan="5" DockPanel.Dock="Top"  Margin="-175,200,0,0"/>
+
+            </Grid>
+        </DockPanel>
     </ControlTemplate>
 
 </ResourceDictionary>
