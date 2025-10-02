@@ -1125,7 +1125,7 @@
                                                                     <Control x:Name="identity" Template="{StaticResource IdentityChoice}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
 
                                                                     <!-- Randomisation controls -->
-                                                                    <Control x:Name="RandomizeCharacterOrigins" Template="{StaticResource ChangeRandomCharacterCarouselTemplate}" Visibility="Collapsed" Margin="0,47,0,0"/>
+                                                                    <Control x:Name="RandomizeCharacterOrigins" Template="{StaticResource HUI_RandomizeCharacterBoxComponent}" Visibility="Collapsed" Margin="0,0,0,0"/>
 
                                                                 </StackPanel>
                                                         </ScrollViewer>
@@ -1736,11 +1736,7 @@
                     <Control.Template>
                         <ControlTemplate TargetType="Control">
                             <Grid>
-                                <b:Interaction.Triggers>
-                                    <b:DataTrigger Binding="{Binding ElementName=namingPage, Path=Visibility}" Value="Visible">
-                                        <b:InvokeCommandAction Command="{Binding SetCharacterCreationStep}" CommandParameter="Naming"/>
-                                    </b:DataTrigger>
-                                </b:Interaction.Triggers>
+
 
                                 <Control Template="{StaticResource setNamingCamera}" Visibility="{Binding Visibility, ElementName=namingPage}"/>
 
@@ -1756,7 +1752,7 @@
 
                                     <TextBlock x:Name="CharacterNameHeader" ls:TextBlockFormatter.SourceText="{Binding Source=hfc928d2ega3a9g420egbeb5g0b20ab704959, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
 
-                                    <Control x:Name="textInputBox" Template="{StaticResource HUI_NamingBoxComponent}" Tag="{Binding Source='h5cd3cabag657ag4abfga33fg9b1b2808ee7f', Converter={StaticResource TranslatedStringConverter}}"/>
+                                    <Control x:Name="textInputBox" Template="{StaticResource HUI_NamingBoxComponent}" Tag="{Binding Source='hfc928d2ega3a9g420egbeb5g0b20ab704959', Converter={StaticResource TranslatedStringConverter}}"/>
 
                                     <ContentPresenter x:Name="MissingRequirementsError" HorizontalAlignment="Center" Visibility="Collapsed" Margin="50,0,0,-20" ContentTemplate="{StaticResource MissingRequirementsErrorTemplate}" Content=""/>
 

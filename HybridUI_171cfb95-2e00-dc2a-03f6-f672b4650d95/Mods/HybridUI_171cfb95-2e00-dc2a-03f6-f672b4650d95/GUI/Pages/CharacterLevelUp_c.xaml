@@ -165,8 +165,8 @@
                 <!-- Fade out intro text and fade in other UI elements -->
                 <DoubleAnimation Storyboard.TargetName="LevelUpIntroPanel" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="{StaticResource LevelUpAfterItemsDuration}"/>
 
-                <DoubleAnimation Storyboard.TargetName="tabNavigation" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpAfterItemsDuration}"/>
-                <DoubleAnimation Storyboard.TargetName="bottomControls" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.2" To="1" Duration="{StaticResource LevelUpAfterItemsDuration}"/>
+                <DoubleAnimation Storyboard.TargetName="tabBar" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpAfterItemsDuration}"/>
+                <DoubleAnimation Storyboard.TargetName="bottomButtons" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.2" To="1" Duration="{StaticResource LevelUpAfterItemsDuration}"/>
                 <DoubleAnimation Storyboard.TargetName="leftSideShading" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.2" To="1" Duration="0:0:0.3"/>
                 <DoubleAnimation Storyboard.TargetName="worldFader" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.3" To="0" Duration="0:0:0.3"/>
 
@@ -183,8 +183,8 @@
                 <!-- Fade out intro text and fade in other UI elements -->
                 <DoubleAnimation Storyboard.TargetName="LevelUpIntroPanel" Storyboard.TargetProperty="Opacity" To="0" Duration="{StaticResource LevelUpSkipDuration}"/>
 
-                <DoubleAnimation Storyboard.TargetName="tabNavigation" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpSkipDuration}"/>
-                <DoubleAnimation Storyboard.TargetName="bottomControls" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpSkipDuration}"/>
+                <DoubleAnimation Storyboard.TargetName="tabBar" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpSkipDuration}"/>
+                <DoubleAnimation Storyboard.TargetName="bottomButtons" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpSkipDuration}"/>
                 <DoubleAnimation Storyboard.TargetName="leftSideShading" Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource LevelUpSkipDuration}"/>
                 <DoubleAnimation Storyboard.TargetName="worldFader" Storyboard.TargetProperty="Opacity" To="0" Duration="{StaticResource LevelUpSkipDuration}"/>
 
@@ -195,6 +195,105 @@
                 <DoubleAnimation Storyboard.TargetName="summary" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" To="0" Duration="{StaticResource LevelUpSkipDuration}" AccelerationRatio="0.75" DecelerationRatio="0.25"/>
 
             </Storyboard>
+
+            <ControlTemplate x:Key="LevelUpBottomButtonsTemplate">
+                <StackPanel Orientation="Horizontal">
+                    <!-- Toggle tooltips -->
+                    <ls:LSButton x:Name="ToggleTooltips" Margin="50,0,0,0"
+                                 Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
+                                 CommandParameter="{Binding FocusedElement, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ls:UIWidget}}"
+                                 BoundEvent="UIShowInfo"
+                                 ContentTemplate="{StaticResource ControllerButtonHint}"
+                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIShowInfo, Converter={StaticResource FindInputEventConverter}}"
+                                 Tag="{Binding Source='hf8dd4c2fg97e0g4ccdgac1ag3cd1fe5060ef', Converter={StaticResource TranslatedStringConverter}}" TapTime="{StaticResource DefaultButtonTapTime}"/>
+
+                    <!-- Multiclass button -->
+                    <ls:LSButton x:Name="addClassButton" Visibility="Collapsed" IsEnabled="False" Command="{Binding DataContext.SelectFirstUnusedClass, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAddClass, Converter={StaticResource FindInputEventConverter}}" BoundEvent="UIAddClass" Tag="{Binding Source=hcbc3c9a8g9e80g4139g952bga971015c1f41,Converter={StaticResource TranslatedStringConverter}}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="levelupTab" PropertyName="Visibility" Value="Collapsed" />
+                                <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedItem" Value="{Binding ElementName=classTab}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+
+                    <ls:LSButton x:Name="cancelAddClassButton" Visibility="Collapsed" Command="{Binding DataContext.SelectFirstUsedClass, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAddClass, Converter={StaticResource FindInputEventConverter}}" BoundEvent="UIAddClass" Tag="{Binding Source=hd8d647a9ga19bg47c6g9c46gc4b12ac464c8,Converter={StaticResource TranslatedStringConverter}}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="levelupTab" PropertyName="Visibility" Value="Visible" />
+                                <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedItem" Value="{Binding ElementName=levelupTab}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+
+                    <ls:LSButton x:Name="showSummary" Visibility="{Binding ElementName=summary, Path=Visibility, Converter={StaticResource InvertVisibilityConverter}}"
+                                 ContentTemplate="{StaticResource ControllerButtonHint}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UISort, Converter={StaticResource FindInputEventConverter}}"
+                                 BoundEvent="UISort" Tag="{Binding Source=h890f4cddg2bdcg4bb2gb73eg43fe16b11b08,Converter={StaticResource TranslatedStringConverter}}" EatInput="False" TapTime="{StaticResource DefaultButtonTapTime}" Margin="50,0,0,0">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="leftSidePanels" PropertyName="IsEnabled" Value="False" />
+                                <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="True" />
+                                <b:ChangePropertyAction TargetName="summary" PropertyName="Visibility" Value="Visible"/>
+                                <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c" FocusElement="{Binding ElementName=summaryPanel}"/>
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource focusSummaryPanelStoryboard}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+                    <ls:LSButton x:Name="hideSummary" Visibility="{Binding ElementName=summary, Path=Visibility}" ContentTemplate="{StaticResource ControllerButtonHint}"
+                                 Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UISort, Converter={StaticResource FindInputEventConverter}}"
+                                 BoundEvent="UISort" Tag="{Binding Source=h70ec62ddg0cfcg4512ga0c6gbc591945b75b,Converter={StaticResource TranslatedStringConverter}}" EatInput="False" TapTime="{StaticResource DefaultButtonTapTime}" Margin="50,0,0,0">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="leftSidePanels" PropertyName="IsEnabled" Value="True" />
+                                <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="False" />
+                                <b:ChangePropertyAction TargetName="summary" PropertyName="Visibility" Value="Collapsed"/>
+                                <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c" FocusElement="{Binding ElementName=leftSidePanels}"/>
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource unfocusSummaryPanelStoryboard}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+
+                    <ls:LSButton x:Name="exitButton" Style="{StaticResource ControllerHoldButtonStyle}" Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}"
+                                 BoundEvent="UICancel" Tag="{Binding Source=hbc80c075g1c12g45a7gb006gfdc65eea207d,Converter={StaticResource TranslatedStringConverter}}" Margin="50,0,0,0" EatInput="False"
+                                 Command="{Binding DataContext.CustomEvent, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="CloseWidget"/>
+                    
+                    <ls:LSInputBinding x:Name="PinTooltipBinding" Style="{StaticResource PinTooltipBindingStyle}"/>
+                </StackPanel>
+                <ControlTemplate.Triggers>
+                    <DataTrigger Binding="{Binding ShowUIElementTooltip, ElementName=CharacterLevelUp_c}" Value="True">
+                        <Setter TargetName="ToggleTooltips" Property="Tag" Value="{Binding Source='hb33ec471gd611g4ee3gbbffg699af8f79167', Converter={StaticResource TranslatedStringConverter}}"/>
+                    </DataTrigger>
+
+                    <!-- Disable and collapse Toggle Tooltips button when draconic tab is selected -->
+                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="draconic">
+                        <Setter TargetName="ToggleTooltips" Property="IsEnabled" Value="False"/>
+                        <Setter TargetName="ToggleTooltips" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+
+                    <!-- Multiclass button visibility rules -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="levelup"/>
+                            <Condition Binding="{Binding IsMulticlassEnabled}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <Setter TargetName="addClassButton" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="addClassButton" Property="IsEnabled" Value="True"/>
+                    </MultiDataTrigger>
+                    
+                    <!-- Show cancel button when in multiclass selection mode -->
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class"/>
+                            <Condition Binding="{Binding IsMulticlassEnabled}" Value="True"/>
+                        </MultiDataTrigger.Conditions>
+                        <Setter TargetName="addClassButton" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="cancelAddClassButton" Property="Visibility" Value="Visible"/>
+                    </MultiDataTrigger>
+
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+
 
             <ControlTemplate x:Key="LevelUpFinishingTemplate">
                 <Grid Background="Black" Opacity="0.5"/>
@@ -291,7 +390,7 @@
 
                                 <Rectangle x:Name="leftSideShading" HorizontalAlignment="Left" Opacity="0" Width="{StaticResource leftSidePanelBackgroundWidth}" Fill="{StaticResource LeftSideShadingBrush}" OpacityMask="{StaticResource OpacityMaskShadingBrush}"/>
 
-                                <Grid x:Name="leftSidePanels" ls:MoveFocus.IsMoveFocusScope="True" MinWidth="1218" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,50,0,0" Tag="0">
+                                <Grid x:Name="leftSidePanels" ls:MoveFocus.IsMoveFocusScope="True" MinWidth="1218" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,140,0,0" Tag="0">
 
                                     <Grid.RenderTransform>
                                         <!-- Start panel at left position during level up animation -->
@@ -328,75 +427,302 @@
 
                                 </Grid>
 
-                                <Grid x:Name="tabNavigation" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,110" Width="{StaticResource gameplaySideWidth}">
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <Grid x:Name="dummyMotionKey" Visibility="Collapsed" HorizontalAlignment="Center">
-                                            <Image Source="{StaticResource CameraActionIndication}" Stretch="None"/>
-                                            <Image Source="{StaticResource CameraActionStickIcon}" Stretch="None" Margin="0,8,0,0"/>
-                                        </Grid>
+                            <!-- Tab Bar Background -->
+                            <Rectangle x:Name="tabBarBackground" Width="3000" Height="{StaticResource TabsPanelHeight}" Fill="{StaticResource NavShadingBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                                        <ContentPresenter x:Name="MissingRequirementsError" HorizontalAlignment="Center" Visibility="Collapsed" Margin="0,0,0,0" ContentTemplate="{StaticResource MissingRequirementsErrorTemplate}" Content=""/>
+                            <StackPanel x:Name="tabBar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="216,0,0,0" Width="3000">
 
-                                        <!-- forward navigation only here, back is in bottombuttons -->
-                                        <ls:LSButton x:Name="nextButton" IsEnabled="False" Style="{StaticResource nextCCTabNavButtonStyle}" HorizontalAlignment="Center"/>
+                                <Grid x:Name="tabBarClipper" Width="3000" ClipToBounds="True" Tag="430">
+                                    <!-- All the Gameplay Tabs -->
+                                    <ListBox x:Name="gameplayTabs" VerticalAlignment="Center" SelectedIndex="0">
+                                        <ListBox.Template>
+                                            <ControlTemplate TargetType="ListBox">
+                                                <Grid x:Name="templateRoot">
+                                                    <b:Interaction.Behaviors>
+                                                        <ls:SubListBoxBehavior x:Name="SubListBoxHelper" RootListBox="{Binding RelativeSource={RelativeSource TemplatedParent}}" DoPrevious="{Binding ElementName=prevTabButton, Path=IsPressed}" DoNext="{Binding ElementName=nextTabButton, Path=IsPressed}"/>
+                                                    </b:Interaction.Behaviors>
 
-                                        <ls:LSNineSliceImage x:Name="ventureForthButton" Visibility="Collapsed" HorizontalContentAlignment="Center" HorizontalAlignment="Center"  Style="{StaticResource PrimaryButton9Slice}" Margin="0,0,0,20">
-                                            <ls:LSButton Style="{StaticResource ControllerHoldButtonStyle}" Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIDelete'}" Tag="{Binding Source='ha7867654g6f71g41ccgbd0bgba956a682293', Converter={StaticResource TranslatedStringConverter}}" EatInput="False" Command="{Binding DataContext.PlayDummyVFX, ElementName=CharacterLevelUp_c}" CommandParameter="VFX_UI_LevelUp_01" Margin="6,0,8,0" >
-                                                <b:Interaction.Triggers>
-                                                    <b:EventTrigger EventName="Click" >
+                                                    <!-- No ScrollViewer -->
+                                                    <Grid x:Name="backplate" Width="{Binding ElementName=SubListBoxHelper, Path=BackplateWidth}" MinWidth="{Binding ElementName=SubListBoxHelper, Path=RootListBox.SelectedItem.ActualWidth}"
+                                                          Height="{StaticResource TabsPanelHeight}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden">
+                                                        <Grid.Tag>
+                                                            <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                <!-- Tab Offset -->
+                                                                <Binding ElementName="SubListBoxHelper" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
+                                                                <Binding ElementName="tabSelector" Path="Width" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-0.5"/>
+                                                                <Binding ElementName="tabBarClipper" Path="Tag"/>
+                                                                <!-- Add backplate offset -->
+                                                                <Binding ElementName="SubListBoxHelper" Path="BackplateOffset"/>
+                                                            </MultiBinding>
+                                                        </Grid.Tag>
 
-                                                        <b:ChangePropertyAction TargetName="levelUp" PropertyName="Visibility" Value="Collapsed" />
-                                                        <b:ChangePropertyAction TargetName="levelUp" PropertyName="IsEnabled" Value="False" />
+                                                        <Grid.Background>
+                                                            <LinearGradientBrush Opacity="1.0" StartPoint="0,0" EndPoint="0,1">
+                                                                <GradientStop Offset="0" Color="{StaticResource transparentBlack}"/>
+                                                                <GradientStop Offset="0.5" Color="#70af8768"/>
+                                                                <GradientStop Offset="1.0" Color="#b0af8768" />
+                                                            </LinearGradientBrush>
+                                                        </Grid.Background>
 
-                                                        <b:InvokeCommandAction Command="{Binding DataContext.SetCameraMode, ElementName=CharacterLevelUp_c}" CommandParameter="Overview"/>
+                                                        <!-- Set Backplate position - todo improve animation -->
+                                                        <Grid.RenderTransform>
+                                                            <TranslateTransform X="{Binding ElementName=backplate,Path=Tag}" Y="0"/>
+                                                        </Grid.RenderTransform>
 
-                                                        <b:InvokeCommandAction Command="{Binding HideTooltipOnUIElementCommand, ElementName=CharacterLevelUp_c}"/>
+                                                        <Grid.Resources>
+                                                            <Storyboard x:Key="SlideBackplateAnimation">
+                                                                <!-- FillBehavior cannot be set to Stop as that will cause some animation issues (see GUSX-14736 for more details) -->
+                                                                <DoubleAnimation Storyboard.TargetName="backplate" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="{StaticResource BackplateSlideAnimationDuration}"
+                                                                    AccelerationRatio="0.25" DecelerationRatio="0.25" To="{Binding ElementName=backplate,Path=Tag}" FillBehavior="HoldEnd"/>
+                                                            </Storyboard>
+                                                        </Grid.Resources>
 
-                                                    </b:EventTrigger>
-                                                    <b:TimerTrigger EventName="Click" MillisecondsPerTick="1400" TotalTicks="1">
-                                                        <b:InvokeCommandAction Command="{Binding DataContext.FinishLevelUp, ElementName=CharacterLevelUp_c}" CommandParameter="Overview"/>
-                                                    </b:TimerTrigger>
-                                                </b:Interaction.Triggers>
-                                            </ls:LSButton>
-                                        </ls:LSNineSliceImage>
+                                                        <b:Interaction.Triggers>
 
-                                        <ListBox x:Name="gameplayTabs" Tag="levelup" ItemsPanel="{StaticResource gameplayTabListPanel}" HorizontalAlignment="Center" Margin="0,-20,0,50">
-                                            <b:Interaction.Behaviors>
-                                                <ls:SubListBoxBehavior x:Name="SubListBoxHelper"  RootListBox="{Binding ElementName=gameplayTabs}" DoNext="{Binding ElementName=nextButton, Path=IsPressed}" DoPrevious="{Binding ElementName=backButton, Path=IsPressed}"/>
-                                            </b:Interaction.Behaviors>
-                                            <ListBox.ItemContainerStyle>
-                                                <Style TargetType="ListBoxItem">
-                                                    <Setter Property="Template" Value="{StaticResource gameplayTabTemplate}"/>
-                                                </Style>
-                                            </ListBox.ItemContainerStyle>
+                                                            <!-- Animated SelectedOffset -->
+                                                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=SubListBoxHelper}">
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideBackplateAnimation}"/>
+                                                                <!-- Ensure offset calculated after startup animations have completed -->
+                                                                <ls:LSControlStoryboard ControlStoryboardOption="Play" >
+                                                                    <ls:LSControlStoryboard.Storyboard>
+                                                                        <Storyboard x:Name="initialBackplateWidthSetting" Duration="0:0:0.4">
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="backplate">
+                                                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="{x:Static Visibility.Visible}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </ls:LSControlStoryboard.Storyboard>
+                                                                </ls:LSControlStoryboard>
+                                                            </b:PropertyChangedTrigger>
 
-                                            <ListBoxItem x:Name="levelupTab" Tag="levelup" IsSelected="True"/>
+                                                            <!-- When the storyboard is triggered, the Tag value bound to the To property keeps changing during the animation, so it could be that the animation ends and, then, 
+                                                            the Tag value changes again, resulting on a wrong end position, so we need to check if the final position is the proper one and, otherwise, retrigger the animation -->
+                                                            <b:StoryboardCompletedTrigger Storyboard="{StaticResource SlideBackplateAnimation}">
+                                                                <b:Interaction.Behaviors>
+                                                                    <b:ConditionBehavior>
+                                                                        <b:ConditionalExpression>
+                                                                            <b:ComparisonCondition LeftOperand="{Binding ElementName=backplate, Path=(UIElement.RenderTransform).(TranslateTransform.X)}" Operator="NotEqual" RightOperand="{Binding ElementName=backplate, Path=Tag}"/>
+                                                                        </b:ConditionalExpression>
+                                                                    </b:ConditionBehavior>
+                                                                </b:Interaction.Behaviors>
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource SlideBackplateAnimation}"/>
+                                                            </b:StoryboardCompletedTrigger>
 
-                                            <ListBoxItem x:Name="classTab" Tag="class" Visibility="{Binding Visibility, ElementName=levelupTab, Converter={StaticResource InvertVisibilityConverter}}"/>
-                                            <ListBoxItem x:Name="subClassTab" Tag="subclass" Visibility="Collapsed"/>
+                                                            <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=tabBarClipper}">
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                                    <b:ControlStoryboardAction.Storyboard>
+                                                                        <Storyboard x:Name="slideBackplateSplitscreen">
+                                                                            <DoubleAnimation Storyboard.TargetName="backplate" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="{StaticResource BackplateSlideAnimationDuration}"
+                                                                                             AccelerationRatio="0.25" DecelerationRatio="0.25" To="{Binding ElementName=backplate,Path=Tag}" FillBehavior="Stop"/>
+                                                                        </Storyboard>
+                                                                    </b:ControlStoryboardAction.Storyboard>
+                                                                </b:ControlStoryboardAction>
+                                                            </b:PropertyChangedTrigger>
+                                                            <b:TimerTrigger EventName="Loaded" SourceName="tabBarButtons" MillisecondsPerTick="280" TotalTicks="1">
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                                    <b:ControlStoryboardAction.Storyboard>
+                                                                        <Storyboard >
+                                                                            <DoubleAnimation Storyboard.TargetName="backplate" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="0:0:0.02" From="300"
+                                                                                             To="{Binding ElementName=backplate,Path=Tag}" FillBehavior="Stop"/>
+                                                                        </Storyboard>
+                                                                    </b:ControlStoryboardAction.Storyboard>
+                                                                </b:ControlStoryboardAction>
+                                                            </b:TimerTrigger>
 
-                                            <ListBoxItem x:Name="raceTab" Tag="race" Visibility="Collapsed"/>
+                                                        </b:Interaction.Triggers>
+                                                    </Grid>
 
-                                            <ListBoxItem x:Name="deityTab" Tag="deity" Visibility="{Binding SelectableDeities.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                                    <Grid x:Name="itemsPanel">
+                                                        <Grid.Tag>
+                                                            <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                <Binding ElementName="SubListBoxHelper" Path="SelectedOffset" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-1"/>
+                                                                <Binding ElementName="tabSelector" Path="Width" Converter="{StaticResource MultiplierConverter}" ConverterParameter="-0.5"/>
 
+                                                                <!-- Added to center tab over related gameplay panel -->
+                                                                <Binding ElementName="tabBarClipper" Path="Tag"/>
+                                                            </MultiBinding>
+                                                        </Grid.Tag>
+
+                                                        <Grid.RenderTransform>
+                                                            <TranslateTransform X="{Binding ElementName=itemsPanel,Path=Tag}" Y="0"/>
+                                                        </Grid.RenderTransform>
+
+                                                        <Grid.Resources>
+                                                            <Storyboard x:Key="ScrollTabsAnimation">
+                                                                <!-- FillBehavior cannot be set to Stop as that will cause some animation issues (see GUSX-14736 for more details) -->
+                                                                <DoubleAnimation Storyboard.TargetName="itemsPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="{StaticResource TabsSlideAnimationDuration}"
+                                                                    AccelerationRatio="0.25" DecelerationRatio="0.25" To="{Binding ElementName=itemsPanel,Path=Tag}" FillBehavior="HoldEnd"/>
+                                                            </Storyboard>
+                                                        </Grid.Resources>
+
+                                                        <b:Interaction.Triggers>
+                                                            <!-- Animated SelectedOffset -->
+                                                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedOffset, ElementName=SubListBoxHelper}">
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource ScrollTabsAnimation}"/>
+                                                            </b:PropertyChangedTrigger>
+
+                                                            <!-- When the storyboard is triggered, the Tag value bound to the To property keeps changing during the animation, so it could be that the animation ends and, then, 
+                                                            the Tag value changes again, resulting on a wrong end position, so we need to check if the final position is the proper one and, otherwise, retrigger the animation -->
+                                                            <b:StoryboardCompletedTrigger Storyboard="{StaticResource ScrollTabsAnimation}">
+                                                                <b:Interaction.Behaviors>
+                                                                    <b:ConditionBehavior>
+                                                                        <b:ConditionalExpression>
+                                                                            <b:ComparisonCondition LeftOperand="{Binding ElementName=itemsPanel, Path=(UIElement.RenderTransform).(TranslateTransform.X)}" Operator="NotEqual" RightOperand="{Binding ElementName=itemsPanel, Path=Tag}"/>
+                                                                        </b:ConditionalExpression>
+                                                                    </b:ConditionBehavior>
+                                                                </b:Interaction.Behaviors>
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource ScrollTabsAnimation}"/>
+                                                            </b:StoryboardCompletedTrigger>
+
+                                                            <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=tabBarClipper}">
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                                    <b:ControlStoryboardAction.Storyboard>
+                                                                        <Storyboard x:Name="scrollTabsSplitscreen">
+                                                                            <DoubleAnimation Storyboard.TargetName="itemsPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="{StaticResource TabsSlideAnimationDuration}"
+                                                                                             AccelerationRatio="0.25" DecelerationRatio="0.25" To="{Binding ElementName=itemsPanel,Path=Tag}" FillBehavior="Stop"/>
+                                                                        </Storyboard>
+                                                                    </b:ControlStoryboardAction.Storyboard>
+                                                                </b:ControlStoryboardAction>
+                                                            </b:PropertyChangedTrigger>
+                                                            <b:TimerTrigger EventName="Loaded" SourceName="tabBarButtons" MillisecondsPerTick="280" TotalTicks="1">
+                                                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                                                    <b:ControlStoryboardAction.Storyboard>
+                                                                        <Storyboard >
+                                                                            <DoubleAnimation Storyboard.TargetName="itemsPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Duration="0:0:0.02" From="300"
+                                                                                             To="{Binding ElementName=itemsPanel,Path=Tag}" FillBehavior="Stop"/>
+                                                                        </Storyboard>
+                                                                    </b:ControlStoryboardAction.Storyboard>
+                                                                </b:ControlStoryboardAction>
+                                                            </b:TimerTrigger>
+
+                                                        </b:Interaction.Triggers>
+                                                        <ItemsPresenter/>
+
+                                                    </Grid>
+
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <!-- Manual backplate width calculation for related tabs -->
+                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="levelup">
+                                                        <Setter TargetName="backplate" Property="Width" Value="{Binding Path=ActualWidth, ElementName=levelupTab}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
+                                                        <Setter TargetName="backplate" Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                    <Binding Path="ActualWidth" ElementName="classTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="subClassTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="deityTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="spellPrepTab"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
+                                                        <Setter TargetName="backplate" Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                    <Binding Path="ActualWidth" ElementName="classTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="subClassTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="deityTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="spellPrepTab"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="feat">
+                                                        <Setter TargetName="backplate" Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                    <Binding Path="ActualWidth" ElementName="featTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="featDetailsTab"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="featdetails">
+                                                        <Setter TargetName="backplate" Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                    <Binding Path="ActualWidth" ElementName="featTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="featDetailsTab"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ListBox.Template>
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel x:Name="itemsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Template" Value="{StaticResource gameplayTabTemplate2}"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+
+                                            <ListBoxItem x:Name="levelupTab" Tag="levelup" IsSelected="True" Visibility="{Binding IsMultiClassLevelUp, Converter={StaticResource BoolToCollapsedConverter}}"/>
+                                            <ListBoxItem x:Name="classTab" Tag="class" IsSelected="{Binding IsMultiClassLevelUp}" Visibility="{Binding Visibility, ElementName=levelupTab, Converter={StaticResource InvertVisibilityConverter}}"/>
+                                            <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                            <ListBoxItem x:Name="deityTab" Tag="deity" IsEnabled="{Binding SelectableDeities.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                            <ListBoxItem x:Name="spellPrepTab" Tag="spellprep" IsEnabled="{Binding SpellPrepare.Preparable.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                            <ListBoxItem x:Name="skillsTab" Tag="skills" IsEnabled="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                            <ListBoxItem x:Name="expertiseTab" Tag="expertise" IsEnabled="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                            <ListBoxItem x:Name="spellReplaceTab" Tag="spellreplace" IsEnabled="{Binding ClassProgressionDetails.InSpellReplacement, Converter={StaticResource NullToBoolFalseConverter}}"/>
                                             <ListBoxItem x:Name="draconicTab" Tag="draconic" Visibility="Collapsed"/>
 
-                                            <ListBoxItem x:Name="skillsTab" Tag="skills" Visibility="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource CountToVisibilityConverter}}"/>
-                                            <ListBoxItem x:Name="expertiseTab" Tag="expertise" Visibility="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource CountToVisibilityConverter}}"/>
-
-                                            <ListBoxItem x:Name="spellReplaceTab" Tag="spellreplace" Visibility="{Binding ClassProgressionDetails.InSpellReplacement, Converter={StaticResource NullToCollapsedConverter}}"/>
-
-                                            <ListBoxItem x:Name="featTab" Tag="feat" Visibility="{Binding CanSelectFeat, Converter={StaticResource BoolToVisibleConverter}}"/>
+                                            <ListBoxItem x:Name="raceTab" Tag="race" Visibility="Collapsed"/>
+                                            <ListBoxItem x:Name="featTab" Tag="feat" IsEnabled="{Binding CanSelectFeat}"/>
                                             <ListBoxItem x:Name="featDetailsTab" Tag="featdetails" Visibility="{Binding SelectedFeatDetails.HasFeat, Converter={StaticResource BoolToVisibleConverter}}"/>
+                                    </ListBox>
 
-                                            <ListBoxItem x:Name="spellPrepTab" Tag="spellprep" Visibility="{Binding SpellPrepare.Preparable.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                                    <!-- Gameplay tab selector underlines -->
+                                    <Grid x:Name="selectedTabUnderline" HorizontalAlignment="Left" Margin="102,88,0,0" Width="600" Visibility="Visible">
+                                        <ls:LSNineSliceImage x:Name="tabSelector" Style="{StaticResource tabSelectorStyle}" Width="0" Margin="0,0,0,0"/>
+                                    </Grid>
 
-                                        </ListBox>
-                                    </StackPanel>
                                 </Grid>
+
+                            </StackPanel>
+
+                            <!-- Tab Navigation Buttons -->
+                            <StackPanel x:Name="tabBarButtons" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,0,0,0">
+                                <ls:LSButton x:Name="prevTabButton" 
+                                             IsEnabled="{Binding ElementName=SubListBoxHelper,Path=HasPrevious}"
+                                             ContentTemplate="{StaticResource ControllerButtonHintImageOnly}"
+                                             Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UITabPrev, Converter={StaticResource FindInputEventConverter}}"
+                                             BoundEvent="UITabPrev"
+                                             Margin="-20,0,-20,0"/>
+                                <ls:LSButton x:Name="nextTabButton" 
+                                             IsEnabled="{Binding ElementName=SubListBoxHelper,Path=HasNext}"
+                                             ContentTemplate="{StaticResource ControllerButtonHintImageOnly}"
+                                             Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UITabNext, Converter={StaticResource FindInputEventConverter}}"
+                                             BoundEvent="UITabNext"
+                                             Margin="-20,0,-20,0"/>
+                            </StackPanel>
 
                             </Grid>
 
+                            <!-- Venture Forth Button (always visible, like CharacterRespec_c.xaml confirm button) -->
+                            <ContentControl Template="{StaticResource buttonBackplateTemplate}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,148">
+                                <ls:LSButton x:Name="ventureForthButton" Style="{StaticResource ControllerHoldButtonStyle}" Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIDelete'}" Tag="{Binding Source='ha7867654g6f71g41ccgbd0bgba956a682293', Converter={StaticResource TranslatedStringConverter}}" Command="{Binding DataContext.PlayDummyVFX, ElementName=CharacterLevelUp_c}" CommandParameter="VFX_UI_LevelUp_01" Margin="2,0,0,0">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="Click" >
+                                            <b:ChangePropertyAction TargetName="levelUp" PropertyName="Visibility" Value="Collapsed" />
+                                            <b:ChangePropertyAction TargetName="levelUp" PropertyName="IsEnabled" Value="False" />
+                                            <b:InvokeCommandAction Command="{Binding DataContext.SetCameraMode, ElementName=CharacterLevelUp_c}" CommandParameter="Overview"/>
+                                            <b:InvokeCommandAction Command="{Binding HideTooltipOnUIElementCommand, ElementName=CharacterLevelUp_c}"/>
+                                        </b:EventTrigger>
+                                        <b:TimerTrigger EventName="Click" MillisecondsPerTick="1400" TotalTicks="1">
+                                            <b:InvokeCommandAction Command="{Binding DataContext.FinishLevelUp, ElementName=CharacterLevelUp_c}" CommandParameter="Overview"/>
+                                        </b:TimerTrigger>
+                                    </b:Interaction.Triggers>
+                                </ls:LSButton>
+                            </ContentControl>
 
                             <Grid x:Name="summary" Visibility="Collapsed" HorizontalAlignment="Right">
                                 <Grid.RenderTransform>
@@ -474,17 +800,8 @@
                                 </Grid>
                             </Grid>
 
-                            <StackPanel x:Name="bottomControls" Opacity="0" Style="{StaticResource ButtonHint.Container.Right}">
-                                <ContentControl x:Name="bottomButtons" IsEnabled="False" Template="{StaticResource StandardBottomButtonsTemplate}">
-                                    <ls:LSButton x:Name="CancelLevelUpButton" 
-                                         Tag="{Binding Source='hbc80c075g1c12g45a7gb006gfdc65eea207d', Converter={StaticResource TranslatedStringConverter}}"  
-                                         Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" 
-                                         Command="{Binding DataContext.CustomEvent, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="CloseWidget" EatInput="False"
-                                         IsEnabled="False" Style="{StaticResource ControllerHoldButtonStyle}" 
-                                         VerticalAlignment="Bottom" Visibility="Collapsed"/>
-                                </ContentControl>
-
-
+                            <StackPanel Style="{StaticResource ButtonHint.Container.Right}">
+                                <Control x:Name="bottomButtons" Template="{StaticResource LevelUpBottomButtonsTemplate}"/>
                             </StackPanel>
 
                             <ls:LSInputBinding x:Name="PinTooltipBinding" Style="{StaticResource PinTooltipBindingStyle}" EatInput="False"/>
@@ -607,11 +924,47 @@
 
                             <!-- Split Screen variation -->
                             <DataTrigger Binding="{Binding Layout}" Value="Common">
-                                <Setter TargetName="leftSidePanels" Property="Margin" Value="200,50,0,0"/>
+                                <Setter TargetName="leftSidePanels" Property="Margin" Value="170,140,0,0"/>
                                 <Setter TargetName="leftSidePanels" Property="Tag" Value="-200"/>
-                                <Setter TargetName="tabNavigation" Property="Margin" Value="0,0,0,0"/>
-                                <Setter TargetName="gameplayPanel" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
+                                <Setter TargetName="gameplayPanel" Property="Height" Value="{StaticResource gameplayPanelHeight}"/>
+                                <Setter TargetName="tabBarClipper" Property="Tag" Value="580"/>
+                                <Setter TargetName="tabBar" Property="Margin" Value="226,0,0,0"/>
+                                <Setter TargetName="selectedTabUnderline" Property="Margin" Value="252,88,0,0"/>
+                            </DataTrigger>
 
+                            <!-- Selected Tab Underline Width Matching -->
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="race">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=raceTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=subRaceTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=classTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=subClassTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="skills">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=skillsTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="expertise">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=expertiseTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellreplace">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=spellReplaceTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="feat">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=featTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="featdetails">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=featDetailsTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=spellPrepTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="levelup">
+                                <Setter TargetName="tabSelector" Property="Width" Value="{Binding Path=ActualWidth, ElementName=levelupTab}"/>
                             </DataTrigger>
 
                             <DataTrigger Value="False">
@@ -625,8 +978,7 @@
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding LevelUpStep}" Value="IntroComplete">
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="True"/>
-                                <Setter TargetName="bottomButtons" Property="IsEnabled" Value="True"/>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=RaceSpellSelectors, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
@@ -666,129 +1018,103 @@
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=(b:Interaction.Behaviors)[0].HasNext}" Value="False">
-                                <Setter TargetName="nextButton" Property="Visibility" Value="Collapsed"/>
-                                <Setter TargetName="ventureForthButton" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="nextTabButton" Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
 
-                            <!-- Disabled next/continue button if current subtab panel is incomplete -->
-                            <DataTrigger Binding="{Binding DataContext.IsComplete, ElementName=gameplaySubPanel}" Value="False">
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </DataTrigger>
-
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="skills"/>
-                                    <Condition Binding="{Binding Validity.ClassSelectors.SkillProficiencySelectors}" Value="False"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
-
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="expertise"/>
-                                    <Condition Binding="{Binding Validity.ClassSelectors.SkillExpertiseSelectors}" Value="False"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
-
-                            <MultiDataTrigger>
+            <!-- Disabled next/continue button if current subtab panel is incomplete -->
+            <!-- <DataTrigger Binding="{Binding DataContext.IsComplete, ElementName=gameplaySubPanel}" Value="False">
+                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+            </DataTrigger> -->            <!-- <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="skills"/>
+                    <Condition Binding="{Binding Validity.ClassSelectors.SkillProficiencySelectors}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+            </MultiDataTrigger> -->            <!-- <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="expertise"/>
+                    <Condition Binding="{Binding Validity.ClassSelectors.SkillExpertiseSelectors}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+            </MultiDataTrigger> -->                            <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="featdetails"/>
                                     <Condition Binding="{Binding SelectedFeatDetails.FeatDetails.IsAbilitySelectionComplete}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
                             </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="feat"/>
-                                    <Condition Binding="{Binding SelectedFeatDetails.HasFeat, FallbackValue=False}" Value="False"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
+            <!-- <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="feat"/>
+                    <Condition Binding="{Binding SelectedFeatDetails.HasFeat, FallbackValue=False}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+            </MultiDataTrigger> -->
 
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep"/>
-                                    <Condition Binding="{Binding SpellPrepare.IsInvalid}" Value="True"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep"/>
-                                    <Condition Binding="{Binding SpellPrepare.IsComplete}" Value="False"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
-
-                            <!-- Feats with ability points (e.g., Athlete) -->
-                            <MultiDataTrigger>
+            <!-- <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep"/>
+                    <Condition Binding="{Binding SpellPrepare.IsInvalid}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="spellprep"/>
+                    <Condition Binding="{Binding SpellPrepare.IsComplete}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+            </MultiDataTrigger> -->                            <!-- Feats with ability points (e.g., Athlete) -->
+                            <!-- <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=SelectedItem.Tag, ElementName=gameplayTabs}" Value="featdetails"/>
                                     <Condition Binding="{Binding Validity.RacialSelectors.AbilitySelectors}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
                             </MultiDataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=SelectedItem.Tag, ElementName=gameplayTabs}" Value="featdetails"/>
                                     <Condition Binding="{Binding Validity.ClassSelectors.AbilitySelectors}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+                            </MultiDataTrigger> -->
 
                             <!-- Feats with passives (e.g., Elemental Adept) -->
-                            <MultiDataTrigger>
+                            <!-- <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=SelectedItem.Tag, ElementName=gameplayTabs}" Value="featdetails"/>
                                     <Condition Binding="{Binding Validity.RacialSelectors.PassiveSelectors}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
                             </MultiDataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=SelectedItem.Tag, ElementName=gameplayTabs}" Value="featdetails"/>
                                     <Condition Binding="{Binding Validity.ClassSelectors.PassiveSelectors}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+                            </MultiDataTrigger> -->
 
                             <!-- Feats with skills (e.g., Skilled) -->
-                            <MultiDataTrigger>
+                            <!-- <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=SelectedItem.Tag, ElementName=gameplayTabs}" Value="featdetails"/>
                                     <Condition Binding="{Binding Validity.RacialSelectors.SkillProficiencySelectors}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
                             </MultiDataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=SelectedItem.Tag, ElementName=gameplayTabs}" Value="featdetails"/>
                                     <Condition Binding="{Binding Validity.ClassSelectors.SkillProficiencySelectors}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="nextButton" Property="IsEnabled" Value="False"/>
-                            </MultiDataTrigger>
+                                <Setter TargetName="nextTabButton" Property="IsEnabled" Value="False"/>
+                            </MultiDataTrigger> -->
 
                             <DataTrigger Binding="{Binding IsLevelUpComplete}" Value="False">
                                 <Setter TargetName="ventureForthButton" Property="IsEnabled" Value="False"/>
                             </DataTrigger>
-
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding LevelUpStep}" Value="IntroComplete"/>
-                                    <Condition Binding="{Binding IsEnabled, ElementName=nextButton}" Value="False"/>
-                                    <Condition Binding="{Binding Visibility, ElementName=nextButton}" Value="Visible"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="MissingRequirementsError" Property="Visibility" Value="Visible"/>
-                            </MultiDataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding LevelUpStep}" Value="IntroComplete"/>
-                                    <Condition Binding="{Binding IsEnabled, ElementName=ventureForthButton}" Value="False"/>
-                                    <Condition Binding="{Binding Visibility, ElementName=ventureForthButton}" Value="Visible"/>
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="MissingRequirementsError" Property="Visibility" Value="Visible"/>
-                            </MultiDataTrigger>
 
                             <DataTrigger Binding="{Binding Layout}" Value="Common">
                                 <Setter TargetName="summary" Property="Visibility" Value="Visible"/>
@@ -1227,12 +1553,8 @@ ConverterParameter=0}" Value="True"/>
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="levelup">
-                                <Setter TargetName="CancelLevelUpButton" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="CancelLevelUpButton" Property="IsEnabled" Value="True" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
-                                <Setter TargetName="CancelLevelUpButton" Property="Visibility" Value="Visible" />
-                                <Setter TargetName="CancelLevelUpButton" Property="IsEnabled" Value="True" />
                             </DataTrigger>
 
                             <!-- New MultiClass -->
@@ -1595,6 +1917,8 @@ ConverterParameter=0}" Value="True"/>
                                     </Setter.Value>
                                 </Setter>
                             </DataTrigger>
+
+
 
                         </ControlTemplate.Triggers>
 

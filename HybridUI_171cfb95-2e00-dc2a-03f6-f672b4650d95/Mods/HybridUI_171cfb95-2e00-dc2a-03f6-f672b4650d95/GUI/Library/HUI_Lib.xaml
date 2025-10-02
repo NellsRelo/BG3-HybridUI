@@ -750,7 +750,7 @@
                     <!-- Shuffle-specific content (collapsed by default) -->
                     <Grid x:Name="shuffleActionContent" Visibility="Collapsed">
                         <StackPanel x:Name="shuffleButton" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,-5,0,0" Opacity="0">
-                            <Control x:Name="shuffleIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIShowInfo'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            <Control x:Name="shuffleIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIShowInfo'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="120" Height="120"/>
                             <TextBlock Text="{Binding Source='hda71b4dbg90ffg4c40g9248g575dbd3edfe8', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Left" Margin="10,0,0,0" Foreground="{StaticResource CCTextPrimary}"/>
                         </StackPanel>
                     </Grid>
@@ -763,7 +763,7 @@
                     <!-- Randomize-specific content (collapsed by default) -->
                     <Grid x:Name="randomizeActionContent" Visibility="Collapsed">
                         <StackPanel x:Name="randomizeButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,40,0" Opacity="0">
-                            <Control x:Name="randomizeIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            <Control x:Name="randomizeIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="120" Height="120"/>
                         </StackPanel>
                     </Grid>
                     
@@ -771,7 +771,7 @@
                     <Grid x:Name="voiceActionContent" Visibility="Collapsed">
                         <StackPanel x:Name="playVoiceButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,40,0" Opacity="0">
                             <TextBlock Text="{Binding Source=hbf7b56f9g7cd9g4b08g9986ge231edbbde18,Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
-                            <Control x:Name="playVoiceIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                            <Control x:Name="playVoiceIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="120" Height="120"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
@@ -2259,7 +2259,7 @@
                             <!-- Collapse Grid Hint - shows when grid is visible -->
                             <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
                                 <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
-                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIShowInfo'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
                             </StackPanel>
                                             <!-- Expand Grid Input Binding - Show external grid via messaging -->
                                             <ls:LSInputBinding x:Name="expandInput" BoundEvent="UIAccept" IsEnabled="False">
@@ -2270,16 +2270,18 @@
                                                 </b:Interaction.Triggers>
                                             </ls:LSInputBinding>
                                             
-                            <!-- Face carousel specific expand input -->
-                            <ls:LSInputBinding x:Name="faceExpandInput" BoundEvent="UIAccept" IsEnabled="False">
-                                <b:Interaction.Triggers>
-                                    <b:EventTrigger EventName="LSInputBindingReleased">
-                                        <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
-                                        <ls:BringIntoViewAction TargetName="faceGrid"/>
-                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
-                                    </b:EventTrigger>
-                                </b:Interaction.Triggers>
-                            </ls:LSInputBinding>                                            <!-- Hair carousel specific expand input -->
+                                            <!-- Face carousel specific expand input -->
+                                            <ls:LSInputBinding x:Name="faceExpandInput" BoundEvent="UIAccept" IsEnabled="False">
+                                                <b:Interaction.Triggers>
+                                                    <b:EventTrigger EventName="LSInputBindingReleased">
+                                                        <b:ChangePropertyAction TargetName="faceGrid" PropertyName="Visibility" Value="Visible"/>
+                                                        <ls:BringIntoViewAction TargetName="faceGrid"/>
+                                                        <ls:LSPlaySound Sound="UI_DefaultButton_Click"/>
+                                                    </b:EventTrigger>
+                                                </b:Interaction.Triggers>
+                                            </ls:LSInputBinding>
+
+                                            <!-- Hair carousel specific expand input -->
                                             <ls:LSInputBinding x:Name="hairExpandInput" BoundEvent="UIAccept" IsEnabled="False">
                                                 <b:Interaction.Triggers>
                                                     <b:EventTrigger EventName="LSInputBindingReleased">
@@ -2660,7 +2662,7 @@
                                             <Setter TargetName="shuffleActionContent" Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
 
-                                        <!-- Enable shuffle input when focused (matches original HUI_CarouselTemplate logic) -->
+                                        <!-- Enable shuffle input when focused -->
                                         <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
                                             <Setter TargetName="shuffleInput" Property="IsEnabled" Value="True"/>
                                         </DataTrigger>
@@ -2923,24 +2925,66 @@
                                         <!-- Facial Hair, Piercing, Scar, tails, top of head, chin, and jaw Carousel needs CarouselButton Appearance -->
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="facialHairCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="piercingCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="scarCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="tailsCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="topOfHeadCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="chinCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource TemplatedParent}}" Value="jawCarousel">
                                             <Setter TargetName="base" Property="Template" Value="{StaticResource CarouselButtonTemplate}"/>
+                                            <Setter TargetName="expandIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="expandIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="collapseIcon" Property="Height" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Width" Value="120"/>
+                                            <Setter TargetName="shuffleIcon" Property="Height" Value="120"/>
                                         </DataTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -5688,7 +5732,7 @@
                                             <!-- Shuffle Action Area (Left side, positioned right of nav buttons) -->
                                             <StackPanel x:Name="shuffleButton" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="140,-5,0,0" Opacity="0">
                                                 <Control x:Name="shuffleIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIShowInfo'}" 
-                                                         Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                                         Template="{StaticResource ControllerButton.ImageSwitcher}" Width="120" Height="120"/>
                                                 <TextBlock Text="{Binding Source='hda71b4dbg90ffg4c40g9248g575dbd3edfe8', Converter={StaticResource TranslatedStringConverter}}" 
                                                            Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Left" 
                                                            Margin="10,0,0,0" Foreground="{StaticResource CCTextPrimary}"/>
@@ -5792,7 +5836,7 @@
                                                            Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" 
                                                            Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
                                                 <Control x:Name="expandIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIAccept'}" 
-                                                         Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                                         Template="{StaticResource ControllerButton.ImageSwitcher}" Width="120" Height="120"/>
                                             </StackPanel>
 
                                             <!-- Collapse Grid Hint - shows when grid is visible -->
@@ -5801,7 +5845,7 @@
                                                            Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" 
                                                            Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
                                                 <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" 
-                                                         Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                                         Template="{StaticResource ControllerButton.ImageSwitcher}" Width="120" Height="120"/>
                                             </StackPanel>
 
                                             <!-- Expand Grid Input Binding -->
@@ -7649,6 +7693,12 @@
                             <b:DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=textInputBox}" Value="True">
                                 <ls:BringIntoViewAction TargetName="textSubheader"/>
                             </b:DataTrigger>
+                            <b:EventTrigger EventName="Loaded">
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=textInputBox}"/>
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="IsVisibleChanged">
+                                <ls:SetMoveFocusAction TargetName="CharacterCreation_c" FocusElement="{Binding ElementName=textInputBox}"/>
+                            </b:EventTrigger>
                         </b:Interaction.Triggers>
                         <Grid MinWidth="740" MinHeight="256">
                             <!-- UIAccept input binding to focus the text input -->
@@ -7692,7 +7742,7 @@
                                          Margin="0,0,80,0">
                                 <ls:LSButton.ContentTemplate>
                                     <DataTemplate DataType="ls:VMInputEvent">
-                                        <Control x:Name="ImageSwitcher" Template="{StaticResource ControllerButton.ImageSwitcher}" VerticalAlignment="Center" Width="{StaticResource ScaledControllerHintSizeSmall}" Height="{StaticResource ScaledControllerHintSizeSmall}"/>
+                                        <Control x:Name="ImageSwitcher" Template="{StaticResource ControllerButton.ImageSwitcher}" VerticalAlignment="Center" Width="120" Height="120"/>
                                     </DataTemplate>
                                 </ls:LSButton.ContentTemplate>
                                 <b:Interaction.Triggers>
@@ -7779,7 +7829,7 @@
                                             <!-- Collapse Grid Hint - shows when grid is visible -->
                                             <StackPanel x:Name="collapseButton" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,-5,100,0" Opacity="0">
                                                 <TextBlock Text="{Binding Source='h4061c893g96bfg4bb7g8739g04b33d5458f4', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource CarouselSideDescriptionText}" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,10,0" Foreground="{StaticResource CCTextPrimary}"/>
-                                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UICancel'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
+                                                <Control x:Name="collapseIcon" DataContext="{Binding DataContext.CurrentPlayer.UIData.InputEvents, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIShowInfo'}" Template="{StaticResource ControllerButton.ImageSwitcher}" Width="80" Height="80"/>
                                             </StackPanel>
 
                                             <!-- Expand Grid Input Binding - Show external grid via messaging -->

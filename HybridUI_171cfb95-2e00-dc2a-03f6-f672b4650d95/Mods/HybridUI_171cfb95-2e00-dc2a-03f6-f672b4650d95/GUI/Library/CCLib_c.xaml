@@ -1705,6 +1705,80 @@
                                 </b:ControlStoryboardAction>
                             </b:DataTrigger>
 
+                            <!-- Recalculate tab width when featDetails name changes -->
+                            <b:PropertyChangedTrigger Binding="{Binding SelectedFeatDetails.Name}">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Operator="Equal" RightOperand="featdetails"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="recalculateTabWidth">
+                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:PropertyChangedTrigger>
+
+                            <!-- Recalculate selector width when featDetails name changes -->
+                            <b:PropertyChangedTrigger Binding="{Binding SelectedFeatDetails.Name}">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Operator="Equal" RightOperand="featdetails"/>
+                                            <b:ComparisonCondition LeftOperand="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Operator="Equal" RightOperand="True"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="recalculateSelectorWidth">
+                                            <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:PropertyChangedTrigger>
+
+                            <!-- Recalculate tab width when multiclass level changes (for "Add Class" text) -->
+                            <b:PropertyChangedTrigger Binding="{Binding SelectedMultiClass.Level}">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Operator="Equal" RightOperand="class"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="recalculateClassTabWidth">
+                                            <DoubleAnimation Storyboard.TargetName="tabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:PropertyChangedTrigger>
+
+                            <!-- Recalculate selector width when multiclass level changes and tab is selected -->
+                            <b:PropertyChangedTrigger Binding="{Binding SelectedMultiClass.Level}">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Operator="Equal" RightOperand="class"/>
+                                            <b:ComparisonCondition LeftOperand="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Operator="Equal" RightOperand="True"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                                    <b:ControlStoryboardAction.Storyboard>
+                                        <Storyboard x:Name="recalculateClassSelectorWidth">
+                                            <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                        </Storyboard>
+                                    </b:ControlStoryboardAction.Storyboard>
+                                </b:ControlStoryboardAction>
+                            </b:PropertyChangedTrigger>
+
                         </b:Interaction.Triggers>
 
                     </TextBlock>
@@ -1865,6 +1939,10 @@
                 <Setter TargetName="ErrorIcon" Property="Visibility" Value="Collapsed"/>
             </Trigger>
 
+            <Trigger Property="Tag" Value="levelup">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}"/>
+            </Trigger>
+
             <Trigger Property="Tag" Value="origin">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='hd0d4922ag7581g43eag9142g44e22c131fa8', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
@@ -1912,6 +1990,20 @@
             <Trigger Property="Tag" Value="appearance">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h261cce55g1d1eg4c09g9675ge5c1be13e820', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
+            
+            <!-- LevelUp specific tags -->
+            <Trigger Property="Tag" Value="levelup">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='he3ccedd0gceaeg4b1fg8e74g9dfc6da58cd2', Converter={StaticResource TranslatedStringConverter}}"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="feat">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='h86926dd9g4332g4ae2g9954g29f5fb4b7b26', Converter={StaticResource TranslatedStringConverter}}"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="featdetails">
+                <Setter TargetName="label" Property="Text" Value="{Binding SelectedFeatDetails.Name}"/>
+            </Trigger>
+            <Trigger Property="Tag" Value="spellreplace">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='h000011feg0be5g4f09g978eg030b3e2e62c6', Converter={StaticResource TranslatedStringConverter}}"/>
+            </Trigger>
 
             <!-- For LevelUp only - new multiclass -->
             <MultiDataTrigger>
@@ -1922,7 +2014,7 @@
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='hcbc3c9a8g9e80g4139g952bga971015c1f41', Converter={StaticResource TranslatedStringConverter}}"/>
             </MultiDataTrigger>
 
-            <!-- Show any race subtabs -->
+            <!-- Race SubTabs -->
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="race">
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding RaceProgressionDetails.NotSubSpellSelectors}"/>
@@ -1934,18 +2026,31 @@
                 <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding RaceProgressionDetails.SubPassiveSelectors}"/>
             </DataTrigger>
 
-            <!-- Show any class subtabs -->
+            <!-- Class SubTabs -->
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="class">
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubSpellSelectors}"/>
+                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubPassiveSelectors}"/>
+                <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubEquipmentSelectors}"/>
             </DataTrigger>
 
+            <!-- Subclass SubTabs -->
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="subclass">
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubSpellSelectors}"/>
+                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubPassiveSelectors}"/>
+                <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubEquipmentSelectors}"/>
             </DataTrigger>
 
-            <!-- Feats are only on LevelUp which doesn't have new animated tabs yet (so not yet used) -->
+            <!-- Level-Up SubTabs -->
+            <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="levelup">
+                <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubSpellSelectors}"/>
+                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubPassiveSelectors}"/>
+                <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubEquipmentSelectors}"/>
+            </DataTrigger>
+
+            <!-- Feats Details SubTabs -->
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="featdetails"/>
@@ -1954,28 +2059,6 @@
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding SelectedFeatDetails.FeatDetails.SpellSelectors}"/>
             </MultiDataTrigger>
-
-            <!-- Passive subtabs -->
-            <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="class">
-                <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubPassiveSelectors}"/>
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="subclass">
-                <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubPassiveSelectors}"/>
-            </DataTrigger>
-
-            <!-- Equipment subtabs -->
-            <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="class">
-                <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubEquipmentSelectors}"/>
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="subclass">
-                <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubEquipmentSelectors}"/>
-            </DataTrigger>
 
         </ControlTemplate.Triggers>
     </ControlTemplate>
