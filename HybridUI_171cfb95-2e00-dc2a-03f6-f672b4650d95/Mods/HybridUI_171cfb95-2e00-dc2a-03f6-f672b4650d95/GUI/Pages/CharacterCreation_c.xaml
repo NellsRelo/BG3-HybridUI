@@ -244,6 +244,28 @@
                                                     <!-- clear subtab panel -->
                                                     <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{x:Null}"/>
                                                 </b:PropertyChangedTrigger>
+                                                <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=daisyTabs}">
+                                                    <b:Interaction.Behaviors>
+                                                        <b:ConditionBehavior>
+                                                            <b:ConditionalExpression>
+                                                                <b:ComparisonCondition LeftOperand="{Binding Path=SelectedIndex, ElementName=daisyTabs}" Operator="NotEqual" RightOperand="-1"/>
+                                                            </b:ConditionalExpression>
+                                                        </b:ConditionBehavior>
+                                                    </b:Interaction.Behaviors>
+                                                    <!-- clear subtab panel when switching to daisy tabs -->
+                                                    <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{x:Null}"/>
+                                                </b:PropertyChangedTrigger>
+                                                <b:PropertyChangedTrigger Binding="{Binding CharacterCreationStep}">
+                                                    <b:Interaction.Behaviors>
+                                                        <b:ConditionBehavior>
+                                                            <b:ConditionalExpression>
+                                                                <b:ComparisonCondition LeftOperand="{Binding CharacterCreationStep}" Operator="Equal" RightOperand="Companion"/>
+                                                            </b:ConditionalExpression>
+                                                        </b:ConditionBehavior>
+                                                    </b:Interaction.Behaviors>
+                                                    <!-- clear subtab panel when switching to Companion mode (daisy tabs) -->
+                                                    <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{x:Null}"/>
+                                                </b:PropertyChangedTrigger>
                                             </b:Interaction.Triggers>
                                         </ContentControl>
                                         <Control x:Name="gameplayPanel" Height="{StaticResource gameplayPanelHeightSplit}"/>
@@ -1448,6 +1470,7 @@
                                     
                                     <!-- Hide other content panels -->
                                     <Setter TargetName="gameplayPanel" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="gameplaySubPanel" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="appearanceContentsPanel" Property="Visibility" Value="Collapsed"/>
                                     
                                     <!-- Hide summary in daisy mode -->

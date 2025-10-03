@@ -1119,68 +1119,78 @@
     </DataTemplate>
 
     <DataTemplate x:Key="gameplayTabPassiveSelectorTemplate2" DataType="{x:Type ls:VMCharacterCreationPassives}">
-        <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid>
+            <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            <!-- Note: does not work without HorizontalAlignment="Right" -->
-            <TextBlock x:Name="label" Text="{Binding Name}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
-            <b:Interaction.Triggers>
+                <!-- Note: does not work without HorizontalAlignment="Right" -->
+                <TextBlock x:Name="label" Text="{Binding Name}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
+                <b:Interaction.Triggers>
 
-                <!-- Set the tab underline asset width -->
-                <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                    <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                        <b:ControlStoryboardAction.Storyboard>
-                            <Storyboard x:Name="setSelectorWidth">
-                                <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
-                            </Storyboard>
-                        </b:ControlStoryboardAction.Storyboard>
-                    </b:ControlStoryboardAction>
-                </b:DataTrigger>
+                    <!-- Set the tab underline asset width -->
+                    <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard x:Name="setSelectorWidth">
+                                    <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
 
-                <b:DataTrigger Binding="{Binding UpdateState}" Value="New">
-                    <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                        <b:ControlStoryboardAction.Storyboard>
-                            <Storyboard x:Name="subTabAppear">
-                                <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
-                            </Storyboard>
-                        </b:ControlStoryboardAction.Storyboard>
-                    </b:ControlStoryboardAction>
-                </b:DataTrigger>
+                    <b:DataTrigger Binding="{Binding UpdateState}" Value="New">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard x:Name="subTabAppear">
+                                    <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
 
-                <b:DataTrigger Binding="{Binding UpdateState}" Value="Replaced">
-                    <b:ChangePropertyAction TargetName="subTabItem" PropertyName="Width" Value="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter=40}" />
-                </b:DataTrigger>
+                    <b:DataTrigger Binding="{Binding UpdateState}" Value="Replaced">
+                        <b:ChangePropertyAction TargetName="subTabItem" PropertyName="Width" Value="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter=40}" />
+                    </b:DataTrigger>
 
-                <b:DataTrigger Binding="{Binding UpdateState}" Value="Old">
-                    <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                        <b:ControlStoryboardAction.Storyboard>
-                            <Storyboard x:Name="subTabDisappear">
-                                <!-- From needs to be set as subtabs are re-created every time there is a change -->
-                                <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width"
-                                                 From="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}"
-                                                 To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
-                            </Storyboard>
-                        </b:ControlStoryboardAction.Storyboard>
-                    </b:ControlStoryboardAction>
-                </b:DataTrigger>
+                    <b:DataTrigger Binding="{Binding UpdateState}" Value="Old">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard x:Name="subTabDisappear">
+                                    <!-- From needs to be set as subtabs are re-created every time there is a change -->
+                                    <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width"
+                                                     From="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}"
+                                                     To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
 
-                <!-- Set the DataContext for the sub panel -->
-                <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                    <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{Binding .}" />
-                    <!-- deselect any non-subtabs-->
-                    <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="-1" />
-                    <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
-                    <b:ChangePropertyAction TargetName="subTabsEquipmentList" PropertyName="SelectedIndex" Value="-1" />
-                </b:DataTrigger>
-            </b:Interaction.Triggers>
-            </TextBlock>
-        </StackPanel>
+                    <!-- Set the DataContext for the sub panel -->
+                    <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                        <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{Binding .}" />
+                        <!-- deselect any non-subtabs-->
+                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="-1" />
+                        <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                        <b:ChangePropertyAction TargetName="subTabsEquipmentList" PropertyName="SelectedIndex" Value="-1" />
+                    </b:DataTrigger>
+                </b:Interaction.Triggers>
+                </TextBlock>
+
+            </StackPanel>
+
+            <Image x:Name="ErrorIcon" Stretch="None" Source="{StaticResource ErrorIcon}" Margin="0,112,0,-12" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
 
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsComplete}" Value="False">
                 <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
                 <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Hidden"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -1210,66 +1220,76 @@
     </DataTemplate>
 
     <DataTemplate x:Key="gameplayTabEquipmentSelectorTemplate2" DataType="{x:Type ls:VMCharacterCreationEquipments}">
-        <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid>
+            <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            <TextBlock x:Name="label" Text="{Binding Name}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
-            <b:Interaction.Triggers>
+                <TextBlock x:Name="label" Text="{Binding Name}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
+                <b:Interaction.Triggers>
 
-                <!-- Set the tab underline asset width -->
-                <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                    <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                        <b:ControlStoryboardAction.Storyboard>
-                            <Storyboard x:Name="setSelectorWidth">
-                                <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
-                            </Storyboard>
-                        </b:ControlStoryboardAction.Storyboard>
-                    </b:ControlStoryboardAction>
-                </b:DataTrigger>
+                    <!-- Set the tab underline asset width -->
+                    <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard x:Name="setSelectorWidth">
+                                    <DoubleAnimation Storyboard.TargetName="tabSelector" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsSelectorWidthAddition}}" Duration="{StaticResource TabSelectorAnimationDuration}"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
 
-                <b:DataTrigger Binding="{Binding UpdateState}" Value="New">
-                    <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                        <b:ControlStoryboardAction.Storyboard>
-                            <Storyboard x:Name="subTabAppear">
-                                <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
-                            </Storyboard>
-                        </b:ControlStoryboardAction.Storyboard>
-                    </b:ControlStoryboardAction>
-                </b:DataTrigger>
+                    <b:DataTrigger Binding="{Binding UpdateState}" Value="New">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard x:Name="subTabAppear">
+                                    <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width" To="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
 
-                <b:DataTrigger Binding="{Binding UpdateState}" Value="Replaced">
-                    <b:ChangePropertyAction TargetName="subTabItem" PropertyName="Width" Value="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter=40}" />
-                </b:DataTrigger>
+                    <b:DataTrigger Binding="{Binding UpdateState}" Value="Replaced">
+                        <b:ChangePropertyAction TargetName="subTabItem" PropertyName="Width" Value="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter=40}" />
+                    </b:DataTrigger>
 
-                <b:DataTrigger Binding="{Binding UpdateState}" Value="Old">
-                    <b:ControlStoryboardAction ControlStoryboardOption="Play">
-                        <b:ControlStoryboardAction.Storyboard>
-                            <Storyboard x:Name="subTabDisappear">
-                                <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width"
-                                                 From="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}"
-                                                 To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
-                            </Storyboard>
-                        </b:ControlStoryboardAction.Storyboard>
-                    </b:ControlStoryboardAction>
-                </b:DataTrigger>
+                    <b:DataTrigger Binding="{Binding UpdateState}" Value="Old">
+                        <b:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <b:ControlStoryboardAction.Storyboard>
+                                <Storyboard x:Name="subTabDisappear">
+                                    <DoubleAnimation Storyboard.TargetName="subTabItem" Storyboard.TargetProperty="Width"
+                                                     From="{Binding ActualWidth, ElementName=label, Converter={StaticResource AddConverter}, ConverterParameter={StaticResource TabsTextWidthAddition}}"
+                                                     To="0" Duration="{StaticResource TabWidthAnimationDuration}"/>
+                                </Storyboard>
+                            </b:ControlStoryboardAction.Storyboard>
+                        </b:ControlStoryboardAction>
+                    </b:DataTrigger>
 
-                <!-- Set the DataContext for the sub panel -->
-                <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                    <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{Binding .}" />
-                    <!-- deselect any non-subtabs-->
-                    <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="-1" />
-                    <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
-                    <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
-                </b:DataTrigger>
-            </b:Interaction.Triggers>
-            </TextBlock>
-        </StackPanel>
+                    <!-- Set the DataContext for the sub panel -->
+                    <b:DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                        <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="DataContext" Value="{Binding .}" />
+                        <!-- deselect any non-subtabs-->
+                        <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="-1" />
+                        <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                        <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                    </b:DataTrigger>
+                </b:Interaction.Triggers>
+                </TextBlock>
+
+            </StackPanel>
+
+            <Image x:Name="ErrorIcon" Stretch="None" Source="{StaticResource ErrorIcon}" Margin="0,112,0,-12" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
 
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsComplete}" Value="False">
                 <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
                 <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Hidden"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="False">
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -3626,7 +3646,7 @@
                 </ls:LSNineSliceImage>
 
             </Grid>
-            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" HorizontalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" IsHitTestVisible="False"/>
+            <TextBlock x:Name="originName" ls:TextBlockFormatter.SourceText="{Binding Name}" HorizontalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" IsHitTestVisible="False" Foreground="{StaticResource LS_baseTxtColor}"/>
         
              <ls:LSInputBinding IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" BoundEvent="UIAccept">
                 <b:Interaction.Triggers>
@@ -3648,11 +3668,13 @@
                 <Setter TargetName="frame" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="base" Property="ToolTip" Value="{x:Null}"/>
+                <Setter TargetName="originName" Property="Foreground" Value="#FF4CAF50"/>
             </DataTrigger>
 
             <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
                 <Setter TargetName="frame" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="frame" Property="ImageSource" Value="pack://application:,,,/Core;component/Assets/CC/selector_CC_h.png"/>
+                <Setter TargetName="originName" Property="Foreground" Value="{StaticResource CCTextPrimary}"/>
             </DataTrigger>
 
             <MultiDataTrigger>
@@ -3662,6 +3684,7 @@
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="frame" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="frame" Property="ImageSource" Value="pack://application:,,,/Core;component/Assets/CC/selector_CC_h.png"/>
+                <Setter TargetName="originName" Property="Foreground" Value="#FF4CAF50"/>
             </MultiDataTrigger>
 
             <MultiDataTrigger>
@@ -4240,7 +4263,7 @@
                     </Image>
                 </Grid>
 
-                <TextBlock x:Name="text" Text="{Binding Name}" Style="{StaticResource FeatureListItemName}"/>
+                <TextBlock x:Name="text" Text="{Binding Name}" Style="{StaticResource FeatureListItemName}" Foreground="{StaticResource LS_baseTxtColor}"/>
 
                 <Image x:Name="tick" Visibility="Collapsed" Source="{StaticResource IconTick}" Stretch="None" HorizontalAlignment="Right" Margin="0,0,110,0"/>
 
@@ -4258,6 +4281,7 @@
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding Value}" Value="1.0">
                 <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="text" Property="Foreground" Value="#FF4CAF50"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Enabled}" Value="False">
                 <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
@@ -4462,7 +4486,7 @@
                                             </Image>
                                         </Grid>
 
-                                        <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource FeatureListItemName}"/>
+                                        <TextBlock x:Name="equipmentText" ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource FeatureListItemName}" Foreground="{StaticResource LS_baseTxtColor}"/>
 
                                         <Image x:Name="tick" Visibility="Collapsed" Source="{StaticResource IconTick}" Stretch="None" HorizontalAlignment="Right" Margin="0,0,130,0"/>
 
@@ -4479,6 +4503,7 @@
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Value}" Value="1.0">
                                         <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="equipmentText" Property="Foreground" Value="#FF4CAF50"/>
                                     </DataTrigger>
 
                                     <MultiDataTrigger>
