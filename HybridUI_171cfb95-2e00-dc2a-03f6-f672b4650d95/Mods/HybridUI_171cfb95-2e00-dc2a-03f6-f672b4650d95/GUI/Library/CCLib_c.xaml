@@ -915,25 +915,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ls:VMSpellSelector}">
-        <DockPanel x:Name="base" LastChildFill="True">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Loaded">
-                    <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-              <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top" Grid.Row="0">
-                  <Control Template="{StaticResource HUI_SpellSelectorTemplate}" />
-              </StackPanel>
-              <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1" Margin="0,40,0,0"/>
-
-          </Grid>
-        </DockPanel>
+        <Control Template="{StaticResource HUI_SpellSelectorTemplate}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type ls:VMCharacterCreationPassives}">
@@ -943,6 +925,10 @@
               <RowDefinition Height="Auto" />
               <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">
                     <ls:SetMoveFocusAction TargetName="CharacterCreation_c"/>
@@ -953,6 +939,7 @@
             </StackPanel>
 
             <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
+
           </Grid>
         </DockPanel>
     </DataTemplate>
@@ -3754,7 +3741,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="progressionPassiveSelectors" DataType="ls:VMCharacterCreationPassives">
-        <StackPanel>
+        <StackPanel Width="{StaticResource gameplayPanelWidth}">
 
             <ItemsControl x:Name="items" ItemsSource="{Binding Passives}" Visibility="{Binding SelectedPassiveCount, Converter={StaticResource CountToVisibilityConverter}}">
                 <ItemsControl.ItemContainerStyle>
@@ -4289,25 +4276,84 @@
     </DataTemplate>
 
     <DataTemplate x:Key="PassiveSelectorItemTemplate">
-        <DockPanel x:Name="Base">
-            <StackPanel DockPanel.Dock="Top">
+        <Grid x:Name="Base">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Header Section -->
+            <StackPanel Grid.Row="0">
                 <ContentControl Template="{StaticResource HUI_SelectorHeader}" />
-
                 <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
                     <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
                 </ContentControl>
-                <TextBlock x:Name="description" ls:TextBlockFormatter.SourceText="{Binding Description.Text}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
-
-                <TextBlock x:Name="SelectedTitle" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0">
-                    <Run Text="{Binding Source='h390a9286g28cag49ceg93c5gd5b7c1e962da', Converter={StaticResource TranslatedStringConverter}}"/>
-                    <Run Text="{Binding SelectedPassiveCount, StringFormat=' {0}'}"/>
-                    <Run x:Name="PassiveSelectorMaxText" Text="{Binding MaxSelectedPassiveCount, StringFormat='/{0}'}"/>
-                </TextBlock>
             </StackPanel>
+            
+            <!-- Scrollable Description with Focus Support -->
+            <ScrollViewer x:Name="descriptionScrollViewer" 
+                        Grid.Row="1"
+                        MaxHeight="300" 
+                        VerticalScrollBarVisibility="Auto" 
+                        HorizontalScrollBarVisibility="Disabled"
+                        Margin="0,20,0,0"
+                        ls:MoveFocus.Focusable="False"
+                        Focusable="False"
+                        BorderThickness="2"
+                        BorderBrush="Transparent">
+                <Grid>
+                    <TextBlock x:Name="description" 
+                             ls:TextBlockFormatter.SourceText="{Binding Description.Text}" 
+                             Style="{StaticResource PanelDescriptionText}" 
+                             TextWrapping="Wrap"/>
+                    <!-- Overlay button to capture UIAccept when ScrollViewer is focused (expand) -->
+                    <ls:LSButton x:Name="DescriptionExpandInlineButton" 
+                                 BoundEvent="UIAccept" 
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 IsTabStop="False"
+                                 Focusable="False"
+                                 Opacity="0"
+                                 IsEnabled="False">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="Base" PropertyName="Tag" Value="DescriptionExpanded"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+                    <!-- Overlay button to capture UICancel when in expanded mode (collapse) -->
+                    <ls:LSButton x:Name="DescriptionCollapseInlineButton" 
+                                 BoundEvent="UICancel" 
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 IsTabStop="False"
+                                 Focusable="False"
+                                 Opacity="0">
+                        <ls:LSButton.IsEnabled>
+                            <Binding Path="Tag" ElementName="Base" Converter="{StaticResource EqualConverter}" ConverterParameter="DescriptionExpanded"/>
+                        </ls:LSButton.IsEnabled>
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:ChangePropertyAction TargetName="Base" PropertyName="Tag" Value=""/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ls:LSButton>
+                </Grid>
+            </ScrollViewer>
 
-            <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
+            <!-- Title Section -->
+            <TextBlock x:Name="SelectedTitle" Grid.Row="2" Style="{StaticResource PanelSubHeaderText}" Margin="0,50,0,0">
+                <Run Text="{Binding Source='h390a9286g28cag49ceg93c5gd5b7c1e962da', Converter={StaticResource TranslatedStringConverter}}"/>
+                <Run Text="{Binding SelectedPassiveCount, StringFormat=' {0}'}"/>
+                <Run x:Name="PassiveSelectorMaxText" Text="{Binding MaxSelectedPassiveCount, StringFormat='/{0}'}"/>
+            </TextBlock>
+
+            <!-- Selector Section -->
+            <ScrollViewer x:Name="selectorScrollViewer" Grid.Row="3" Style="{StaticResource gameplayPanelScrollViewerStyle}"
                                 VerticalScrollBarVisibility="Auto" MaxHeight="1200" Height="Auto"
-                                DockPanel.Dock="Top" Margin="0,20,0,0">
+                                Margin="0,20,0,0">
                 <StackPanel Style="{StaticResource gameplayScrolledStackPanelStyle}">
 
                     <ItemsControl x:Name="SelectablePassiveItemsControl" ItemsSource="{Binding Passives}" ItemTemplate="{StaticResource SelectablePassiveTemplate}" Margin="0,40,0,0"/>
@@ -4317,7 +4363,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-        </DockPanel>
+        </Grid>
 
         <DataTemplate.Triggers>
             <!-- Split Screen variation -->
@@ -4325,8 +4371,21 @@
                 <Setter TargetName="Base" Property="Height" Value="{StaticResource gameplayPanelHeight}" />
             </DataTrigger> -->
             <DataTrigger Binding="{Binding Description.Text, Converter={StaticResource NullToBoolTrueConverter}, ConverterParameter='EmptyString'}" Value="True">
-                <Setter TargetName="description" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="descriptionScrollViewer" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
+            
+            <!-- Make description scrollviewer focusable when content exceeds MaxHeight -->
+            <DataTrigger Binding="{Binding ComputedVerticalScrollBarVisibility, ElementName=descriptionScrollViewer}" Value="Visible">
+                <Setter TargetName="descriptionScrollViewer" Property="ls:MoveFocus.Focusable" Value="True" />
+                <Setter TargetName="descriptionScrollViewer" Property="Focusable" Value="True" />
+            </DataTrigger>
+            
+            <!-- Focus visual styling and enable expand button when description scrollviewer is focused -->
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=descriptionScrollViewer}" Value="True">
+                <Setter TargetName="descriptionScrollViewer" Property="BorderBrush" Value="{StaticResource LS_accent100TxtColor}" />
+                <Setter TargetName="DescriptionExpandInlineButton" Property="IsEnabled" Value="True" />
+            </DataTrigger>
+            
             <DataTrigger Binding="{Binding DataContext.IsLevelUp, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=False}" Value="True">
                 <Setter TargetName="PiercingSelector" Property="Visibility" Value="{Binding DataContext.SelectablePiercings.Count, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, Converter={StaticResource CountToVisibilityConverter}}"/>
             </DataTrigger>
@@ -4346,6 +4405,24 @@
             <DataTrigger Binding="{Binding IsComplete}" Value="False">
                 <Setter TargetName="SelectedTitle" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
             </DataTrigger>
+            
+            <!-- Description Expansion Mode - expand description to content height, shrink selector proportionally -->
+            <DataTrigger Binding="{Binding Tag, ElementName=Base}" Value="DescriptionExpanded">
+                <!-- Expand description to show all content without scrolling -->
+                <Setter TargetName="descriptionScrollViewer" Property="MaxHeight" Value="800"/>
+                <Setter TargetName="descriptionScrollViewer" Property="Height" Value="Auto"/>
+                <Setter TargetName="descriptionScrollViewer" Property="VerticalScrollBarVisibility" Value="Disabled"/>
+                <Setter TargetName="descriptionScrollViewer" Property="BorderBrush" Value="{StaticResource LS_accent100TxtColor}"/>
+                <Setter TargetName="descriptionScrollViewer" Property="BorderThickness" Value="3"/>
+                <!-- Shrink selector to accommodate expanded description -->
+                <Setter TargetName="selectorScrollViewer" Property="MaxHeight" Value="700"/>
+                <Setter TargetName="selectorScrollViewer" Property="Height" Value="700"/>
+                <!-- Disable expand button, enable collapse button -->
+                <Setter TargetName="DescriptionExpandInlineButton" Property="IsEnabled" Value="False"/>
+                <Setter TargetName="DescriptionCollapseInlineButton" Property="IsEnabled" Value="True"/>
+            </DataTrigger>
+            
+
         </DataTemplate.Triggers>
     </DataTemplate>
 
@@ -4926,10 +5003,49 @@
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="Click">
                         <b:ChangePropertyAction TargetName="appearanceTabs" PropertyName="Tag" Value="{Binding SelectedIndex, ElementName=appearanceTabs}" />
-                        <!-- Exit appearance mode -->
-                        <b:ChangePropertyAction TargetName="modeController" PropertyName="Tag" Value="" />
                         <!-- Restore to the originally stored tab index (compensate for any corruption) -->
                         <b:ChangePropertyAction TargetName="gameplayTabs" PropertyName="SelectedIndex" Value="{Binding Tag, ElementName=gameplayTabs, FallbackValue=0}" />
+                    </b:EventTrigger>
+
+                    <!-- Exit appearance mode - return to gameplay mode in normal cases -->
+                    <b:DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                        <b:DataTrigger.EnterActions>
+                            <b:BeginStoryboard>
+                                <b:BeginStoryboard.Storyboard>
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backFromAppearanceButton" Storyboard.TargetProperty="Tag">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="CompanionMode"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </b:BeginStoryboard.Storyboard>
+                            </b:BeginStoryboard>
+                        </b:DataTrigger.EnterActions>
+                    </b:DataTrigger>
+
+                    <!-- Conditional exit based on mode -->
+                    <b:EventTrigger EventName="Click">
+                        <b:Interaction.Behaviors>
+                            <b:ConditionBehavior>
+                                <b:ConditionalExpression>
+                                    <b:ComparisonCondition LeftOperand="{Binding CharacterCreationStep}" Operator="Equal" RightOperand="Companion"/>
+                                </b:ConditionalExpression>
+                            </b:ConditionBehavior>
+                        </b:Interaction.Behaviors>
+                        <!-- Return to daisy mode when in companion mode -->
+                        <b:ChangePropertyAction TargetName="modeController" PropertyName="Tag" Value="daisy" />
+                    </b:EventTrigger>
+
+                    <!-- For non-companion mode, return to empty (normal gameplay) -->
+                    <b:EventTrigger EventName="Click">
+                        <b:Interaction.Behaviors>
+                            <b:ConditionBehavior>
+                                <b:ConditionalExpression>
+                                    <b:ComparisonCondition LeftOperand="{Binding CharacterCreationStep}" Operator="NotEqual" RightOperand="Companion"/>
+                                </b:ConditionalExpression>
+                            </b:ConditionBehavior>
+                        </b:Interaction.Behaviors>
+                        <!-- Return to normal gameplay mode -->
+                        <b:ChangePropertyAction TargetName="modeController" PropertyName="Tag" Value="" />
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </ls:LSButton>
@@ -4953,6 +5069,23 @@
                 </Grid>
             </Grid>
 
+            <!-- Description Expand/Collapse Hint -->
+            <ls:LSButton x:Name="DescriptionExpandHint"
+                         Visibility="Collapsed"
+                         ContentTemplate="{StaticResource ControllerButtonHint}"
+                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}"
+                         Tag="{Binding Source='hb0254c5cgfdc4g43a3gb7d5g25b5edcf56c1', Converter={StaticResource TranslatedStringConverter}}"
+                         IsHitTestVisible="False"
+                         Opacity="0.8"/>
+
+            <ls:LSButton x:Name="DescriptionCollapseHint"
+                         Visibility="Collapsed"
+                         ContentTemplate="{StaticResource ControllerButtonHint}"
+                         Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}"
+                         Tag="{Binding Source='hcaa1d4e1g1bb0g463egaba6gd6a9d27deb99', Converter={StaticResource TranslatedStringConverter}}"
+                         IsHitTestVisible="False"
+                         Opacity="0.8"/>
+
             <!-- Toggle tooltips -->
             <ls:LSButton x:Name="ToggleTooltips"
                                  Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
@@ -4964,6 +5097,23 @@
 
         </StackPanel>
         <ControlTemplate.Triggers>
+            <!-- Description expand/collapse hints based on FocusedElement -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding FocusedElement.Name, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=''}" Value="descriptionScrollViewer"/>
+                    <Condition Binding="{Binding FocusedElement.VerticalScrollBarVisibility, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=Auto}" Value="Auto"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="DescriptionExpandHint" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding FocusedElement.Name, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=''}" Value="descriptionScrollViewer"/>
+                    <Condition Binding="{Binding FocusedElement.VerticalScrollBarVisibility, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=Auto}" Value="Disabled"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="DescriptionCollapseHint" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+            
             <DataTrigger Binding="{Binding ElementName=tabBar, Path=Tag}" Value="CanJumpToAppearance">
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Visible"/>
             </DataTrigger>
@@ -4979,6 +5129,7 @@
             
             <!-- Daisy mode - hide appearance buttons like appearance mode does -->
             <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                <Setter TargetName="daisyHeader" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="showSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="hideSummary" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="gotoAppearanceButton" Property="Visibility" Value="Collapsed"/>

@@ -471,11 +471,11 @@
     <DataTemplate x:Key="HUI_CCIconGridTemplate">
         <StackPanel x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True">
             <Grid HorizontalAlignment="Center">
-                <Rectangle x:Name="icon" Width="188" Height="188" Fill="{StaticResource CCIconDefault}" Style="{DynamicResource CustomIconStyle}"/>
+                <Rectangle x:Name="icon" Width="140" Height="140" Fill="{StaticResource CCIconDefault}" Style="{DynamicResource CustomIconStyle}"/>
                 <ls:LSNineSliceImage x:Name="frame" Visibility="Hidden" ImageSource="{StaticResource IconGridSelector}" Slices="32,32,32,32" Padding="16" Width="208" Height="208" Margin="-6"/>
                 <Image x:Name="tick" Visibility="Hidden" Source="{StaticResource IconTick}" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
             </Grid>
-            <TextBlock x:Name="label" ls:TextBlockFormatter.SourceText="{Binding Name}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource LS_baseTxtColor}" Width="{DynamicResource IconTextWidth}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="label" ls:TextBlockFormatter.SourceText="{Binding Name}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource LS_baseTxtColor}" Width="230" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
 
             <ls:LSInputBinding IsEnabled="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" BoundEvent="UIAccept">
                 <b:Interaction.Triggers>

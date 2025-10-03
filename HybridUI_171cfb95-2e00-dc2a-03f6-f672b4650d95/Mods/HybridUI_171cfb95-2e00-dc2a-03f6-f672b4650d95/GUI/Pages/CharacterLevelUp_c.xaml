@@ -1648,8 +1648,6 @@ ConverterParameter=0}" Value="True"/>
                                                           <Control Template="{StaticResource skillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
 
-                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
                                                     </Grid>
                                                 </DockPanel>
                                             </ControlTemplate>
@@ -1672,8 +1670,6 @@ ConverterParameter=0}" Value="True"/>
                                                     <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                       <Control Template="{StaticResource skillExpertisePanelTemplate}"/>
                                                     </StackPanel>
-
-                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                   </Grid>
                                                 </DockPanel>

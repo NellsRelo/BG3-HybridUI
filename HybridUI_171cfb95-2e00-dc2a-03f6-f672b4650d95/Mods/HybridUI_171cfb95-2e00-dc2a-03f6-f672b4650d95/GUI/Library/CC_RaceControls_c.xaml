@@ -152,11 +152,12 @@
     <ControlTemplate x:Key="HUI_LevelUpRaceHeader">
         <DockPanel>
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.DisplayName}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center"/>
-                </ContentControl>
-                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.Description}" Style="{StaticResource PanelDescriptionText}"  FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" Margin="0,5,0,0"/>
+                  <ContentControl x:Name="SubRaceOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                  <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                      <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.DisplayName}" Style="{StaticResource PanelHeaderText}" HorizontalAlignment="Center"  Height="100" Margin="0,-10,0,10"/>
+                  </ContentControl>
 
+                  <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.Description}" Style="{StaticResource PanelDescriptionText}"  FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" Margin="0,5,0,0"/>
             </StackPanel>
         </DockPanel>
     </ControlTemplate>
@@ -165,10 +166,11 @@
     <ControlTemplate x:Key="HUI_HenchRaceHeader">
         <DockPanel>
             <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                    <TextBlock Text="{Binding Source='he1ff355fg8a83g4370g9178ga6d9364f4290', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+                <ContentControl x:Name="SubRaceOpeningDecorator" Template="{StaticResource HUI_SelectorHeader}" Grid.Row="0"/>
+                <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}" Grid.Row="1">
+                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.DisplayName}" Style="{StaticResource PanelHeaderText}" HorizontalAlignment="Center"  Height="100" Margin="0,-10,0,10"/>
                 </ContentControl>
-                    <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.Description}" Style="{StaticResource PanelDescriptionText}"  FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" Margin="0,5,0,0"/>
+                <TextBlock ls:TextBlockFormatter.SourceText="{Binding DummyCharacter.Stats.Race.Description}" Style="{StaticResource PanelDescriptionText}"  FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" Margin="0,5,0,0"/>
 
             </StackPanel>
         </DockPanel>

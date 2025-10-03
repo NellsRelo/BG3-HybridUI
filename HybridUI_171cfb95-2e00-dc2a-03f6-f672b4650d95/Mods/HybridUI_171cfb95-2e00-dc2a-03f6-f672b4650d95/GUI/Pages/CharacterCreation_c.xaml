@@ -23,6 +23,9 @@
     <ls:UIWidget.Resources>
         <ResourceDictionary>
 
+            <!-- Daisy Header Backdrop -->
+            <BitmapImage x:Key="daisyBackdrop" UriSource="pack://application:,,,/Core;component/Assets/CC/titleBG_guardian.png"/>
+
             <!-- Message box to ensure user wants to activate tutorials -->
             <ls:LSMessageBoxData x:Key="MessageBoxTutorialsCheck"
                                  Text="{Binding Source='h86f06e64g4588g4798gb828gf6e0268122af', Converter={StaticResource TranslatedStringConverter}}"
@@ -841,7 +844,7 @@
                                                             <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
                                                                 <Setter Property="IsEnabled" Value="{Binding ElementName=AppearanceTabNavigator,Path=HasPrevious}"/>
                                                             </DataTrigger>
-                                                            <!-- Bind to DaisyTabNavigator when in daisy mode -->
+                                                            <!-- Bind to DaisyTabNavigator when in Companion mode -->
                                                             <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
                                                                 <Setter Property="IsEnabled" Value="{Binding ElementName=DaisyTabNavigator,Path=HasPrevious}"/>
                                                             </DataTrigger>
@@ -862,7 +865,7 @@
                                                             <DataTrigger Binding="{Binding ElementName=modeController, Path=Tag}" Value="appearance">
                                                                 <Setter Property="IsEnabled" Value="{Binding ElementName=AppearanceTabNavigator,Path=HasNext}"/>
                                                             </DataTrigger>
-                                                            <!-- Bind to DaisyTabNavigator when in daisy mode -->
+                                                            <!-- Bind to DaisyTabNavigator when in Companion mode -->
                                                             <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
                                                                 <Setter Property="IsEnabled" Value="{Binding ElementName=DaisyTabNavigator,Path=HasNext}"/>
                                                             </DataTrigger>
@@ -1303,8 +1306,6 @@
                                                           <Control Template="{StaticResource raceSkillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
 
-                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
                                                     </Grid>
                                                 </DockPanel>
                                             </ControlTemplate>
@@ -1329,8 +1330,6 @@
                                                           <Control Template="{StaticResource skillProficiencyPanelTemplate}"/>
                                                       </StackPanel>
 
-                                                      <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
-
                                                     </Grid>
                                                 </DockPanel>
                                             </ControlTemplate>
@@ -1353,8 +1352,6 @@
                                                     <StackPanel x:Name="backgroundCarouselAndDescription" Orientation="Horizontal" VerticalAlignment="Stretch" DockPanel.Dock="Top" Grid.Column="0" Grid.Row="0">
                                                       <Control Template="{StaticResource skillExpertisePanelTemplate}"/>
                                                     </StackPanel>
-
-                                                    <Control Template="{StaticResource HUI_SelectorClosingTemplate}" Grid.Column="0" Grid.Row="1"/>
 
                                                   </Grid>
                                                 </DockPanel>
@@ -1430,8 +1427,14 @@
                                     <Setter TargetName="passiveFeaturesTab" Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
 
-                                <!-- Daisy Tabs Mode - triggered by CharacterCreationStep -->
+                                <!-- Companion Mode - Base Setup -->
                                 <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                                    <!-- Reset mode controller to ensure we start in daisy mode -->
+                                    <Setter TargetName="modeController" Property="Tag" Value=""/>
+                                    
+                                    <!-- Show the daisy page for companion mode -->
+                                    <Setter TargetName="daisyPage" Property="Visibility" Value="Visible"/>
+                                    
                                     <!-- Hide other tab systems -->
                                     <Setter TargetName="gameplayTabs" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="appearanceTabs" Property="Visibility" Value="Collapsed"/>
@@ -1450,17 +1453,9 @@
                                     <!-- Hide summary in daisy mode -->
                                     <Setter TargetName="summary" Property="Visibility" Value="Collapsed"/>
                                     
-                                    <!-- Hide the old daisy page list in daisy mode -->
-                                    <Setter TargetName="daisyPage" Property="Visibility" Value="Collapsed"/>
-                                    
-                                    <!-- Hide mode controller in daisy mode -->
-                                    <Setter TargetName="modeController" Property="Visibility" Value="Collapsed"/>
-                                    
                                     <!-- Replace gotoNamingButton with VentureForthButton behavior -->
                                     <Setter TargetName="gotoNamingButton" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="ventureForthButton" Property="Visibility" Value="Visible"/>
-                                    
-                                    <!-- Show back button in daisy mode -->
                                     <Setter TargetName="daisyBackButton" Property="Visibility" Value="Visible"/>
                                     
                                     <!-- Hide toggle tooltips and nudity buttons during daisy mode -->
@@ -1468,8 +1463,9 @@
                                     
                                     <!-- Set the daisy contents panel template - default to Race when entering daisy mode -->
                                     <Setter TargetName="daisyContentsPanel" Property="Template" Value="{StaticResource RaceDaisyTemplate}"/>
-
                                 </DataTrigger>
+
+
 
                                 <!-- Daisy Tab Specific DataTriggers -->
                                 <DataTrigger Binding="{Binding ElementName=daisyTabs, Path=SelectedItem.Tag}" Value="race">
@@ -1736,8 +1732,6 @@
                                             </ls:LSButton>
                                         </StackPanel>
                                     </ControlTemplate>
-                                    
-                                    <BitmapImage x:Key="daisyBackdrop" UriSource="pack://application:,,,/Core;component/Assets/CC_c/c_titleBG_guardian.png"/>
                                 </Grid.Resources>
 
                                 <b:Interaction.Triggers>
@@ -1749,10 +1743,6 @@
                                 <Control x:Name="setCameras" Template="{StaticResource setDaisyCamera_Splitscreen}"/>
                                 <Control Template="{StaticResource AppearanceBackgroundTemplate}"/>
                                 <Rectangle x:Name="bottomShading" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="{StaticResource bottomBackgroundHeight}" Fill="{StaticResource BottomShadingBrush}"/>
-
-                                <ls:LSNineSliceImage x:Name="daisyHeader" Slices="240,130,820,130" MinWidth="800" MinHeight="264" ImageSource="{StaticResource daisyBackdrop}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="176,146,0,0" Padding="40 20 100 0">
-                                    <TextBlock x:Name="pageTitle" ls:TextBlockFormatter.SourceText="{Binding Source=h0606bec2g5227g499ag8f4bg9ab2589ccded, Converter={StaticResource TranslatedStringConverter}}" FontSize="{StaticResource ScaledTitleFontSize}" Foreground="{StaticResource LS_extraspecialTxtColor}" TextWrapping="Wrap" VerticalAlignment="Top" Margin="40 20 40 20" MaxWidth="700"/>
-                                </ls:LSNineSliceImage>
 
                                 <Control x:Name="appearancePanel" Template="{StaticResource AppearancePanelTemplate}" Height="1700" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,212,50,0"/>
 
@@ -1772,8 +1762,8 @@
                                 </ContentControl>
 
                                 <!-- Daisy Page Bottom Buttons -->
-                                <StackPanel  Style="{StaticResource ButtonHint.Container.Right}">
-                                    <Control x:Name="bottomButtons"/>
+                                <StackPanel x:Name="daisyBottomButtonsHolder" Margin="0,0,24,56" Style="{StaticResource ButtonHint.Container.Right}">
+                                    <Control x:Name="bottomButtons" Template="{StaticResource StandardBottomButtonsTemplate2}"/>
                                 </StackPanel>
 
                             </Grid>
@@ -1782,18 +1772,27 @@
                                     <Setter TargetName="setCameras" Property="Template" Value="{StaticResource setDaisyCamera}"/>
                                     <Setter TargetName="appearancePanel" Property="Margin" Value="0,212,200,0"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Layout}" Value="Left">
-                                    <Setter TargetName="pageTitle" Property="Style" Value="{StaticResource CCBaseText}"/>
-                                    <Setter TargetName="daisyHeader" Property="Margin" Value="60 60 0 0"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Layout}" Value="Right">
-                                    <Setter TargetName="pageTitle" Property="Style" Value="{StaticResource CCBaseText}"/>
-                                    <Setter TargetName="daisyHeader" Property="Margin" Value="60 60 0 0"/>
-                                </DataTrigger>
+                                <!-- Layout-specific triggers removed - daisyHeader and pageTitle are now outside daisyPage -->
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Control.Template>
                 </Control>
+
+                <!-- Daisy Header - positioned at right edge, jutting out in Companion mode -->
+                <Canvas Width="3840" Height="2160" ClipToBounds="False">
+                    <ls:LSNineSliceImage x:Name="daisyHeader" Slices="240,130,820,130" MinWidth="1000" MinHeight="320" 
+                                       ImageSource="{StaticResource daisyBackdrop}" Canvas.Right="-900" Canvas.Top="180"
+                                       Padding="0" Visibility="Collapsed">
+                        <ls:LSNineSliceImage.RenderTransform>
+                            <ScaleTransform ScaleX="-1" ScaleY="1"/>
+                        </ls:LSNineSliceImage.RenderTransform>
+                    </ls:LSNineSliceImage>
+                    
+                    <!-- Text overlaid on header for better positioning control -->
+                    <TextBlock x:Name="pageTitle" ls:TextBlockFormatter.SourceText="{Binding Source=h0606bec2g5227g499ag8f4bg9ab2589ccded, Converter={StaticResource TranslatedStringConverter}}" 
+                             FontSize="{StaticResource ScaledTitleFontSize}" Foreground="{StaticResource LS_extraspecialTxtColor}" 
+                             TextAlignment="Right" TextWrapping="Wrap" Canvas.Right="350" Canvas.Top="250" MaxWidth="600" Visibility="Collapsed"/>
+                </Canvas>
 
                 <Control x:Name="readyInfoPage" Visibility="Collapsed">
                     <Control.Template>
@@ -1951,6 +1950,22 @@
                         </BeginStoryboard>
                     </MultiDataTrigger.EnterActions>
                 </MultiDataTrigger>
+
+                <!-- Layout-specific styling for daisyHeader and pageTitle now that they're at main level -->
+                <DataTrigger Binding="{Binding Layout}" Value="Left">
+                    <Setter TargetName="pageTitle" Property="Style" Value="{StaticResource CCBaseText}"/>
+                    <Setter TargetName="daisyHeader" Property="Margin" Value="60 60 0 0"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Layout}" Value="Right">
+                    <Setter TargetName="pageTitle" Property="Style" Value="{StaticResource CCBaseText}"/>
+                    <Setter TargetName="daisyHeader" Property="Margin" Value="60 60 0 0"/>
+                </DataTrigger>
+
+                <!-- Show daisyHeader and pageTitle in Companion mode -->
+                <DataTrigger Binding="{Binding CharacterCreationStep}" Value="Companion">
+                    <Setter TargetName="daisyHeader" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="pageTitle" Property="Visibility" Value="Visible"/>
+                </DataTrigger>
 
             </DataTemplate.Triggers>
         </DataTemplate>
