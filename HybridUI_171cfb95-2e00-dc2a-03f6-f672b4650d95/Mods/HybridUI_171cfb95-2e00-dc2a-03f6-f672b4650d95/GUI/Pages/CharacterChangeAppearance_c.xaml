@@ -61,7 +61,6 @@
                         <ControlTemplate TargetType="Control">
                             <Grid>
                                 <Control x:Name="setCameras" Template="{StaticResource setDaisyCamera_Splitscreen}"/>
-                                <Control Template="{StaticResource AppearanceBackgroundTemplate}"/>
 
                                 <Grid>
                                     <Rectangle x:Name="bottomShading" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="{StaticResource bottomBackgroundHeight}" Fill="{StaticResource BottomShadingBrush}"/>

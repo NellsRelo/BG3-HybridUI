@@ -1333,7 +1333,7 @@
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
-                                </DataTrigger>                                
+                                </DataTrigger>
                                 
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="skills">
                                     <Setter TargetName="gameplayPanel" Property="Template">

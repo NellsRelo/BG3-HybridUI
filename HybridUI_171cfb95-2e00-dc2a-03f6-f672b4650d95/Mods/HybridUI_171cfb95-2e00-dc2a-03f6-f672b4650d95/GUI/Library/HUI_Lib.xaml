@@ -1010,6 +1010,17 @@
                 <Setter TargetName="cTxt" Property="Text" Value="{Binding Source='h13bbfa20g4e29g4974g90degb60346fdb770', Converter={StaticResource TranslatedStringConverter}}"/>
             </DataTrigger>
             
+            <!-- Randomize Tag: Show Randomize buttons, hide default buttons, show randomize action content, use fixed text -->
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Randomize_Hench">
+                <Setter TargetName="base" Property="Template" Value="{StaticResource ListButtonTemplate}"/>
+                <Setter TargetName="leftBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="rightBtn" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="randomizeLeftBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="randomizeRightBtn" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="randomizeActionContent" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="cTxt" Property="Text" Value="{Binding Source='h13bbfa20g4e29g4974g90degb60346fdb770', Converter={StaticResource TranslatedStringConverter}}"/>
+            </DataTrigger>
+            
             <!-- Voice focused: Show play voice button and enable input when Voice tag and focused -->
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -1024,6 +1035,14 @@
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Randomize"/>
+                    <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="randomizeButton" Property="Opacity" Value="1"/>
+                <Setter TargetName="randomizeInput" Property="IsEnabled" Value="True"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="Randomize_Hench"/>
                     <Condition Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True"/>
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="randomizeButton" Property="Opacity" Value="1"/>

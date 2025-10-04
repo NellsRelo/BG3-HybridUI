@@ -2121,6 +2121,10 @@
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h230f60c6g161fg481bgbe52g42bc264618dd', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
 
+            <Trigger Property="Tag" Value="henchmen">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='hb2fe326ag314ag4607g8a50g66f64c9de642', Converter={StaticResource TranslatedStringConverter}}"/>
+            </Trigger>
+
             <Trigger Property="Tag" Value="origin">
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='hd0d4922ag7581g43eag9142g44e22c131fa8', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
