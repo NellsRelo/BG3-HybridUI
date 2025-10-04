@@ -91,7 +91,7 @@
                               </ls:LSButton>
 
                               <Grid VerticalAlignment="Center" MinWidth="80">
-                                  <TextBlock x:Name="value" ls:TextBlockFormatter.SourceText="{Binding Value}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextPrimary}" HorizontalAlignment="Center"/>
+                                  <TextBlock x:Name="abilityValue" ls:TextBlockFormatter.SourceText="{Binding Value}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextPrimary}" HorizontalAlignment="Center"/>
                               </Grid>
 
                               <ls:LSButton x:Name="rightBtn" BoundEvent="UIRight" IsEnabled="{Binding CanIncrease}" Command="{Binding DataContext.IncreaseAbility, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" CommandParameter="{Binding}" Style="{StaticResource IconCarouselButtonStyle}" VerticalAlignment="Bottom" SoundID="UI_HUD_CC_IncreaseAbility"/>

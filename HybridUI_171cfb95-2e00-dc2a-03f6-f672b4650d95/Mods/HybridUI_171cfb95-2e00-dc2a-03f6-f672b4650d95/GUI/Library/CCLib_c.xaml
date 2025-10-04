@@ -3202,7 +3202,7 @@
         <ContentControl Template="{StaticResource CarouselButtonTemplate}" Tag="notEnabled" x:Name="base" ls:MoveFocus.Focusable="True" Focusable="True" ToolTip="{Binding Source={StaticResource ManagedTooltip}, FallbackValue={x:Null}, TargetNullValue={x:Null}}" ToolTipService.VerticalOffset="-10" ToolTipService.HorizontalOffset="20">
             <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <Control Template="{StaticResource AbilityDisplayName}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" VerticalAlignment="Center"/>
+                    <Control x:Name="abilityName" Template="{StaticResource AbilityDisplayName}" FontSize="{StaticResource ScaledDefaultFontSize}" Foreground="{StaticResource CCTextNormal}" VerticalAlignment="Center"/>
 
                     <Image Source="{StaticResource IconProficiency}" Stretch="None" Visibility="{Binding IsPrimary, Converter={StaticResource BoolToVisibleConverter}, ConverterParameter=True}" Margin="20,0,0,0"/>
                 </StackPanel>
@@ -3237,6 +3237,9 @@
             </Grid>
         </ContentControl>
         <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="abilityName" Property="Foreground" Value="{StaticResource LS_selectedTextPad}"/>
+            </DataTrigger>
 
             <!-- With Bonuses Value -->
 
@@ -4457,6 +4460,10 @@
             </Grid>
         </ContentControl>
         <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                <Setter TargetName="text" Property="Foreground" Value="{StaticResource LS_selectedTextPad}"/>
+            </DataTrigger>
+
             <DataTrigger Binding="{Binding Value}" Value="1.0">
                 <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="text" Property="Foreground" Value="#FF4CAF50"/>
@@ -4742,8 +4749,8 @@
             </DataTrigger>
 
             <DataTrigger Binding="{Binding Enabled}" Value="False">
-                <Setter TargetName="skillName" Property="Foreground" Value="#FF8B0000"/>
-                <Setter TargetName="skillRollBonus" Property="Foreground" Value="#FF8B0000"/>
+                <Setter TargetName="skillName" Property="Foreground" Value="#FF6B5555"/>
+                <Setter TargetName="skillRollBonus" Property="Foreground" Value="#FF6B5555"/>
                 <Setter TargetName="skillIcon" Property="Opacity" Value="0.4"/>
             </DataTrigger>
 

@@ -440,12 +440,12 @@
                                                             <Setter.Value>
                                                                 <MultiBinding Converter="{StaticResource AddMultipleConverter}">
                                                                     <Binding Path="ActualWidth" ElementName="raceTab"/>
-                                                                    <Binding Path="ActualWidth" ElementName="subRaceTab"/>
+                                                                    <!-- <Binding Path="ActualWidth" ElementName="subRaceTab"/> -->
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
+                                                    <!-- <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
                                                         <Setter TargetName="backplate" Property="Width">
                                                             <Setter.Value>
                                                                 <MultiBinding Converter="{StaticResource AddMultipleConverter}">
@@ -454,7 +454,7 @@
                                                                 </MultiBinding>
                                                             </Setter.Value>
                                                         </Setter>
-                                                    </DataTrigger>
+                                                    </DataTrigger> -->
                                                     <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
                                                         <Setter TargetName="backplate" Property="Width">
                                                             <Setter.Value>
@@ -484,7 +484,7 @@
                                         </ListBox.ItemContainerStyle>
 
                                         <ListBoxItem x:Name="raceTab" Tag="race" IsSelected="True"/>
-                                        <ListBoxItem x:Name="subRaceTab" Tag="subrace" IsEnabled="{Binding SelectableSubRaces.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                        <!-- <ListBoxItem x:Name="subRaceTab" Tag="subrace" IsEnabled="{Binding SelectableSubRaces.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/> -->
 
                                         <ListBoxItem x:Name="classTab" Tag="class"/>
                                         <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
@@ -688,37 +688,6 @@
 
                         <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="race">
                             <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource RaceSelectorTemplate}"/>
-                        </DataTrigger>
-
-                        <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
-                            <Setter TargetName="gameplayPanel" Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                      <DockPanel LastChildFill="True">
-                                        <Grid>
-                                          <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="*" />
-                                          </Grid.RowDefinitions>
-                                            <b:Interaction.Triggers>
-                                                <b:EventTrigger EventName="Loaded">
-                                                    <ls:SetMoveFocusAction TargetName="CharacterRespec_c"/>
-                                                </b:EventTrigger>
-                                            </b:Interaction.Triggers>
-
-                                            <Control Template="{StaticResource setGameplayCameraOffsets}"/>
-
-                                            <StackPanel x:Name="raceCarouselAndDescription" Orientation="Horizontal" DockPanel.Dock="Top"  Grid.Row="0">
-                                              <Control Template="{StaticResource subRaceSelectionTemplate}"/>
-                                            </StackPanel>
-
-                                            <Control Template="{StaticResource subRaceProgressionsTemplate}"  Grid.Row="1"/>
-                                        </Grid>
-                                      </DockPanel>
-
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">

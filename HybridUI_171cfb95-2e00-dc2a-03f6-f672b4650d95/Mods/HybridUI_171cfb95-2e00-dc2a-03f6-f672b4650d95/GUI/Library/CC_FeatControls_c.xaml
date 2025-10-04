@@ -46,7 +46,7 @@
                   
                   <StackPanel x:Name="featList" Orientation="Horizontal" DockPanel.Dock="Top">
                       <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
-                                VerticalScrollBarVisibility="Auto" MaxHeight="1400" Height="Auto"
+                                VerticalScrollBarVisibility="Auto" MaxHeight="1300" Height="Auto"
                                 DockPanel.Dock="Top" Margin="0,20,0,-20">
 
                               <ListBox x:Name="featsList" ItemsSource="{Binding SelectableFeats}" SelectedItem="{Binding SelectedFeat}">
@@ -124,10 +124,10 @@
                                               </Grid>
                                           </ContentControl>
                                           <DataTemplate.Triggers>
-                                              <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                                                  <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
-                                                  <Setter TargetName="selectFeat" Property="IsEnabled" Value="False"/>
+                                              <DataTrigger Binding="{Binding Path=(ls:MoveFocus.IsFocused), ElementName=base}" Value="True">
+                                                  <Setter TargetName="text" Property="Foreground" Value="{StaticResource LS_selectedTextPad}"/>
                                               </DataTrigger>
+
                                               <DataTrigger Binding="{Binding IsAlreadyTaken}" Value="True">
                                                   <Setter TargetName="selectFeat" Property="IsEnabled" Value="False"/>
                                                   <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
@@ -139,6 +139,11 @@
                                                   <Setter TargetName="selectFeat" Property="IsEnabled" Value="False"/>
                                                   <Setter TargetName="lock" Property="Visibility" Value="Visible"/>
                                                   <Setter TargetName="base" Property="Template" Value="{StaticResource ListButtonTemplate}"/>
+                                              </DataTrigger>
+                                              <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                                  <Setter TargetName="tick" Property="Visibility" Value="Visible"/>
+                                                  <Setter TargetName="selectFeat" Property="IsEnabled" Value="False"/>
+                                                  <Setter TargetName="text" Property="Foreground" Value="#FF4CAF50"/>
                                               </DataTrigger>
                                               <DataTrigger Binding="{Binding Icon}" Value="{x:Null}">
                                                   <Setter TargetName="icon" Property="Fill" Value="{StaticResource IconFeatDefaultBrush}"/>

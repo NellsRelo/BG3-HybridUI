@@ -750,7 +750,7 @@
                                                 <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="False" />
                                                 <b:ChangePropertyAction TargetName="focusSummaryPanelButton" PropertyName="Visibility" Value="Visible" />
                                                 <b:ChangePropertyAction TargetName="focusGameplayPanelButton" PropertyName="Visibility" Value="Hidden" />
-                                                <b:ChangePropertyAction TargetName="bottomButtons" PropertyName="Template" Value="{StaticResource StandardBottomButtonsTemplate}"/>
+                                                <b:ChangePropertyAction TargetName="bottomButtons" PropertyName="Template" Value="{StaticResource LevelUpBottomButtonsTemplate}"/>
                                                 <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c" FocusElement="{Binding ElementName=leftSidePanels}"/>
                                                 <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource unfocusSummaryPanelStoryboard}"/>
                                             </b:EventTrigger>
@@ -771,7 +771,7 @@
                                                 <b:ChangePropertyAction TargetName="summaryPanel" PropertyName="IsEnabled" Value="False" />
                                                 <b:ChangePropertyAction TargetName="focusSummaryPanelButton" PropertyName="Visibility" Value="Visible" />
                                                 <b:ChangePropertyAction TargetName="focusGameplayPanelButton" PropertyName="Visibility" Value="Hidden" />
-                                                <b:ChangePropertyAction TargetName="bottomButtons" PropertyName="Template" Value="{StaticResource StandardBottomButtonsTemplate}"/>
+                                                <b:ChangePropertyAction TargetName="bottomButtons" PropertyName="Template" Value="{StaticResource LevelUpBottomButtonsTemplate}"/>
                                                 <ls:SetMoveFocusAction TargetName="CharacterLevelUp_c" FocusElement="{Binding ElementName=leftSidePanels}"/>
                                                 <b:ControlStoryboardAction ControlStoryboardOption="Play" Storyboard="{StaticResource unfocusSummaryPanelStoryboard}"/>
                                             </b:EventTrigger>
