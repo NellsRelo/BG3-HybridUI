@@ -60,7 +60,7 @@
                     <Control.Template>
                         <ControlTemplate TargetType="Control">
                             <Grid>
-                                <Control x:Name="setCameras" Template="{StaticResource setAppearanceCamera_Splitscreen}"/>
+                                <Control x:Name="setCameras" Template="{StaticResource setDaisyCamera_Splitscreen}"/>
                                 <Control Template="{StaticResource AppearanceBackgroundTemplate}"/>
 
                                 <Grid>
@@ -313,13 +313,6 @@
 
                                 </Grid>
 
-
-
-                                <Grid x:Name="dummyMotionKey" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="50,0,0,200">
-                                    <Image Source="{StaticResource CameraActionIndication}" Stretch="None"/>
-                                    <Image Source="{StaticResource CameraActionStickIcon}" Stretch="None" Margin="0,8,0,0"/>
-                                </Grid>
-
                                 <ContentControl Template="{StaticResource buttonBackplateTemplate}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,148">
                                     <ls:LSButton x:Name="confirmButton" Style="{StaticResource ControllerHoldButtonStyle}" Content="{Binding CurrentPlayer.UIData.InputEvents, Converter={StaticResource FindInputEventConverter}, ConverterParameter='UIDelete'}" Tag="{Binding Source='h7a174735g0099g4ca9ga1f7ga53ad66b1aa4', Converter={StaticResource TranslatedStringConverter}}" Command="{Binding DataContext.FinishHenchmenCreating, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Margin="2,0,0,0"/>
                                 </ContentControl>
@@ -340,7 +333,7 @@
                             <ControlTemplate.Triggers>
                                 <!-- Split Screen variation -->
                                 <DataTrigger Binding="{Binding Layout}" Value="Common">
-                                    <Setter TargetName="setCameras" Property="Template" Value="{StaticResource setAppearanceCamera}"/>
+                                    <Setter TargetName="setCameras" Property="Template" Value="{StaticResource setDaisyCamera}"/>
                                     <Setter TargetName="appearancePanel" Property="Height" Value="{StaticResource appearancePanelHeight}"/>
                                     <Setter TargetName="appearancePanel" Property="Margin" Value="0,212,200,0"/>
                                     <Setter TargetName="leftSidePanels" Property="Margin" Value="170,140,0,0"/>

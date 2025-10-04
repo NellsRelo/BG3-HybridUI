@@ -1021,7 +1021,8 @@
             <StackPanel x:Name="subTabItem" Width="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                 <!-- Note: does not work without HorizontalAlignment="Right" ? -->
-                <TextBlock x:Name="label" Text="{Binding Title}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
+                <!-- Using Title with fallback for combined SpellSelectors collection -->
+                <TextBlock x:Name="label" Text="{Binding Title, TargetNullValue='Spells', FallbackValue='Spells'}" Style="{StaticResource gameplayTabTextStyle}" HorizontalAlignment="Right">
                     <b:Interaction.Triggers>
 
                         <!-- Set the DataContext for the sub panel -->
@@ -1080,6 +1081,14 @@
         </Grid>
 
         <DataTemplate.Triggers>
+            <!-- Set fallback text when Title is null or empty (e.g., for combined SpellSelectors on levelup tab) -->
+            <DataTrigger Binding="{Binding Title, Converter={StaticResource NullToBoolTrueConverter}}" Value="True">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='h1912b50dgcd8ag4f74g9d0bg1666165c3451', Converter={StaticResource TranslatedStringConverter}}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Title, Converter={StaticResource CompareStringConverter}, ConverterParameter=''}" Value="True">
+                <Setter TargetName="label" Property="Text" Value="{Binding Source='h1912b50dgcd8ag4f74g9d0bg1666165c3451', Converter={StaticResource TranslatedStringConverter}}"/>
+            </DataTrigger>
+            
             <DataTrigger Binding="{Binding IsComplete}" Value="False">
                 <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
                 <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
@@ -1794,6 +1803,7 @@
 
                 <StackPanel x:Name="subTabs" Visibility="Collapsed" Orientation="Horizontal">
 
+                    <!-- Class spell subtabs -->
                     <ListBox x:Name="subTabsSpellsList" ItemTemplate="{StaticResource gameplayTabSpellSelectorTemplate2}" ItemsPanel="{StaticResource gameplayTabListPanel}" ItemContainerStyle="{StaticResource gameplaySubTabItemStyle}">
 
                         <b:Interaction.Triggers>
@@ -1813,8 +1823,58 @@
                             <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=gameplayTabs}">
                                 <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
                             </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubSpellsList}">
+                                <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsEquipmentList}">
+                                <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
                             <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=gameplaySubPanel}">
                                 <b:ChangePropertyAction TargetName="subTabsSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+
+                    <!-- Subclass spell subtabs -->
+                    <ListBox x:Name="subTabsSubSpellsList" ItemTemplate="{StaticResource gameplayTabSpellSelectorTemplate2}" ItemsPanel="{StaticResource gameplayTabListPanel}" ItemContainerStyle="{StaticResource gameplaySubTabItemStyle}">
+
+                        <b:Interaction.Triggers>
+
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubSpellsList}">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding Path=SelectedIndex, ElementName=subTabsSubSpellsList}" Operator="NotEqual" RightOperand="-1"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="Tag" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"/>
+                            </b:PropertyChangedTrigger>
+
+                            <!-- deselect this ListBox if selection is made elsewhere -->
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=gameplayTabs}">
+                                <b:ChangePropertyAction TargetName="subTabsSubSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSpellsList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsEquipmentList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubSpellsList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=gameplaySubPanel}">
+                                <b:ChangePropertyAction TargetName="subTabsSubSpellsList" PropertyName="SelectedIndex" Value="-1" />
                             </b:PropertyChangedTrigger>
                         </b:Interaction.Triggers>
                     </ListBox>
@@ -1838,8 +1898,55 @@
                             <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=gameplayTabs}">
                                 <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
                             </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubSpellsList}">
+                                <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsEquipmentList}">
+                                <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
                             <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=gameplaySubPanel}">
                                 <b:ChangePropertyAction TargetName="subTabsPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                        </b:Interaction.Triggers>
+                    </ListBox>
+
+                    <!-- Subrace passive subtabs -->
+                    <ListBox x:Name="subTabsSubPassivesList" ItemTemplate="{StaticResource gameplayTabPassiveSelectorTemplate2}" ItemsPanel="{StaticResource gameplayTabListPanel}" ItemContainerStyle="{StaticResource gameplaySubTabItemStyle}">
+
+                        <b:Interaction.Triggers>
+
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubPassivesList}">
+                                <b:Interaction.Behaviors>
+                                    <b:ConditionBehavior>
+                                        <b:ConditionalExpression>
+                                            <b:ComparisonCondition LeftOperand="{Binding Path=SelectedIndex, ElementName=subTabsSubPassivesList}" Operator="NotEqual" RightOperand="-1"/>
+                                        </b:ConditionalExpression>
+                                    </b:ConditionBehavior>
+                                </b:Interaction.Behaviors>
+                                <b:ChangePropertyAction TargetName="gameplaySubPanel" PropertyName="Tag" Value="{Binding Tag, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"/>
+                            </b:PropertyChangedTrigger>
+
+                            <!-- deselect this ListBox if selection is made elsewhere -->
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=gameplayTabs}">
+                                <b:ChangePropertyAction TargetName="subTabsSubPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSpellsList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubSpellsList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsEquipmentList}">
+                                <b:ChangePropertyAction TargetName="subTabsSubPassivesList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=gameplaySubPanel}">
+                                <b:ChangePropertyAction TargetName="subTabsSubPassivesList" PropertyName="SelectedIndex" Value="-1" />
                             </b:PropertyChangedTrigger>
                         </b:Interaction.Triggers>
                     </ListBox>
@@ -1860,6 +1967,15 @@
 
                             <!-- deselect this ListBox if selection is made elsewhere -->
                             <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=gameplayTabs}">
+                                <b:ChangePropertyAction TargetName="subTabsEquipmentList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubSpellsList}">
+                                <b:ChangePropertyAction TargetName="subTabsEquipmentList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsPassivesList}">
+                                <b:ChangePropertyAction TargetName="subTabsEquipmentList" PropertyName="SelectedIndex" Value="-1" />
+                            </b:PropertyChangedTrigger>
+                            <b:PropertyChangedTrigger Binding="{Binding Path=SelectedIndex, ElementName=subTabsSubPassivesList}">
                                 <b:ChangePropertyAction TargetName="subTabsEquipmentList" PropertyName="SelectedIndex" Value="-1" />
                             </b:PropertyChangedTrigger>
                             <b:PropertyChangedTrigger Binding="{Binding Path=Tag, ElementName=gameplaySubPanel}">
@@ -1937,6 +2053,61 @@
                 <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
             </MultiDataTrigger>
 
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="feat"/>
+                    <Condition Binding="{Binding CanSelectFeat}" Value="True"/>
+                    <Condition Binding="{Binding SelectedFeatDetails.HasFeat, FallbackValue=False}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="feats"/>
+                    <Condition Binding="{Binding SelectableFeats.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True"/>
+                    <Condition Binding="{Binding SelectedFeatDetails.HasFeat, FallbackValue=False}" Value="False"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+
+            <!-- Feat details - ability selection incomplete -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="featdetails"/>
+                    <Condition Value="False">
+                        <Condition.Binding>
+                            <MultiBinding Converter="{StaticResource EqualConverter}">
+                                <Binding Path="SelectedFeat.FeatDetails.SelectedAbilityCount"/>
+                                <Binding Path="SelectedFeat.FeatDetails.MaxSelectedAbilityCount"/>
+                            </MultiBinding>
+                        </Condition.Binding>
+                    </Condition>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+
+            <!-- Feat details - skill selection incomplete -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="featdetails"/>
+                    <Condition Value="False">
+                        <Condition.Binding>
+                            <MultiBinding Converter="{StaticResource EqualConverter}">
+                                <Binding Path="SelectedFeat.FeatSkills.SelectedSkillCount"/>
+                                <Binding Path="SelectedFeat.FeatSkills.MaxSelectedSkillCount"/>
+                            </MultiBinding>
+                        </Condition.Binding>
+                    </Condition>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabToDo}"/>
+                <Setter TargetName="ErrorIcon" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+
+
             <Trigger Property="IsSelected" Value="True">
                 <Setter TargetName="label" Property="Foreground" Value="{StaticResource CCTabSelected}"/>
                 <Setter TargetName="ErrorIcon" Property="Visibility" Value="Hidden"/>
@@ -1968,7 +2139,7 @@
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='h1e67bc9cg0f53g4218g8ce8geb6a6636f141', Converter={StaticResource TranslatedStringConverter}}"/>
             </Trigger>
 
-            <!-- Dynamic subclass tab name based on SubclassTitle - only for subclass tab -->
+            <!-- Dynamic subclass tab name based on SubclassTitle -->
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="subclass"/>
@@ -2039,11 +2210,13 @@
                 <Setter TargetName="label" Property="Text" Value="{Binding Source='hcbc3c9a8g9e80g4139g952bga971015c1f41', Converter={StaticResource TranslatedStringConverter}}"/>
             </MultiDataTrigger>
 
-            <!-- Race SubTabs -->
+            <!-- Race SubTabs - Show ALL race and subrace subtabs using separate ListBoxes for spell and passive collections -->
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="race">
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding RaceProgressionDetails.NotSubSpellSelectors}"/>
+                <Setter TargetName="subTabsSubSpellsList" Property="ItemsSource" Value="{Binding RaceProgressionDetails.SubSpellSelectors}"/>
                 <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding RaceProgressionDetails.NotSubPassiveSelectors}"/>
+                <Setter TargetName="subTabsSubPassivesList" Property="ItemsSource" Value="{Binding RaceProgressionDetails.SubPassiveSelectors}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="subrace">
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
@@ -2059,19 +2232,24 @@
                 <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubEquipmentSelectors}"/>
             </DataTrigger>
 
-            <!-- Subclass SubTabs -->
-            <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="subclass">
+            <!-- Subclass SubTabs - Only show if subclass tab is enabled -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="subclass"/>
+                    <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
+                </MultiDataTrigger.Conditions>
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubSpellSelectors}"/>
                 <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubPassiveSelectors}"/>
                 <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubEquipmentSelectors}"/>
-            </DataTrigger>
+            </MultiDataTrigger>
 
-            <!-- Level-Up SubTabs -->
+            <!-- Level-Up SubTabs - Show ALL class and subclass subtabs using separate ListBoxes for spell collections -->
             <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="levelup">
                 <Setter TargetName="subTabs" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="subTabsSpellsList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubSpellSelectors}"/>
-                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubPassiveSelectors}"/>
+                <Setter TargetName="subTabsSubSpellsList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.SubSpellSelectors}"/>
+                <Setter TargetName="subTabsPassivesList" Property="ItemsSource" Value="{Binding ClassAndSubClassPassives}"/>
                 <Setter TargetName="subTabsEquipmentList" Property="ItemsSource" Value="{Binding ClassProgressionDetails.NotSubEquipmentSelectors}"/>
             </DataTrigger>
 
@@ -4895,6 +5073,23 @@
                     </b:Interaction.Triggers>
                 </ls:LSButton>
 
+                <!-- Description Expand/Collapse Hint -->
+                <ls:LSButton x:Name="DescriptionExpandHint"
+                             Visibility="Collapsed"
+                             ContentTemplate="{StaticResource ControllerButtonHint}"
+                             Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UIAccept, Converter={StaticResource FindInputEventConverter}}"
+                             Tag="{Binding Source='hb0254c5cgfdc4g43a3gb7d5g25b5edcf56c1', Converter={StaticResource TranslatedStringConverter}}"
+                             IsHitTestVisible="False"
+                             Opacity="0.8"/>
+
+                <ls:LSButton x:Name="DescriptionCollapseHint"
+                             Visibility="Collapsed"
+                             ContentTemplate="{StaticResource ControllerButtonHint}"
+                             Content="{Binding CurrentPlayer.UIData.InputEvents, ConverterParameter=UICancel, Converter={StaticResource FindInputEventConverter}}"
+                             Tag="{Binding Source='hcaa1d4e1g1bb0g463egaba6gd6a9d27deb99', Converter={StaticResource TranslatedStringConverter}}"
+                             IsHitTestVisible="False"
+                             Opacity="0.8"/>
+
                 <!-- Toggle tooltips -->
                 <ls:LSButton x:Name="ToggleTooltips"
                                      Command="ls:UIWidget.ToggleTooltipOnUIElementCommand"
@@ -4966,6 +5161,23 @@
                 <Setter TargetName="addClassButton" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="cancelAddClassButton" Property="Visibility" Value="Visible"/>
             </DataTrigger>
+
+            <!-- Description expand/collapse hints based on FocusedElement -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding FocusedElement.Name, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=''}" Value="descriptionScrollViewer"/>
+                    <Condition Binding="{Binding FocusedElement.VerticalScrollBarVisibility, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=Auto}" Value="Auto"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="DescriptionExpandHint" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding FocusedElement.Name, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=''}" Value="descriptionScrollViewer"/>
+                    <Condition Binding="{Binding FocusedElement.VerticalScrollBarVisibility, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}, FallbackValue=Auto}" Value="Disabled"/>
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="DescriptionCollapseHint" Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
 
             <DataTrigger Binding="{Binding ShowUIElementTooltip, RelativeSource={RelativeSource AncestorType={x:Type ls:UIWidget}}}" Value="True">
                 <Setter TargetName="ToggleTooltips" Property="Tag" Value="{Binding Source='hb33ec471gd611g4ee3gbbffg699af8f79167', Converter={StaticResource TranslatedStringConverter}}"/>
@@ -5599,6 +5811,70 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+            <ControlTemplate x:Key="setDaisyCamera">
+                <Canvas>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Loaded">
+
+                            <b:InvokeCommandAction Command="{Binding SetCameraMode}" CommandParameter="Overview"/>
+                            <b:InvokeCommandAction Command="{Binding Path=SetCameraOffsets}">
+                                <b:InvokeCommandAction.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                        <Binding>
+                                            <Binding.Source>
+                                                <System:Single>-8.5</System:Single>
+                                            </Binding.Source>
+                                        </Binding>
+                                        <Binding>
+                                            <Binding.Source>
+                                                <System:Single>-4</System:Single>
+                                            </Binding.Source>
+                                        </Binding>
+                                        <Binding>
+                                            <Binding.Source>
+                                                <System:Single>0.5</System:Single>
+                                            </Binding.Source>
+                                        </Binding>
+                                    </MultiBinding>
+                                </b:InvokeCommandAction.CommandParameter>
+                            </b:InvokeCommandAction>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Canvas>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="setDaisyCamera_Splitscreen">
+                <Canvas>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Loaded">
+
+                            <b:InvokeCommandAction Command="{Binding SetCameraMode}" CommandParameter="Overview"/>
+                            <b:InvokeCommandAction Command="{Binding Path=SetCameraOffsets}">
+                                <b:InvokeCommandAction.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                        <Binding>
+                                            <Binding.Source>
+                                                <System:Single>-12.9</System:Single>
+                                            </Binding.Source>
+                                        </Binding>
+                                        <Binding>
+                                            <Binding.Source>
+                                                <System:Single>-5.5</System:Single>
+                                            </Binding.Source>
+                                        </Binding>
+                                        <Binding>
+                                            <Binding.Source>
+                                                <System:Single>-4.4</System:Single>
+                                            </Binding.Source>
+                                        </Binding>
+                                    </MultiBinding>
+                                </b:InvokeCommandAction.CommandParameter>
+                            </b:InvokeCommandAction>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Canvas>
+            </ControlTemplate>
+
     <ControlTemplate x:Key="setAppearanceCamera">
         <Canvas>
             <b:Interaction.Triggers>
@@ -5609,7 +5885,7 @@
                             <MultiBinding Converter="{StaticResource PassThroughConverter}">
                                 <Binding>
                                     <Binding.Source>
-                                        <System:Single>1.3</System:Single>
+                                        <System:Single>0.3</System:Single>
                                     </Binding.Source>
                                 </Binding>
                                 <Binding>
@@ -5620,6 +5896,37 @@
                                 <Binding>
                                     <Binding.Source>
                                         <System:Single>2.7</System:Single>
+                                    </Binding.Source>
+                                </Binding>
+                            </MultiBinding>
+                        </b:InvokeCommandAction.CommandParameter>
+                    </b:InvokeCommandAction>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </Canvas>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="setMMAppearanceCamera">
+        <Canvas>
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="Loaded">
+                    <b:InvokeCommandAction Command="{Binding SetCameraMode}" CommandParameter="CloseupB"/>
+                    <b:InvokeCommandAction Command="{Binding Path=SetCameraOffsets}">
+                        <b:InvokeCommandAction.CommandParameter>
+                            <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                <Binding>
+                                    <Binding.Source>
+                                        <System:Single>-1.3</System:Single>
+                                    </Binding.Source>
+                                </Binding>
+                                <Binding>
+                                    <Binding.Source>
+                                        <System:Single>-1.3</System:Single>
+                                    </Binding.Source>
+                                </Binding>
+                                <Binding>
+                                    <Binding.Source>
+                                        <System:Single>-2.7</System:Single>
                                     </Binding.Source>
                                 </Binding>
                             </MultiBinding>

@@ -37,13 +37,12 @@
           <ControlTemplate x:Key="featSelectionTemplate">
               <DockPanel>
                   <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                      <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                          <TextBlock x:Name="featsTitle" ls:TextBlockFormatter.SourceText="{Binding Source='hb7180a49g729ag4ec3g9f87gaeadb7d4252c', Converter={StaticResource TranslatedStringConverter}, StringFormat='{}{0} (1/1)'}" Style="{StaticResource PanelHeaderText}"/>
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}"/>
+                      <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                          <TextBlock x:Name="featsTitle" ls:TextBlockFormatter.SourceText="{Binding Source=hb7180a49g729ag4ec3g9f87gaeadb7d4252c, Converter={StaticResource TranslatedStringConverter}, StringFormat='{}{0} (1/1)'}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center" Height="100" Margin="0,-10,0,10"/>
                       </ContentControl>
-
                       <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h3a0e9481ge605g41fbgb7fag21d4a45f0c93', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,40"/>
                   </StackPanel>
-
                   
                   <StackPanel x:Name="featList" Orientation="Horizontal" DockPanel.Dock="Top">
                       <ScrollViewer Style="{StaticResource gameplayPanelScrollViewerStyle}"
@@ -170,10 +169,10 @@
           <ControlTemplate x:Key="featDetailsTemplate">
               <DockPanel DataContext="{Binding SelectedFeatDetails}">
                   <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left" DockPanel.Dock="Top">
-                      <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                          <TextBlock ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}"/>
+                      <ContentControl Template="{StaticResource HUI_SelectorHeader}"/>
+                      <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                          <TextBlock x:Name="featsTitle" ls:TextBlockFormatter.SourceText="{Binding Name}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center" Height="100" Margin="0,-10,0,10"/>
                       </ContentControl>
-
                   </StackPanel>
                   
                   <StackPanel x:Name="featDetailScroller" Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,-15">

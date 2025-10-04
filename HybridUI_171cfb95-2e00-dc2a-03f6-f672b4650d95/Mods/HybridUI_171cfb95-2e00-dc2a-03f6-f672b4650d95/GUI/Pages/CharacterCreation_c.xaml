@@ -497,12 +497,12 @@
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource AddMultipleConverter}">
                                                                                 <Binding Path="ActualWidth" ElementName="raceTab"/>
-                                                                                <Binding Path="ActualWidth" ElementName="subRaceTab"/>
+                                                                                <!-- <Binding Path="ActualWidth" ElementName="subRaceTab"/> -->
                                                                             </MultiBinding>
                                                                         </Setter.Value>
                                                                     </Setter>
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
+                                                                <!-- <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
                                                                     <Setter TargetName="backplate" Property="Width">
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource AddMultipleConverter}">
@@ -511,7 +511,7 @@
                                                                             </MultiBinding>
                                                                         </Setter.Value>
                                                                     </Setter>
-                                                                </DataTrigger>
+                                                                </DataTrigger> -->
                                                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
                                                                     <Setter TargetName="backplate" Property="Width">
                                                                         <Setter.Value>
@@ -569,7 +569,7 @@
                                                     <ListBoxItem x:Name="originTab" Tag="origin" />
 
                                                     <ListBoxItem x:Name="raceTab" Tag="race"/>
-                                                    <ListBoxItem x:Name="subRaceTab" Tag="subrace" IsEnabled="{Binding SelectableSubRaces.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
+                                                    <!-- <ListBoxItem x:Name="subRaceTab" Tag="subrace" IsEnabled="{Binding SelectableSubRaces.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/> -->
 
                                                     <ListBoxItem x:Name="classTab" Tag="class"/>
                                                     <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
@@ -1194,9 +1194,9 @@
                                     <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource RaceSelectorTemplate}"/>
                                 </DataTrigger>
 
-                                <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
+                                <!-- <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subrace">
                                     <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource SubRaceSelectorTemplate}"/>
-                                </DataTrigger>
+                                </DataTrigger> -->
 
                                 <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
                                     <Setter TargetName="gameplayPanel" Property="Template" Value="{StaticResource ClassSelectorTemplate}"/>

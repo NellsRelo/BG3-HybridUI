@@ -602,9 +602,20 @@
                                                 </Grid>
                                                 <ControlTemplate.Triggers>
                                                     <!-- Manual backplate width calculation for related tabs -->
+
                                                     <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="levelup">
-                                                        <Setter TargetName="backplate" Property="Width" Value="{Binding Path=ActualWidth, ElementName=levelupTab}"/>
+                                                        <Setter TargetName="backplate" Property="Width">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource AddMultipleConverter}">
+                                                                    <Binding Path="ActualWidth" ElementName="levelup"/>
+                                                                    <Binding Path="ActualWidth" ElementName="subClassTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="deityTab"/>
+                                                                    <Binding Path="ActualWidth" ElementName="spellPrepTab"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
                                                     </DataTrigger>
+
                                                     <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="class">
                                                         <Setter TargetName="backplate" Property="Width">
                                                             <Setter.Value>
@@ -617,11 +628,11 @@
                                                             </Setter.Value>
                                                         </Setter>
                                                     </DataTrigger>
+
                                                     <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="subclass">
                                                         <Setter TargetName="backplate" Property="Width">
                                                             <Setter.Value>
                                                                 <MultiBinding Converter="{StaticResource AddMultipleConverter}">
-                                                                    <Binding Path="ActualWidth" ElementName="classTab"/>
                                                                     <Binding Path="ActualWidth" ElementName="subClassTab"/>
                                                                     <Binding Path="ActualWidth" ElementName="deityTab"/>
                                                                     <Binding Path="ActualWidth" ElementName="spellPrepTab"/>
@@ -630,16 +641,6 @@
                                                         </Setter>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="feat">
-                                                        <Setter TargetName="backplate" Property="Width">
-                                                            <Setter.Value>
-                                                                <MultiBinding Converter="{StaticResource AddMultipleConverter}">
-                                                                    <Binding Path="ActualWidth" ElementName="featTab"/>
-                                                                    <Binding Path="ActualWidth" ElementName="featDetailsTab"/>
-                                                                </MultiBinding>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="featdetails">
                                                         <Setter TargetName="backplate" Property="Width">
                                                             <Setter.Value>
                                                                 <MultiBinding Converter="{StaticResource AddMultipleConverter}">
@@ -665,7 +666,7 @@
                                             </Style>
                                         </ListBox.ItemContainerStyle>
 
-                                            <ListBoxItem x:Name="levelupTab" Tag="levelup" IsSelected="True" Visibility="{Binding IsMultiClassLevelUp, Converter={StaticResource BoolToCollapsedConverter}}"/>
+                                            <ListBoxItem x:Name="levelupTab" Tag="levelup" IsSelected="True"/>
                                             <ListBoxItem x:Name="classTab" Tag="class" IsSelected="{Binding IsMultiClassLevelUp}" Visibility="{Binding Visibility, ElementName=levelupTab, Converter={StaticResource InvertVisibilityConverter}}"/>
                                             <ListBoxItem x:Name="subClassTab" Tag="subclass" IsEnabled="{Binding SelectableSubClasses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                             <ListBoxItem x:Name="deityTab" Tag="deity" IsEnabled="{Binding SelectableDeities.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
@@ -673,11 +674,11 @@
                                             <ListBoxItem x:Name="skillsTab" Tag="skills" IsEnabled="{Binding AllSkills.ClassProficientSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                             <ListBoxItem x:Name="expertiseTab" Tag="expertise" IsEnabled="{Binding AllSkills.ExpertiseSkills.MaxSelectedSkillCount, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}"/>
                                             <ListBoxItem x:Name="spellReplaceTab" Tag="spellreplace" IsEnabled="{Binding ClassProgressionDetails.InSpellReplacement, Converter={StaticResource NullToBoolFalseConverter}}"/>
-                                            <ListBoxItem x:Name="draconicTab" Tag="draconic" Visibility="Collapsed"/>
+                                            <ListBoxItem x:Name="draconicTab" Tag="draconic" IsEnabled="False"/>
 
-                                            <ListBoxItem x:Name="raceTab" Tag="race" Visibility="Collapsed"/>
+                                            <ListBoxItem x:Name="raceTab" Tag="race" IsEnabled="False"/>
                                             <ListBoxItem x:Name="featTab" Tag="feat" IsEnabled="{Binding CanSelectFeat}"/>
-                                            <ListBoxItem x:Name="featDetailsTab" Tag="featdetails" Visibility="{Binding SelectedFeatDetails.HasFeat, Converter={StaticResource BoolToVisibleConverter}}"/>
+                                            <ListBoxItem x:Name="featDetailsTab" Tag="featdetails" IsEnabled="{Binding SelectedFeatDetails.HasFeat}"/>
                                     </ListBox>
 
                                     <!-- Gameplay tab selector underlines -->
@@ -982,34 +983,34 @@
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=RaceSpellSelectors, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=SubRaceSpellSelectors, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=RaceProgressions, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding FilteredItems.Count, ElementName=SubRaceProgressions, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ProgressionData.RaceProgression.Other.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ProgressionData.RaceProgression.AbilityBonuses.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ProgressionData.RaceProgression.SaveProficiencies.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ProgressionData.RaceProgression.WeaponProficiencies.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ProgressionData.RaceProgression.ArmourProficiencies.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ProgressionData.RaceProgression.Skills.Count, Converter={StaticResource GreaterThanConverter}, ConverterParameter=0}" Value="True">
-                                <Setter TargetName="raceTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="raceTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
 
                             <!-- Subclass has a selection -->
@@ -1624,7 +1625,7 @@ ConverterParameter=0}" Value="True"/>
 
                             <!-- Show passiveFeaturesTab for Draconic Sorcerer -->
                             <DataTrigger Binding="{Binding SelectedSubClass.IsDraconicSorcerer}" Value="True">
-                                <Setter TargetName="draconicTab" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="draconicTab" Property="IsEnabled" Value="True"/>
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding ElementName=gameplayTabs, Path=SelectedItem.Tag}" Value="deity">

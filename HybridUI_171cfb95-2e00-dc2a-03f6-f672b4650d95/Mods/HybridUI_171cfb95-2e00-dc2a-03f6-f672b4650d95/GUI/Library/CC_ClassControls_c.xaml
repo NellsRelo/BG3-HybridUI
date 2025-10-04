@@ -264,10 +264,11 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
 
-            <StackPanel x:Name="upperClassPanel" HorizontalAlignment="Center">
-                <ContentControl Template="{StaticResource HUI_SelectorHeader}">
-                    <TextBlock x:Name="classPanelTitleText" ls:TextBlockFormatter.SourceText="{Binding Source=he3ccedd0gceaeg4b1fg8e74g9dfc6da58cd2, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
-                </ContentControl> 
+            <StackPanel x:Name="upperClassPanel" HorizontalAlignment="Center" Width="{StaticResource gameplayPanelWidth}">
+                <ContentControl Template="{StaticResource HUI_SelectorHeader}"/>
+                <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                    <TextBlock x:Name="classPanelTitleText" ls:TextBlockFormatter.SourceText="{Binding Source=he3ccedd0gceaeg4b1fg8e74g9dfc6da58cd2, Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" TextAlignment="Center" Height="100" Margin="0,-10,0,10"/>
+                </ContentControl>
             </StackPanel>
 
             <Grid x:Name="ClassesCarousel" HorizontalAlignment="Center" Width="900" Opacity="{Binding Opacity, ElementName=upperClassPanel}">
