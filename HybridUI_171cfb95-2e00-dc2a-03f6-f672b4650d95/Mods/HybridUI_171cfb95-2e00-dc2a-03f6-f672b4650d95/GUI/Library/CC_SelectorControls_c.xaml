@@ -47,12 +47,10 @@
     <ControlTemplate x:Key="spellReplaceTemplate">
         <StackPanel Width="{StaticResource gameplayPanelWidth}" HorizontalAlignment="Left">
             <!-- Header Section -->
-            <Image Source="{StaticResource CarouselDecoration}" Stretch="None" Margin="25,98,0,-148" Height="108" HorizontalAlignment="Center">
-                <Image.RenderTransform>
-                    <ScaleTransform ScaleY="-1"></ScaleTransform>
-                </Image.RenderTransform>
-            </Image>
-            <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h000011feg0be5g4f09g978eg030b3e2e62c6', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}"/>
+            <ContentControl Template="{StaticResource HUI_SelectorHeader}"/>
+            <ContentControl Template="{StaticResource HUI_CarouselHeaderDecorator}">
+                <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h000011feg0be5g4f09g978eg030b3e2e62c6', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelHeaderText}" Height="100" Margin="0,-10,0,10"/>
+            </ContentControl>
             <TextBlock ls:TextBlockFormatter.SourceText="{Binding Source='h7d40d764gac52g4ccbgb18eg136c928dd69e', Converter={StaticResource TranslatedStringConverter}}" Style="{StaticResource PanelDescriptionText}" Margin="0,20,0,0"/>
             
             <!-- Content Section -->
